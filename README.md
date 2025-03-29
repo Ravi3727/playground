@@ -13,7 +13,7 @@ Follow these steps to set up the project on your local machine.
 
 ### 2️⃣ Clone Your Forked Repository
 ```sh
-git clone https://github.com/Ravi3727/GDSC_Website.git 
+git clone https://github.com/Ravi3727/GDG_Official_Website.git 
 cd Frontend
 ```
 
