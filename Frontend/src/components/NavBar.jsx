@@ -5,11 +5,7 @@ function NavBar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -18,19 +14,20 @@ function NavBar() {
 
   return (
     <nav
-      className={`flex items-center justify-between bg-[#e5e4e4] rounded-4xl w-[80%] mx-auto mt-6 py-3 px-6 shadow-lg transition-all duration-300 ${
-        isScrolled
-          ? "fixed top-0 left-[10%] backdrop-blur-md bg-white/70 z-50"
-          : ""
-      }`}
+      className={`flex items-center justify-between bg-[#e5e4e4] rounded-4xl mx-auto mt-6 py-3 px-6 sm:px-16 shadow-lg transition-all duration-300 
+        ${isScrolled ? "fixed top-0 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-white/70 z-50" : ""} 
+        w-[90%] sm:w-[80%] md:w-[75%] lg:w-[70%] xl:w-[65%]`}
     >
       {/* Left: Logo */}
-      <a href="#" className="logo font-bold text-lg">
-        <img className="w-[50px] h-[30px]" src="logo.png" alt="logo" />
-      </a>
+      <div className="flex items-center">
+        <span className="h-6 w-6 bg-blue-500 rounded-l-full"></span>
+        <span className="h-6 w-6 bg-red-500 rounded-t-full"></span>
+        <span className="h-6 w-6 bg-yellow-400 rounded-b-full"></span>
+        <span className="h-6 w-6 bg-green-500 rounded-r-full"></span>
+      </div>
 
-      {/* Center: Navigation Links */}
-      <ul className="flex items-center ml-22 gap-10">
+      {/* Center: Navigation Links (Hidden Below 1000px) */}
+      <ul className="hidden lg:flex items-center gap-6 xl:gap-10">
         <li>
           <a href="#" className="hover:text-gray-600">
             Resources & Blogs
@@ -53,9 +50,9 @@ function NavBar() {
         </li>
       </ul>
 
-      {/* Right: Login Button */}
-      <button className="px-4 py-2 bg-black text-white text-[15px] rounded-3xl w-[140px] transform active:scale-90 cursor-pointer hover:bg-slate-900 transition">
-        Log In/ Sign UP
+      {/* Right: Login Button (Same size until mid-screen, then gradually smaller) */}
+      <button className="px-3 py-1 bg-black text-white text-xs sm:text-sm md:text-[15px] rounded-3xl w-[80px] sm:w-[100px] md:w-[140px] transform active:scale-90 cursor-pointer hover:bg-slate-900 transition">
+        Join Us
       </button>
     </nav>
   );
