@@ -1,58 +1,20 @@
 import React from "react";
 
-const TopCards = () => {
+const TopCards = ({ title, description, icon, bgColor }) => {
   return (
-    <div style={styles.card}>
-      <div style={styles.iconContainer}>
-        <div style={styles.icon}>
-            
-           
-          
-        </div>
+    <div className="w-full sm:w-[300px] p-6 bg-white rounded-xl shadow-md text-left">
+      {/* Icon Container */}
+      <div
+        className={`w-12 h-12 rounded-full flex items-center justify-center ${bgColor} mb-4`}
+      >
+        <span className="text-xl">{icon}</span>
       </div>
-      <h3 style={styles.title}>Grow</h3>
-      <p style={styles.description}>
-        Learn about Google technologies through workshops, events, and
-        project-based learning.
-      </p>
+      {/* Title */}
+      <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      {/* Description */}
+      <p className="text-gray-600 text-sm">{description}</p>
     </div>
   );
-};
-
-const styles = {
-  card: {
-    width: "300px",
-    padding: "20px",
-    borderRadius: "8px",
-    backgroundColor: "#fff",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    fontFamily: "'Arial', sans-serif",
-    textAlign: "left",
-  },
-  iconContainer: {
-    display: "flex",
-    justifyContent: "flex-start",
-    marginBottom: "10px",
-  },
-  icon: {
-    width: "40px",
-    height: "40px",
-    borderRadius: "50%",
-    backgroundColor: "#fde8e8",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "20px",
-  },
-  title: {
-    fontSize: "18px",
-    fontWeight: "bold",
-    marginBottom: "10px",
-  },
-  description: {
-    fontSize: "14px",
-    color: "#555",
-  },
 };
 
 export default TopCards;

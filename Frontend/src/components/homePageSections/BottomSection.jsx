@@ -11,10 +11,10 @@ const BottomSection = () => {
     profileCards.push(<ProfileCard key={i} color={profileColors[i % 3]} />);
   }
   return (
-    <div className='w-full min-h-[100vh] overflow-x-clip  no-scrollbar flex-col flex gap-10 items-center pb-[10vh] ' >
-      <div className='w-full flex flex-col items-center'>
-        <h1 className='text-[#191919] font-bold text-2xl'>Our Departments</h1>
-        <p className='text-[#696969] text-sm'>Explore our specialized departments and find your perfect fit.</p>
+    <div className='w-full min-h-[100vh] bg-gray-100 overflow-x-clip  no-scrollbar flex-col flex gap-10 items-center pb-[10vh] ' >
+      <div className='w-full flex flex-col mt-20 items-center'>
+        <h1 className='text-[#191919] font-bold text-3xl'>Our Departments</h1>
+        <p className='text-[#696969] text-[16px] mt-4'>Explore our specialized departments and find your perfect fit.</p>
 
       </div>
       <div className="w-full flex justify-center gap-6 flex-wrap">
@@ -22,19 +22,23 @@ const BottomSection = () => {
           <HomeCards key={index} obj={item} color={colors[index % 3]} />
         ))}
       </div>
-      <div className='w-full flex flex-col items-center'>
-        <h1 className='text-[#191919] font-bold text-xl'>Meet Our Team
+      <div className='w-full mt-10 flex flex-col items-center'>
+        <h1 className='text-[#191919] font-bold text-3xl'>Meet Our Team
         </h1>
-        <p className='text-[#696969] text-sm'>The passionate individuals behind GDSC DTU</p>
+        <p className='text-[#696969] mt-3 text-[16px]'>The passionate individuals behind GDSC DTU</p>
 
       </div>
       {/* slideshow */}
-      <div className='w-full overflow-x-scroll flex gap-10 no-scrollbar' >
+      <div className='w-full overflow-x-scroll  flex gap-10 no-scrollbar' >
         {
           profileCards
         }
       </div>
-      <button className='bg-[#34A853] w-fit text-white px-3 py-2 rounded-xl'>View all team members </button>
+      <button className='bg-[#34A853] cursor-pointer transform active:scale-90 transition  w-fit text-white px-3 items-center gap-2 py-2 flex justify-center rounded-xl hover:bg-green-700'>
+        <p>View all team members</p>
+        <img className='w-[12px] h-[12px]' src="right-arrow.png" alt="right-arrow" />
+
+        </button>
 
     </div>
   )

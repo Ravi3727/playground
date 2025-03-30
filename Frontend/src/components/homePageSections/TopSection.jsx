@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import NavBar from "../NavBar";
-import TopCards from "../cards/TopCards";
+// import TopCards from "../cards/TopCards";
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
@@ -207,16 +207,7 @@ export default function Home() {
               Join Community
             </motion.a>
           </motion.div>
-          {/* Middle Section */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "50px",
-            }}
-          >
-            <TopCards />
-          </div>
+         
         </div>
       </section>
     </div>
