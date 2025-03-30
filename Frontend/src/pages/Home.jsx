@@ -3,10 +3,9 @@ import BottomSection from '../components/homePageSections/bottomSection'
 
 function Home() {
   return (
-<>
-
-<BottomSection/>
-</>
+    <>
+      <BottomSection />
+    </>
   )
 }
 
