@@ -1,14 +1,13 @@
 import './App.css'
+import React from "react";
+import ProjectsPage from "./pages/ProjectPage";
 
 function App() {
 
   return (
-    <>
-    <h1>Welcome DTU Developers</h1>
-     <p>
-      Let&apos;s build the Official GDSC Website!<br></br>
-     </p>
-    </>
+    
+    <ProjectsPage />
+    
   )
 }
 
