@@ -29,8 +29,14 @@ const WhatWeOffer = () => {
   }, []);
 
   return (
-    <section className="py-20 bg-white" ref={featuresRef}>
-      <div className="container max-w-6xl mx-auto">
+    <section
+      className="relative py-20 bg-white"
+      ref={featuresRef}
+    >
+      {/* Graph Paper Background */}
+      <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_2px),linear-gradient(to_bottom,#80808012_1px,transparent_2px)] bg-[size:24px_24px] pointer-events-none"></div>
+
+      <div className="container relative max-w-6xl mx-auto">
         <motion.h2
           className="text-3xl font-bold text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
@@ -102,7 +108,8 @@ const OfferCard = ({ title, description, href, icon, bgColor, borderColor, textC
     transition={{ duration: 0.5, delay }}
     whileHover={{
       y: -5,
-      boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.1), 0 8px 10px -6px rgba(59, 130, 246, 0.1)",
+      boxShadow:
+        "0 10px 25px -5px rgba(59, 130, 246, 0.1), 0 8px 10px -6px rgba(59, 130, 246, 0.1)",
     }}
   >
     <motion.div

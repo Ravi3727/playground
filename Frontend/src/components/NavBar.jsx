@@ -14,8 +14,8 @@ function NavBar() {
 
   return (
     <nav
-      className={`flex items-center justify-between bg-[#e5e4e4] rounded-4xl mx-auto mt-6 py-3 px-6 sm:px-16 shadow-lg transition-all duration-300 
-        ${isScrolled ? "fixed top-0 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-white/70 z-50" : ""} 
+      className={`flex items-center justify-between bg-[#cbc7c7] rounded-4xl mx-auto mt-6 py-3 px-6 sm:px-16 shadow-lg transition-all duration-300 
+        ${isScrolled ? "fixed text-white top-0 left-1/2 transform -translate-x-1/2 backdrop-blur-md bg-black/50 z-50" : ""} 
         w-[90%] sm:w-[80%] md:w-[75%] lg:w-[70%] xl:w-[65%]`}
     >
       {/* Left: Logo */}

@@ -21,6 +21,7 @@ export default function Home() {
       top: "23%",
       left: "5%",
       duration: 4,
+      responsive: ""
     },
     {
       size: "w-12 h-12 sm:w-16 sm:h-16 md:w-28 md:h-28",
@@ -30,6 +31,7 @@ export default function Home() {
       top: "60%",
       left: "80%",
       duration: 8,
+      responsive: "hidden md:block"
     },
     {
       size: "w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32",
@@ -39,6 +41,7 @@ export default function Home() {
       top: "40%",
       left: "75%",
       duration: 7,
+      responsive: ""
     },
     {
       size: "w-10 h-10 sm:w-14 sm:h-14 md:w-24 md:h-24",
@@ -48,6 +51,7 @@ export default function Home() {
       top: "60%",
       left: "10%",
       duration: 5,
+      responsive: "hidden md:block" // Hide on small screens, show on md and up
     },
     {
       size: "w-14 h-14 sm:w-20 sm:h-20 md:w-36 md:h-36",
@@ -57,6 +61,8 @@ export default function Home() {
       top: "20%",
       left: "20%",
       duration: 6,
+      responsive:""
+
     },
   ];
 
@@ -144,11 +150,20 @@ export default function Home() {
 
   return (
     <div className=" flex flex-col">
-      <NavBar />
+      {/* Navbar with higher z-index */}
+      <div className="relative z-50">
+        <NavBar />
+      </div>
+
+      {/* Graph Paper Background */}
+      <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_4px),linear-gradient(to_bottom,#80808012_1px,transparent_4px)] bg-[size:24px_24px] pointer-events-none"></div>
       {/* Floating Circles - Restricted to Top Section Only */}
-      <div className="absolute inset-0 top-0 h-full md:h-[500px] lg:h-[600px] xl:h-[700px] pointer-events-none overflow-hidden">
+      <div className="absolute z-10 inset-0 top-0 h-full md:h-[500px] lg:h-[600px] xl:h-[700px] pointer-events-none overflow-hidden">
         {shapes.map((shape, index) => (
-          <FloatingShape key={index} {...shape} />
+          <FloatingShape 
+            key={index} 
+            {...shape} 
+          />
         ))}
       </div>
 
