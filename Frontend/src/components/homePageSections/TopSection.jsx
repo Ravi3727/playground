@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import NavBar from "../NavBar";
-import TopCards from "../cards/TopCards";
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
@@ -11,51 +10,59 @@ export default function Home() {
   const statsRef = useRef(null);
   const statsInView = useRef(false);
 
+  // Responsive floating shapes config
+
   const shapes = [
     {
-      size: "w-40 h-40",
+      size: "w-16 h-16 sm:w-20 sm:h-20 md:w-40 md:h-40",
       color: "bg-blue-500",
-      x: [-90, 50],
-      y: [-50, 50],
+      x: [-40, 30],
+      y: [-30, 30],
       top: "23%",
       left: "5%",
       duration: 4,
+      responsive: ""
     },
     {
-      size: "w-28 h-28",
+      size: "w-12 h-12 sm:w-16 sm:h-16 md:w-28 md:h-28",
       color: "bg-yellow-400",
-      x: [20, -20],
-      y: [30, -30],
+      x: [10, -10],
+      y: [15, -15],
       top: "60%",
       left: "80%",
       duration: 8,
+      responsive: "hidden md:block"
     },
     {
-      size: "w-32 h-32",
+      size: "w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32",
       color: "bg-red-400",
-      x: [-80, 80],
-      y: [-40, 40],
+      x: [-40, 40],
+      y: [-20, 20],
       top: "40%",
       left: "75%",
       duration: 7,
+      responsive: ""
     },
     {
-      size: "w-24 h-24",
+      size: "w-10 h-10 sm:w-14 sm:h-14 md:w-24 md:h-24",
       color: "bg-green-400",
-      x: [25, -25],
-      y: [-25, 25],
+      x: [15, -15],
+      y: [-15, 15],
       top: "60%",
       left: "10%",
       duration: 5,
+      responsive: "hidden md:block" // Hide on small screens, show on md and up
     },
     {
-      size: "w-36 h-36",
+      size: "w-14 h-14 sm:w-20 sm:h-20 md:w-36 md:h-36",
       color: "bg-purple-400",
-      x: [30, -30],
-      y: [20, -20],
+      x: [20, -20],
+      y: [10, -10],
       top: "20%",
       left: "20%",
       duration: 6,
+      responsive:""
+
     },
   ];
 
@@ -142,19 +149,29 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
-      {/* Animated Circles - Restricted to Homepage Only */}
-      <div className="absolute inset-0 pointer-events-none">
+    <div className=" flex flex-col">
+      {/* Navbar with higher z-index */}
+      <div className="relative z-50">
+        <NavBar />
+      </div>
+
+      {/* Graph Paper Background */}
+      <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_4px),linear-gradient(to_bottom,#80808012_1px,transparent_4px)] bg-[size:24px_24px] pointer-events-none"></div>
+      {/* Floating Circles - Restricted to Top Section Only */}
+      <div className="absolute z-10 inset-0 top-0 h-full md:h-[500px] lg:h-[600px] xl:h-[700px] pointer-events-none overflow-hidden">
         {shapes.map((shape, index) => (
-          <FloatingShape key={index} {...shape} />
+          <FloatingShape 
+            key={index} 
+            {...shape} 
+          />
         ))}
       </div>
+
       {/* Hero Section */}
-      <section className="relative py-24 text-center">
+      <section className="relative py-12 md:py-24 px-4 sm:mt-15 mt-15 text-center">
         <div className="max-w-3xl mx-auto">
           <motion.h1
-            className="text-7xl font-extrabold tracking-tight mb-8"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-4 md:mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
@@ -162,7 +179,7 @@ export default function Home() {
             Innovate. Learn. Grow.
           </motion.h1>
           <motion.p
-            className="text-xl text-gray-500 mb-10"
+            className="text-base sm:text-lg md:text-xl text-gray-500 mb-6 md:mb-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
@@ -170,18 +187,18 @@ export default function Home() {
             Google Developer Group at Delhi Technological University
           </motion.p>
           <motion.div
-            className="flex flex-col sm:flex-row gap-5 justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
           >
             <motion.a
               href="/events"
-              className="px-8 flex justify-center py-2 bg-black text-white rounded-full hover:bg-slate-800"
+              className="px-6 sm:px-8 py-2 flex items-center justify-center bg-black text-white rounded-full hover:bg-slate-800"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <p className="mt-[2px]">Explore Events </p>
+              <span>Explore Events</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -189,10 +206,10 @@ export default function Home() {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-arrow-right ml-2 mt-[8px] h-4 w-4 transition-transform group-hover:translate-x-1"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
               >
                 <path d="M5 12h14"></path>
                 <path d="m12 5 7 7-7 7"></path>
@@ -200,23 +217,13 @@ export default function Home() {
             </motion.a>
             <motion.a
               href="/join"
-              className="px-6 py-3 border border-gray-500 rounded-full hover:bg-gray-100"
+              className="px-6 py-2 border border-gray-500 rounded-full hover:bg-gray-100"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Join Community
             </motion.a>
           </motion.div>
-          {/* Middle Section */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "50px",
-            }}
-          >
-            <TopCards />
-          </div>
         </div>
       </section>
     </div>
