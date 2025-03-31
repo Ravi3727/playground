@@ -5,7 +5,7 @@ import "../styles/ProjectsPage.css";
 import greenSvg from "../assets/ProjectPageIcons/Green.svg";
 import redSvg from "../assets/ProjectPageIcons/Red.svg";
 import yellowSvg from "../assets/ProjectPageIcons/Yellow.svg";
-import stripeSvg from "../assets/ProjectPageIcons/Stripe.svg"; // Import stripe.svg
+import Title from "../components/Title";
 
 const ProjectsPage = () => {
   const categories = ["UX/UI", "DSA/CP", "Open Source", "App Dev", "Cyber Security"];
@@ -34,11 +34,7 @@ const ProjectsPage = () => {
         <img src={yellowSvg} alt="Yellow Decoration" className="yellow-svg" />
       </div>
       <div className="projects-header">
-        <h1 className="projects-title">Projects</h1>
-        <div className="stripe-svg-container">
-          <img src={stripeSvg} alt="Stripe Decoration" className="stripe-svg" />
-        </div>
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+        <Title heading="Projects"/>
       </div>
       <div className="projects-categories">
         {categories.map((category, index) => (
