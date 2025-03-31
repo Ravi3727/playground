@@ -3,7 +3,7 @@ import person1 from "../../assets/membersPic/p2.png";
 const ProfileCard = ({ color }) => {
   return (
     <div >
-      <div className='w-[300px] h-[350px] rounded-2xl relative' style={{ backgroundColor: color }}>
+      <div className='w-[300px] h-[350px] rounded-2xl relative z-30 '  style={{ backgroundColor: color }}>
         <img className='absolute bottom-0 object-fill ' src={person1} alt="" />
       </div>
 
