@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link,  NavLink } from "react-router-dom";
 import { Route } from "react-router-dom";
 
 function NavBar() {
@@ -21,12 +21,14 @@ function NavBar() {
         w-[90%] sm:w-[80%] md:w-[75%] lg:w-[70%] xl:w-[65%]`}
     >
       {/* Left: Logo */}
-      <div className="flex items-center">
-        <span className="h-6 w-6 bg-blue-500 rounded-l-full"></span>
-        <span className="h-6 w-6 bg-red-500 rounded-t-full"></span>
-        <span className="h-6 w-6 bg-yellow-400 rounded-b-full"></span>
-        <span className="h-6 w-6 bg-green-500 rounded-r-full"></span>
-      </div>
+      <Link to="/" >
+       <div className="flex items-center">
+         <span className="h-6 w-6 bg-blue-500 rounded-l-full"></span>
+         <span className="h-6 w-6 bg-red-500 rounded-t-full"></span>
+         <span className="h-6 w-6 bg-yellow-400 rounded-b-full"></span>
+         <span className="h-6 w-6 bg-green-500 rounded-r-full"></span>
+       </div>
+      </Link>
 
       {/* Center: Navigation Links (Hidden Below 1000px) */}
       <ul className="hidden lg:flex items-center gap-6 xl:gap-10">
