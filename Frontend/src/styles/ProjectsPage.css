@@ -1,0 +1,238 @@
+/* General Styles */
+.projects-page {
+  position: relative;
+  padding: 20px;
+}
+
+.projects-header {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative; /* Make this container the reference for absolute positioning */
+}
+
+.projects-title {
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.projects-header p {
+  color: #666;
+}
+
+.projects-categories {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* Ensure buttons wrap on smaller screens */
+}
+
+.category-button {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.category-button:hover {
+  background-color: #f1f1f1;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+  gap: 20px;
+}
+
+/* Navbar Responsiveness */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+  padding: 10px 20px;
+  background-color: #f1f1f1;
+  border-radius: 50px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo-img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.navbar-links {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  flex-wrap: wrap; /* Ensure links wrap on smaller screens */
+}
+
+.navbar-links li {
+  cursor: pointer;
+  color: #333;
+}
+
+.navbar-links .active {
+  color: red;
+  font-weight: bold;
+}
+
+.navbar-login {
+  background-color: black;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* SVG Decorations */
+.green-svg-container {
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  z-index: -1;
+}
+
+.green-svg {
+  height: 150px;
+  width: auto;
+}
+
+.red-svg-container {
+  position: absolute;
+  top: 50%;
+  left: -50px;
+  z-index: -1;
+}
+
+.red-svg {
+  height: 120px;
+  width: auto;
+}
+
+.yellow-svg-container {
+  position: absolute;
+  bottom: -20px;
+  right: 5%;
+  z-index: -1;
+}
+
+.yellow-svg {
+  height: 180px;
+  width: auto;
+}
+
+/* Stripe SVG Container */
+.stripe-svg-container {
+  position: relative; /* Position relative to the .projects-header */
+  margin-top: -10px; /* Adjust to make it touch the bottom of the heading */
+  text-align: center; /* Center the SVG horizontally */
+}
+
+/* Stripe SVG */
+.stripe-svg {
+  display: inline-block;
+  height: 20px; /* Adjust size */
+  width: auto;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .projects-title {
+    font-size: 2rem; /* Reduce font size for smaller screens */
+  }
+
+  .projects-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust grid for smaller screens */
+  }
+
+  .navbar {
+    flex-direction: column; /* Stack navbar items vertically */
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .green-svg-container {
+    top: 15%; /* Adjust position for smaller screens */
+    right: 5%;
+  }
+
+  .red-svg-container {
+    top: 60%; /* Adjust position for smaller screens */
+    left: -30px;
+  }
+
+  .yellow-svg-container {
+    bottom: -10px; /* Adjust position for smaller screens */
+    right: 10%;
+  }
+
+  .green-svg,
+  .red-svg,
+  .yellow-svg {
+    height: 100px; /* Reduce size of SVGs on smaller screens */
+  }
+
+  .stripe-svg {
+    height: 15px; /* Reduce size for smaller screens */
+    top: 100%; /* Adjust position */
+  }
+}
+
+@media (max-width: 480px) {
+  .projects-title {
+    font-size: 1.5rem; /* Further reduce font size for very small screens */
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr; /* Single column layout for very small screens */
+  }
+
+  .navbar {
+    align-items: center;
+  }
+
+  .navbar-links {
+    flex-direction: column; /* Stack links vertically */
+    align-items: center;
+  }
+
+  .green-svg-container {
+    top: 20%;
+    right: 0;
+  }
+
+  .red-svg-container {
+    top: 70%;
+    left: 0;
+  }
+
+  .yellow-svg-container {
+    bottom: 0;
+    right: 0;
+  }
+
+  .green-svg,
+  .red-svg,
+  .yellow-svg {
+    height: 80px; /* Further reduce size of SVGs */
+  }
+
+  .stripe-svg {
+    height: 10px; /* Further reduce size for very small screens */
+    top: 100%; /* Adjust position */
+  }
+}
+

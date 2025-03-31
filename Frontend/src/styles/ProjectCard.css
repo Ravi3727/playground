@@ -1,0 +1,26 @@
+.project-card {
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Softer shadow for a glassy effect */
+    overflow: hidden;
+    text-align: center;
+    backdrop-filter: blur(10px); /* Apply blur effect to the background */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border for the glass effect */
+}
+
+.project-card-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    background-color: #CFE1FF;
+}
+
+.project-card-content {
+    padding: 10px;
+}
+
+.project-card-date {
+    color: gray;
+    font-size: 0.9rem;
+}
