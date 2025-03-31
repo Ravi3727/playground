@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar";
 import ProjectCard from "../components/ProjectCard";
 import "../styles/ProjectsPage.css";
 import greenSvg from "../assets/ProjectPageIcons/Green.svg";

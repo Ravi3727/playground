@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -29,24 +31,44 @@ function NavBar() {
       {/* Center: Navigation Links (Hidden Below 1000px) */}
       <ul className="hidden lg:flex items-center gap-6 xl:gap-10">
         <li>
-          <a href="#" className="hover:text-gray-600">
+          <NavLink
+            to="/resources"
+            className={({ isActive }) =>
+              isActive ? "text-gray-600 font-bold" : "hover:text-gray-600"
+            }
+          >
             Resources & Blogs
-          </a>
+          </NavLink>
         </li>
         <li>
-          <a href="#" className="hover:text-gray-600">
+          <NavLink
+            to="/projects"
+            className={({ isActive }) =>
+              isActive ? "text-gray-600 font-bold" : "hover:text-gray-600"
+            }
+          >
             Projects
-          </a>
+          </NavLink>
         </li>
         <li>
-          <a href="#" className="hover:text-gray-600">
+          <NavLink
+            to="/events"
+            className={({ isActive }) =>
+              isActive ? "text-gray-600 font-bold" : "hover:text-gray-600"
+            }
+          >
             Events
-          </a>
+          </NavLink>
         </li>
         <li>
-          <a href="#" className="hover:text-gray-600">
+          <NavLink
+            to="/alumni"
+            className={({ isActive }) =>
+              isActive ? "text-gray-600 font-bold" : "hover:text-gray-600"
+            }
+          >
             Alumni
-          </a>
+          </NavLink>
         </li>
       </ul>
 
