@@ -1,5 +1,7 @@
 import React from "react";
 import HomeCards from "../cards/HomeCards";
+import yellowVector from "../../assets/HomePagePng/topRight.png"
+import redVector from "../../assets/HomePagePng/bottomLeft.png"
 import ProfileCard from "../cards/ProfileCard";
 import { technologies } from "../../assets/DummyData/BottomSection";
 
@@ -14,6 +16,8 @@ const BottomSection = () => {
 
   return (
     <div className="relative w-full min-h-[100vh] bg-gray-100 overflow-x-clip no-scrollbar flex-col flex gap-10 items-center pb-[10vh]">
+        <img src={yellowVector} alt="" className="w-[20vw] absolute  z-10 right-0 object-right object-contain  h-[40vh]  " />
+        <img src={redVector} alt="" className="w-[10vw] absolute object-left object-contain  z-10 left-0 top-[40%]" />
       {/* Graph Paper Background */}
       <div className="absolute inset-0 h-full w-full bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
 
@@ -39,7 +43,7 @@ const BottomSection = () => {
       </div>
 
       {/* Slideshow */}
-      <div className="relative w-full overflow-x-scroll flex gap-10 no-scrollbar">
+      <div className="relative w-full overflow-x-scroll flex gap-10 no-scrollbar [&::-webkit-scrollbar]:hidden [&]:scrollbar-none">
         {profileCards}
       </div>
 
