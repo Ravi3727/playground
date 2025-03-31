@@ -13,10 +13,10 @@ function App() {
     
     // <ProjectsPage />
 
-    <Event/>
-    // <Home/>
-
+    // <Event/>
     <Home/>
+
+    // <Home/>
 
     
   )
