@@ -1,12 +1,13 @@
 import './App.css'
-import Home from './pages/Home'
+import React from "react";
+import ProjectsPage from "./pages/ProjectPage";
 
 function App() {
 
   return (
-    <>
-   <Home/>
-    </>
+    
+    <ProjectsPage />
+    
   )
 }
 
