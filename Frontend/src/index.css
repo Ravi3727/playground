@@ -1,1 +1,15 @@
 @import "tailwindcss";
+/* Responsive behavior for small screens */
+
+/* Default text */
+#gdg-title::before {
+    content: "Google Developer Group DTU" ;
+  }
+  
+  /* Change text for smaller screens */
+  @media (max-width: 480px) {
+    #gdg-title::before {
+      content: "GDG DTU ";
+    }
+  }
+  

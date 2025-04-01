@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import NavBar from "../NavBar";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
@@ -186,18 +187,17 @@ export default function Home() {
           >
             Google Developer Group at Delhi Technological University
           </motion.p>
+          
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-          >
+            transition={{ duration: 0.7, delay: 0.6 }}>
+            <Link to="/events"  >
             <motion.a
-              href="/events"
               className="px-6 sm:px-8 py-2 flex items-center justify-center bg-black text-white rounded-full hover:bg-slate-800"
               whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+              whileTap={{ scale: 0.95 }}>
               <span>Explore Events</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -215,14 +215,16 @@ export default function Home() {
                 <path d="m12 5 7 7-7 7"></path>
               </svg>
             </motion.a>
+            </Link>
+            <Link to="/signup" >
             <motion.a
-              href="/join"
               className="px-6 py-2 border border-gray-500 rounded-full hover:bg-gray-100"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Join Community
             </motion.a>
+            </Link>
           </motion.div>
         </div>
       </section>

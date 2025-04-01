@@ -5,7 +5,7 @@ import Vector2 from '/src/assets/Graphics/vector2.svg?url';
 
 
 import PastEvent from '../components/cards/PastEvent'
-import NavBar from '../components/Navbar'
+import NavBar from '../components/NavBar'
 
 const Event = () => {
   return (

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link,  NavLink } from "react-router-dom";
 import { Route } from "react-router-dom";
 
+
 function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -73,11 +74,14 @@ function NavBar() {
           </NavLink>
         </li>
       </ul>
-
+      
       {/* Right: Login Button (Same size until mid-screen, then gradually smaller) */}
-      <button className="px-3 py-1 bg-black text-white text-xs sm:text-sm md:text-[15px] rounded-3xl w-[80px] sm:w-[100px] md:w-[140px] transform active:scale-90 cursor-pointer hover:bg-slate-900 transition">
-        Join Us
-      </button>
+      <NavLink to="/signup" >
+        <button className="px-3 py-1 bg-black text-white text-xs sm:text-sm md:text-[15px] rounded-3xl w-[80px] sm:w-[100px] md:w-[140px] transform active:scale-90 cursor-pointer hover:bg-slate-900 transition">
+          Sign In 
+        </button>
+
+      </NavLink>
     </nav>
   );
 }
