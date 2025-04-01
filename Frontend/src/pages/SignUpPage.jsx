@@ -2,8 +2,43 @@ import React from "react";
 import { SignUp } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import "../index.css";
+import { useState, useEffect, useRef } from "react";
+
 
 const SignUpPage = () => {
+  const [authError, setAuthError] = useState(null);
+  const formContainerRef = useRef(null);
+
+  // Listen for error messages in the DOM
+  useEffect(() => {
+    if (!formContainerRef.current) return;
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList') {
+          // Look for error messages in the DOM
+          const errorElements = formContainerRef.current.querySelectorAll('[role="alert"]');
+          for (const errorElement of errorElements) {
+            const errorText = errorElement.textContent || '';
+            // Check for common "account exists" error patterns
+            if (errorText.toLowerCase().includes('already exists') || 
+                errorText.toLowerCase().includes('already in use') ||
+                errorText.toLowerCase().includes('already taken')) {
+              setAuthError("An account with this email already exists.");
+              break;
+            }
+          }
+        }
+      }
+    });
+
+    observer.observe(formContainerRef.current, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_2px),linear-gradient(to_bottom,#80808012_1px,transparent_2px)] bg-[size:24px_24px]">
       {/* Header Section */}
@@ -12,11 +47,11 @@ const SignUpPage = () => {
           {/* GDG Logo */}
           <div className="flex items-center space-x-2">
             
-            <Link to="/" className="cursor-pointer transform transition duration-50 active:scale-90  h-6 w-6 bg-blue-500 rounded-full text-white items-center justify-center text-center hover:scale-105" > H
+            <Link to="/" className="cursor-pointer transform transition duration-50 active:scale-90  h-6 w-6 bg-blue-500 rounded-full text-white items-center justify-center text-center hover:scale-105" > 
             </Link>
-            <Link to="/" className="cursor-pointer transform transition duration-100 active:scale-90 h-6 w-6 bg-red-500 rounded-full text-white items-center justify-center text-center hover:scale-105">O</Link>
-            <Link to="/" className="cursor-pointer transform transition duration-100 active:scale-90 h-6 w-6 bg-yellow-400 rounded-full text-white items-center justify-center text-center hover:scale-105">M</Link>
-            <Link to="/" className="cursor-pointer transform transition duration-100 active:scale-90 h-6 w-6 bg-green-500 rounded-full text-white items-center justify-center text-center hover:scale-105">E</Link>
+            <Link to="/" className="cursor-pointer transform transition duration-100 active:scale-90 h-6 w-6 bg-red-500 rounded-full text-white items-center justify-center text-center hover:scale-105"></Link>
+            <Link to="/" className="cursor-pointer transform transition duration-100 active:scale-90 h-6 w-6 bg-yellow-400 rounded-full text-white items-center justify-center text-center hover:scale-105"></Link>
+            <Link to="/" className="cursor-pointer transform transition duration-100 active:scale-90 h-6 w-6 bg-green-500 rounded-full text-white items-center justify-center text-center hover:scale-105"></Link>
           </div>
           {/* Page Title */}
           <Link to="/" >
@@ -54,6 +89,31 @@ const SignUpPage = () => {
           Join the Google Developer Group community and start exploring
           projects, events, and resources.
         </p>
+        {/* Error Message Alert */}
+        {authError && (
+          <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded-md shadow-md w-full max-w-md relative">
+            <div className="flex items-center">
+              <div className="py-1">
+                <svg className="w-6 h-6 mr-4 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-bold">Account Already Exists</p>
+                <p className="text-sm">{authError}</p>
+                <Link to="/signin" className="text-sm font-semibold text-blue-700 hover:text-blue-900 underline mt-1 inline-block">
+                  Sign in instead
+                </Link>
+              </div>
+            </div>
+            <button 
+              onClick={() => setAuthError(null)}
+              className="absolute top-0 right-0 mt-4 mr-4 text-blue-500 hover:text-blue-700"
+            >
+              <span className="text-xl font-bold">×</span>
+            </button>
+          </div>
+        )}
 
         {/* Clerk Sign-Up Component */}
         <div className="bg-blue-100 flex justify-center rounded-xl shadow-lg p-8 w-full max-w-md">
