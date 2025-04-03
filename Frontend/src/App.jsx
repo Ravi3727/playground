@@ -1,24 +1,20 @@
 import './App.css'
 import React from "react";
-import Home from "./pages/Home";
-
-import Event from "./pages/Event"
-import Home from "./pages/Home"
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 
 
 function App() {
 
   return (
-   
-    <>
-    </>
-    // <ProjectsPage />
-
-    // <Event/>
-//     <Home/>
-
-    // <Home/>
+    <header>
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+    </header>
 
 
     
