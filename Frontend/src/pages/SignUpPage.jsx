@@ -39,6 +39,7 @@ const SignUpPage = () => {
     };
   }, []);
 
+
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-white bg-[linear-gradient(to_right,#80808012_1px,transparent_2px),linear-gradient(to_bottom,#80808012_1px,transparent_2px)] bg-[size:24px_24px]">
       {/* Header Section */}
@@ -117,7 +118,7 @@ const SignUpPage = () => {
 
         {/* Clerk Sign-Up Component */}
         <div className="bg-blue-100 flex justify-center rounded-xl shadow-lg p-8 w-full max-w-md">
-          <SignUp signInUrl="/signin" />
+          <SignUp signInUrl="/api/v1/sign-up" />
         </div>
       </main>
 

@@ -9,6 +9,9 @@ const SignUpPage = () => {
 
   const [authError, setAuthError] = useState(null);
   const formContainerRef = useRef(null);
+  const { user, isSignedIn, isLoaded} = useUser();
+
+  console.log("useUser Hook:", { isLoaded, isSignedIn, user });
 
   // Listen for error messages in the DOM
   useEffect(() => {
@@ -104,7 +107,7 @@ const SignUpPage = () => {
 
         {/* Clerk Sign-Up Component */}
         <div className="bg-green-100 flex justify-center rounded-xl shadow-lg p-8 w-full max-w-md">
-          <SignIn signUpUrl="/signup" />
+          <SignIn signUpUrl="/api/v1/sign-up" />
         </div>
       </main>
 
