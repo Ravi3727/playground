@@ -2,7 +2,6 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import { connectDB } from './DBConfig/demo.js';
-import authRoutes from './Routes/demo.js'
 
 dotenv.config()
 
@@ -16,7 +15,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to GDSC Web Server!");
 });
 
-app.use('/', authRoutes);
+const mainRouter = require("./Routes/index.js");
+app.use("/api/v1", mainRouter);
 
 app.listen(PORT, () => {
   connectDB();
