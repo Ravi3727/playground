@@ -10,8 +10,6 @@ import SignUpPage from './pages/SignUpPage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import Layout from './Layout.jsx';
 import App from './App.jsx';
-import SignUp from './pages/SignUp.jsx';
-
 
 // Clerk API Key from environment variable
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;

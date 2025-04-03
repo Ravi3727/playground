@@ -9,9 +9,6 @@ const SignUpPage = () => {
 
   const [authError, setAuthError] = useState(null);
   const formContainerRef = useRef(null);
-  const { user, isSignedIn, isLoaded} = useUser();
-
-  console.log("useUser Hook:", { isLoaded, isSignedIn, user });
 
   // Listen for error messages in the DOM
   useEffect(() => {
