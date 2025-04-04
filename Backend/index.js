@@ -11,3 +11,17 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+const dbConnect = require("./DBConfig/DBConfig");
+
+dbConnect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("connected to mongoDB successfully");
+  })
+  .catch((err) => {
+    console.log("connection failed : ", err);
+  });
+ 
+  const EventRouter = require('./Routes/events');
+
+  app.use('/api/v1/events',EventRouter);

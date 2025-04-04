@@ -28,8 +28,7 @@ const EventSchema = new mongoose.Schema(
     registered_user_id: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        unique: true, // Ensures a user can't register twice
+        ref: "User"
       },
     ],
     department: [
@@ -54,7 +53,7 @@ const EventSchema = new mongoose.Schema(
         },
         position: {
           type: String,
-          enum: ["1st", "2nd", "3rd", "Honorable Mention"], // Add more as needed
+          enum: ["1st", "2nd", "3rd" ], // Add more as needed
         },
       },
     ],
