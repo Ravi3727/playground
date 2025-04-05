@@ -7,7 +7,6 @@ import Department from "../Models/department.model.js";
 export const postDepartment = asyncHandler( async (req, res) => {
     const departmentData = req.body;
         try{
-            await connectDB();
             const departmentRow = await Department.create(departmentData);
             const departmentRowId = departmentRow._id;
     
@@ -19,7 +18,6 @@ export const postDepartment = asyncHandler( async (req, res) => {
 
 export const getDepartment = asyncHandler( async (req, res) => {
     try{
-        await connectDB();
         const departmentData = await Department.find().select("_id name shortDescription");   
         if(!departmentData) throw new ApiError(404, "No Departments found"); 
         return res.status(200).json(new ApiResponse(200, departmentData , 'Department fetched successfully'));
@@ -30,7 +28,6 @@ export const getDepartment = asyncHandler( async (req, res) => {
 
 export const getDepartmentById = asyncHandler(async (req, res) => {
     try{
-        await connectDB();
         const departmentData = await Department.findById(req.params.id)
         .populate({ path: "departmentHead", strictPopulate: false })
         .populate({ path: "departmentCohead", strictPopulate: false });
@@ -45,7 +42,6 @@ export const getDepartmentById = asyncHandler(async (req, res) => {
 
 export const updateDepartment = asyncHandler(async (req, res) => {
     try {
-        await connectDB();
         const { id } = req.params;
         const updateData = req.body;
 

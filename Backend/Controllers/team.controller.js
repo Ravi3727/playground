@@ -6,7 +6,6 @@ import User from "../Models/user.model.js";
 
 export const getTeam = asyncHandler( async (req, res) => {
     try{
-        await connectDB();
         const teamData = await User.find()
         .populate({path : "department", strictPopulate : false})
         .select("_id name designation department photo socialMediaHandles");   
