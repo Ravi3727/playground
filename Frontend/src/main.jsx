@@ -8,8 +8,10 @@ import Event from './pages/Event.jsx';
 import ProjectPage from './pages/ProjectPage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import Layout from './Layout.jsx';
-import AdminDashboard from './pages/AdminDashboard.jsx'; // Add this import
-import ProtectedAdminRoute from './components/ProtectedAdminRoute.jsx'; // Add this import
+import SignUpPage from './pages/SignUpPage.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
+import ProtectedAdminRoute from './components/ProtectedAdminRoute.jsx';
+
 
 // Clerk API Key from environment variable
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -32,11 +34,16 @@ const router = createBrowserRouter([
         element: <Event />,
       },
       {
-        path: 'signin',
-        element: <SignInPage />
+        path: '/signup',
+        element: <SignUpPage />,
       },
-      // Admin routes - protected by role check
       {
+        path:'/signin',
+        element:<SignInPage/>
+
+      },
+       // Admin routes - protected by role check
+       {
         element: <ProtectedAdminRoute />,
         children: [
           {
@@ -48,6 +55,7 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

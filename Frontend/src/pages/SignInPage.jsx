@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 
 
-const SignUpPage = () => {
+const SignInPage = () => {
 
   const [authError, setAuthError] = useState(null);
   const formContainerRef = useRef(null);
@@ -116,4 +116,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default SignInPage;
