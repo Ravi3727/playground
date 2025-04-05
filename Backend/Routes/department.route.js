@@ -1,7 +1,7 @@
-const validateSchema  = require("../Middlewares/validate.middleware");
-const { Router } = require("express");
-const {departmentSchema, updateDepartmentSchema}  = require("../Validations/department.validation");
-const { postDepartment, getDepartment, getDepartmentById, updateDepartment } = require("../Controllers/department.controller");
+import validateSchema from "../Middlewares/validate.middleware.js";
+import { Router } from "express";
+import { departmentSchema, updateDepartmentSchema } from "../Validations/department.validation.js";
+import { postDepartment, getDepartment, getDepartmentById, updateDepartment } from "../Controllers/department.controller.js";
 
 const router = Router();
 
@@ -15,4 +15,4 @@ router.route("/:id").put(validateSchema(updateDepartmentSchema), updateDepartmen
 // Middleware required for authentication, should be put before validdate Schema middleware
 // Middleware should return status 403 if not authenticated.
 
-module.exports = router;
+export default router;

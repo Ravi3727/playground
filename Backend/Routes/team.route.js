@@ -1,9 +1,9 @@
-const { Router } = require("express");
-const { getTeam } = require("../Controllers/team.controller");
+import { Router } from "express";
+import { getTeam } from "../Controllers/team.controller.js";
 
 const router = Router();
 
 
 router.route("/").get(getTeam);
 
-module.exports = router;
+export default router;

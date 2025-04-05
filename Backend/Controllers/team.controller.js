@@ -1,10 +1,10 @@
-const ApiError = require("../API/ApiError");
-const ApiResponse = require("../API/ApiResponse");
-const asyncHandler = require("../API/asyncHandler");
-const connectDB = require("../DBConfig/dbConnection");
-const { User } = require("../Models/user.model");
+import ApiError from "../API/ApiError.js";
+import ApiResponse from "../API/ApiResponse.js";
+import asyncHandler from "../API/asyncHandler.js";
+import connectDB from "../DBConfig/dbConnection.js";
+import User from "../Models/user.model.js";
 
-exports.getTeam = asyncHandler( async (req, res) => {
+export const getTeam = asyncHandler( async (req, res) => {
     try{
         await connectDB();
         const teamData = await User.find()

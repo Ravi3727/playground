@@ -1,5 +1,4 @@
-const { z } = require("zod");
-const ApiError = require("../API/ApiError");
+import ApiError from "../API/ApiError.js";
 
 const validateSchema = (schema) => (req, res, next) => {
     try {
@@ -17,4 +16,4 @@ const validateSchema = (schema) => (req, res, next) => {
     }
 };
 
-module.exports = validateSchema;
+export default validateSchema;

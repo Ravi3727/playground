@@ -1,10 +1,10 @@
-const ApiError = require("../API/ApiError");
-const ApiResponse = require("../API/ApiResponse");
-const asyncHandler = require("../API/asyncHandler");
-const connectDB = require("../DBConfig/dbConnection");
-const { Department } = require("../Models/department.model");
+import ApiError from "../API/ApiError.js";
+import ApiResponse from "../API/ApiResponse.js";
+import asyncHandler from "../API/asyncHandler.js";
+import connectDB from "../DBConfig/dbConnection.js";
+import Department from "../Models/department.model.js";
 
-exports.postDepartment = asyncHandler( async (req, res) => {
+export const postDepartment = asyncHandler( async (req, res) => {
     const departmentData = req.body;
         try{
             await connectDB();
@@ -17,7 +17,7 @@ exports.postDepartment = asyncHandler( async (req, res) => {
         }
 });
 
-exports.getDepartment = asyncHandler( async (req, res) => {
+export const getDepartment = asyncHandler( async (req, res) => {
     try{
         await connectDB();
         const departmentData = await Department.find().select("_id name shortDescription");   
@@ -28,7 +28,7 @@ exports.getDepartment = asyncHandler( async (req, res) => {
     }
 });
 
-exports.getDepartmentById = asyncHandler(async (req, res) => {
+export const getDepartmentById = asyncHandler(async (req, res) => {
     try{
         await connectDB();
         const departmentData = await Department.findById(req.params.id)
@@ -43,7 +43,7 @@ exports.getDepartmentById = asyncHandler(async (req, res) => {
     }
 })
 
-exports.updateDepartment = asyncHandler(async (req, res) => {
+export const updateDepartment = asyncHandler(async (req, res) => {
     try {
         await connectDB();
         const { id } = req.params;
