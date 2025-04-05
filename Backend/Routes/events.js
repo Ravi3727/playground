@@ -4,8 +4,8 @@ const router = express.Router();
 
 router.get("/", handleGetAllEvents);
 router.post("/create", handleCreateEvent);
-router.patch("/update", handleUpdateEvent);
-router.patch("/register", handleUserRegistration);
-router.delete("/delete", handleDeleteEvent);
+router.patch("/update/:id", handleUpdateEvent);
+router.patch("/register/:id", handleUserRegistration);
+router.delete("/delete/:id", handleDeleteEvent);
 
 module.exports = router;

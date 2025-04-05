@@ -5,8 +5,7 @@ const ApiResponse = require("../API/ApiResponse");
 
 const handleCreateEvent = asyncHandler(async (req, res) => {
   try {
-    const {user_id} = req.bodyuser;
-    const { title, description, on_date, venue, department, type_of_event } =
+    const { title, description, on_date, venue, department, type_of_event, user_id } =
       req.body;
 
     // Create a new event instance
@@ -55,17 +54,9 @@ const handleUpdateEvent = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     let updateData = { $set: req.body };
-
-    // Handle winners update separately
-    if (req.body.winners) {
-      updateData.$push = { winners: { $each: req.body.winners } }; // Push new winners to the array
-    }
-
-    // Ensure venue updates properly
-    if (req.body.venue) {
-      updateData.$set["venue.mode"] = req.body.venue.mode;
-      updateData.$set["venue.place"] = req.body.venue.place;
-    }
+    
+    //while passing winners it must be an array of winners and as each time the whole winner
+    //sections updates so pass new and previous winners collectively same for venue
 
     const updatedEvent = await Event.findByIdAndUpdate(id, updateData, {
       new: true,

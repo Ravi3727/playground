@@ -4,6 +4,8 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.send("Welcome to GDSC Web Server!");
 });
@@ -23,5 +25,7 @@ dbConnect(process.env.MONGODB_URI)
   });
  
   const EventRouter = require('./Routes/events');
+  const userRoutes = require("./Routes/user");
 
   app.use('/api/v1/events',EventRouter);
+  app.use("/api/v1/users", userRoutes);
