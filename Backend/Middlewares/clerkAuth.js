@@ -90,4 +90,4 @@ const verifyEventAccess = asyncHandler(async (req, res, next) => {
     }
 });
 
-module.exports = { verifyClerkAuth, authorizeRoles, submitBlogForApproval, verifyEventAccess };
+export { verifyClerkAuth, authorizeRoles, submitBlogForApproval, verifyEventAccess };
