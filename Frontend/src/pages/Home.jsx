@@ -50,8 +50,7 @@ useEffect(()=>{
       <MiddleSection />
       <WhatWeOffer />
       <BottomSection />
-      <JoinComm />
-      <Footer></Footer>
+      
     </>
   )
 }
