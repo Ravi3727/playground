@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     department: {
-        type: String
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'Department'
     },
     graduatingYear: {
         type: String

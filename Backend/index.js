@@ -1,7 +1,9 @@
+
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./DBConfig/dbConnect.js";
+
 
 import userRoutes from "./Routes/user.route.js";
 import resourceRoutes from "./Routes/resource.route.js";
@@ -18,6 +20,7 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("Welcome to GDSC Web Server!");
 });
+
 
 app.use("/api/v1", userRoutes);
 app.use("/api/v1/resources", resourceRoutes);
