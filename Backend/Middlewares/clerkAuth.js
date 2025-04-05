@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const { sessions, users } = require("@clerk/clerk-sdk-node");
-const { User } = require("../models/userModel");
+const { User } = require("../Models/user.model");
 const clerkClient = require("@clerk/clerk-sdk-node");
 
 // Middleware to verify Clerk authentication
