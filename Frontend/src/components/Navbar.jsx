@@ -86,7 +86,7 @@ function NavBar() {
       {/* Right: Conditional Auth Button */}
       <div>
         <SignedOut>
-          <NavLink to="/signin">
+          <NavLink to="/api/v1/sign-up">
             <button className="px-3 py-1 bg-black text-white text-xs sm:text-sm md:text-[15px] rounded-3xl w-[80px] sm:w-[100px] md:w-[140px] transform active:scale-90 cursor-pointer hover:bg-slate-900 transition">
               Sign In
             </button>

@@ -11,7 +11,6 @@ import SignInPage from './pages/SignInPage.jsx';
 import Layout from './Layout.jsx';
 import App from './App.jsx';
 
-
 // Clerk API Key from environment variable
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -33,12 +32,12 @@ const router = createBrowserRouter([
         element: <Event />,
       },
       {
-        path: '/signup',
+        path: '/api/v1/signup',
         element: <SignUpPage />,
       },
       {
-        path:'signin',
-        element:<SignInPage/>
+        path:'api/v1/sign-up',
+        element:<SignInPage />
 
       }
 
@@ -47,11 +46,11 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')).render(
+  <ClerkProvider publishableKey={clerkPubKey}>
   <StrictMode>
-    <ClerkProvider publishableKey={clerkPubKey}>
       <RouterProvider router={router}>
-        {/* <App/> */}
+        <App/>
       </RouterProvider>
-    </ClerkProvider>
   </StrictMode>
+  </ClerkProvider>
 );
