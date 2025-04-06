@@ -1,7 +1,6 @@
 import ApiError from "../API/ApiError.js";
 import ApiResponse from "../API/ApiResponse.js";
 import asyncHandler from "../API/asyncHandler.js";
-import connectDB from "../DBConfig/dbConnection.js";
 import Department from "../Models/department.model.js";
 
 export const postDepartment = asyncHandler( async (req, res) => {

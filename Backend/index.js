@@ -1,12 +1,9 @@
-
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./DBConfig/dbConnect.js";
 
-
-import userRoutes from "./Routes/user.route.js";
-import resourceRoutes from "./Routes/resource.route.js";
+import mainRouter from "./Routes/index.js";
 import eventRoutes from "./Routes/events.route.js";
 import ApiError from "./API/ApiError.js";
 
@@ -23,8 +20,7 @@ app.get("/", (req, res) => {
 });
 
 
-app.use("/api/v1", userRoutes);
-app.use("/api/v1/resources", resourceRoutes);
+app.use("/api/v1", mainRouter);
 app.use("/api/v1/events", eventRoutes);
 
 // Global error-handling middleware
