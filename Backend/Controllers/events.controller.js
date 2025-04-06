@@ -1,13 +1,13 @@
-const Event = require("../Models/events");
-const asyncHandler = require("../API/asyncHandler");
-const ApiError = require("../API/ApiError");
-const ApiResponse = require("../API/ApiResponse");
+import Event from "../Models/events.model.js"
+import asyncHandler from "../API/asyncHandler.js"
+import ApiError from "../API/ApiError.js"
+import ApiResponse from "../API/ApiResponse.js"
 
-const handleCreateEvent = asyncHandler(async (req, res) => {
+export const handleCreateEvent = asyncHandler(async (req, res) => {
   try {
-    const { title, description, on_date, venue, department, type_of_event, user_id } =
+    const { title, description, on_date, venue, department, type_of_event, createdBy } =
       req.body;
-
+ 
     // Create a new event instance
     const newEvent = new Event({
       title: title,
@@ -16,7 +16,7 @@ const handleCreateEvent = asyncHandler(async (req, res) => {
       venue: venue,
       department: department,
       type_of_event: type_of_event,
-      createdBy: user_id,
+      createdBy: createdBy,
     });
 
     // Save event to the database
@@ -32,25 +32,26 @@ const handleCreateEvent = asyncHandler(async (req, res) => {
         )
       );
 
-    //   { message: "Event created successfully", event: savedEvent }
   } catch (error) {
     console.error("Error creating event:", error);
     throw new ApiError(500, error?.message || "Failed to create event");
   }
 });
 
-const handleGetAllEvents = asyncHandler(async (req, res) => {
+export const handleGetAllEvents = asyncHandler(async (req, res) => {
   try {
     const events = await Event.find();
     res
       .status(200)
       .json(new ApiResponse(200, events, "Events fetched successfully"));
   } catch (error) {
-    next(new ApiError(500, "error while fetching events", error));
+    res
+      .status(500)
+      .json(new ApiError(500, "Error while fetching the event", error));
   }
 });
 
-const handleUpdateEvent = asyncHandler(async (req, res) => {
+export const handleUpdateEvent = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     let updateData = { $set: req.body };
@@ -77,7 +78,7 @@ const handleUpdateEvent = asyncHandler(async (req, res) => {
   }
 });
 
-const handleDeleteEvent = asyncHandler(async (req, res) => {
+export const handleDeleteEvent = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const deletedEvent = await Event.findByIdAndDelete(id);
@@ -94,7 +95,7 @@ const handleDeleteEvent = asyncHandler(async (req, res) => {
   }
 });
 
-const handleUserRegistration = asyncHandler(async (req, res) => {
+export const handleUserRegistration = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const { user_id } = req.body;
@@ -122,11 +123,4 @@ const handleUserRegistration = asyncHandler(async (req, res) => {
       .json(new ApiError(500, "error while registering user to event", error));
   }
 });
-
-module.exports = {
-  handleCreateEvent,
-  handleGetAllEvents,
-  handleDeleteEvent,
-  handleUpdateEvent,
-  handleUserRegistration,
-};
+ 
