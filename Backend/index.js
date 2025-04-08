@@ -4,6 +4,7 @@ import cors from "cors";
 import { connectDB } from "./DBConfig/dbConnect.js";
 
 import mainRouter from "./Routes/index.js";
+import eventRoutes from "./Routes/events.route.js";
 import ApiError from "./API/ApiError.js";
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 
 
 app.use("/api/v1", mainRouter);
+app.use("/api/v1/events", eventRoutes);
 
 // Global error-handling middleware
 app.use((err, req, res, next) => {
