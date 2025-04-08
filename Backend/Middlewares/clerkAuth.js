@@ -81,4 +81,6 @@ const verifyEventAccess = asyncHandler(async (req, res, next) => {
     }
 });
 
-export default { verifyClerkAuth, authorizeRoles, submitBlogForApproval, verifyEventAccess };
+
+export { verifyClerkAuth, authorizeRoles, submitBlogForApproval, verifyEventAccess };
+

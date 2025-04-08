@@ -51,7 +51,7 @@ useEffect(()=>{
       <WhatWeOffer />
       <BottomSection />
       <JoinComm />
-      <Footer></Footer>
+      <Footer/>
     </>
   )
 }

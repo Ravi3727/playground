@@ -3,8 +3,10 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./DBConfig/dbConnect.js";
 
-import userRoutes from "./Routes/user.route.js";
-import resourceRoutes from "./Routes/resource.route.js";
+
+import mainRouter from "./Routes/index.js";
+import eventRoutes from "./Routes/events.route.js";
+
 import ApiError from "./API/ApiError.js";
 
 dotenv.config();
@@ -19,8 +21,11 @@ app.get("/", (req, res) => {
   res.send("Welcome to GDSC Web Server!");
 });
 
-app.use("/api/v1", userRoutes);
-app.use("/api/v1/resources", resourceRoutes);
+
+
+app.use("/api/v1", mainRouter);
+app.use("/api/v1/events", eventRoutes);
+
 
 // Global error-handling middleware
 app.use((err, req, res, next) => {
