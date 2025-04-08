@@ -20,33 +20,34 @@ import {
 } from "../Validations/resource.validation.js";
 
 import validate from "../Middlewares/validate.js";
+import { verifyClerkAuth } from "../Middlewares/clerkIdAuth.js";
 
 const router = express.Router();
 
 // 1. CRUD operations for resources
 router
   .route("/")
-  .post(validate(resourceValidationSchema), createResource) // Create a new resource
+  .post(verifyClerkAuth, validate(resourceValidationSchema), createResource) // Create a new resource
   .get(getResources); // Get all resources
 
 router
   .route("/:id")
   .get(getResource) // Get a specific resource by ID
-  .put(validate(resourceUpdateValidationSchema), updateResource) // Update a specific resource by ID
-  .delete(deleteResource); // Delete a specific resource by ID
+  .put(verifyClerkAuth, validate(resourceUpdateValidationSchema), updateResource) // Update a specific resource by ID
+  .delete(verifyClerkAuth, deleteResource); // Delete a specific resource by ID
 
 // 2. Like functionality
-router.post("/:id/like", toggleLike);
+router.post("/:id/like", verifyClerkAuth, toggleLike);
 
 // 3. CRUD operations for comments
 router
   .route("/:resourceId/comments")
-  .post(validate(commentValidationSchema), createComment) // Create a new comment
+  .post(verifyClerkAuth, validate(commentValidationSchema), createComment) // Create a new comment
   .get(getComments); // Get all comments
-  
+
 router
   .route("/:resourceId/comments/:commentId")
-  .put(validate(commentValidationSchema), updateComment) // Update a comment
-  .delete(deleteComment); // Delete a comment
+  .put(verifyClerkAuth, validate(commentValidationSchema), updateComment) // Update a comment
+  .delete(verifyClerkAuth, deleteComment); // Delete a comment
 
 export default router;

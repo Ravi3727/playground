@@ -1,9 +1,7 @@
-const asyncHandler = require("express-async-handler");
-const { sessions, users } = require("@clerk/clerk-sdk-node");
-const { User } = require("../Models/user.model");
-const clerkClient = require("@clerk/clerk-sdk-node");
+import asyncHandler from "express-async-handler";
+import { sessions, users } from "@clerk/clerk-sdk-node";
+import User from "../Models/user.model.js";
 
-// Middleware to verify Clerk authentication
 const verifyClerkAuth = asyncHandler(async (req, res, next) => {
     try {
         const sessionToken = req.cookies?.sessionToken || req.header("Authorization")?.replace("Bearer ", "").trim();
@@ -27,7 +25,6 @@ const verifyClerkAuth = asyncHandler(async (req, res, next) => {
     }
 });
 
-// Middleware to authorize roles
 const authorizeRoles = (...allowedRoles) => {
     return (req, res, next) => {
         if (!req.user || !allowedRoles.includes(req.user.role)) {
@@ -37,18 +34,15 @@ const authorizeRoles = (...allowedRoles) => {
     };
 };
 
-// Middleware to submit a blog for approval or publish directly
 const submitBlogForApproval = asyncHandler(async (req, res, next) => {
     try {
         if (!req.user) {
             return res.status(401).json({ success: false, message: "Unauthorized" });
         }
-        // If user is an admin, publish the blog immediately
         if (req.user.role === "admin") {
             req.blogStatus = "published";
             return next();
         }
-        // Otherwise, submit the blog for admin approval
         const approver = await User.findOne({ role: "admin" });
         if (approver) {
             approver.verificationQueue = approver.verificationQueue || [];
@@ -66,14 +60,11 @@ const submitBlogForApproval = asyncHandler(async (req, res, next) => {
     }
 });
 
-// Middleware to verify event access
 const verifyEventAccess = asyncHandler(async (req, res, next) => {
     try {
-        // Allow all users to view events
         if (req.method === "GET") {
             return next();
         }
-        // Only allow admins to add events
         if (req.method === "POST") {
             if (!req.user) {
                 return res.status(401).json({ success: false, message: "Unauthorized: User not authenticated" });
@@ -90,4 +81,6 @@ const verifyEventAccess = asyncHandler(async (req, res, next) => {
     }
 });
 
+
 export { verifyClerkAuth, authorizeRoles, submitBlogForApproval, verifyEventAccess };
+
