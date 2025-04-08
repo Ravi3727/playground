@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./DBConfig/dbConnect.js";
 
+
 import mainRouter from "./Routes/index.js";
 import ApiError from "./API/ApiError.js";
 
@@ -17,6 +18,7 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("Welcome to GDSC Web Server!");
 });
+
 
 
 app.use("/api/v1", mainRouter);

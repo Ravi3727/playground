@@ -1,6 +1,7 @@
 import { Router } from "express";
 import departmentRouter from "./department.route.js";
 import teamRouter from "./team.route.js";
+
 import resourceRouter from "./resource.route.js";
 import userRouter from "./user.route.js";
 import eventRoutes from "./events.route.js";
@@ -13,5 +14,6 @@ router.use("/resources", resourceRouter);
 router.use("/events", eventRoutes);
 // Add any other routes here
 // router.use("/anotherRoute", anotherRouter);
+
 
 export default router;
