@@ -36,21 +36,28 @@ const router = createBrowserRouter([
         element: <SignUpPage />,
       },
       {
-        path:'api/v1/sign-up',
-        element:<SignInPage />
+        path:'/signin',
+        element:<SignInPage/>
 
+      },
+       // Admin routes - protected by role check
+       {
+        element: <ProtectedAdminRoute />,
+        children: [
+          {
+            path: '/admin',
+            element: <AdminDashboard />
+          }
+        ]
       }
-
     ],
   },
 ]);
 
 createRoot(document.getElementById('root')).render(
-  <ClerkProvider publishableKey={clerkPubKey}>
   <StrictMode>
-      <RouterProvider router={router}>
-        <App/>
-      </RouterProvider>
+    <ClerkProvider publishableKey={clerkPubKey}>
+      <RouterProvider router={router} />
+    </ClerkProvider>
   </StrictMode>
-  </ClerkProvider>
 );
