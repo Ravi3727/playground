@@ -21,30 +21,52 @@ import { verifyClerkAuth } from "../Middlewares/clerkAuth.js";
 
 const router = Router();
 
-// 1. CRUD operations for resources
-router
-  .route("/")
-  .post(verifyClerkAuth, validate(resourceValidationSchema), createResource) // Create a new resource
-  .get(getResources); // Get all resources
+// Public routes
+router.get("/", getResources); // Get all resources
+router.get("/:id", getResource); // Get a specific resource by ID
+router.get("/:resourceId/comments", getComments); // Get all comments for a resource
 
-router
-  .route("/:id")
-  .get(getResource) // Get a specific resource by ID
-  .put(verifyClerkAuth, validate(resourceUpdateValidationSchema), updateResource) // Update a specific resource by ID
-  .delete(verifyClerkAuth, deleteResource); // Delete a specific resource by ID
+// Protected routes requiring authentication
+// 1. CRUD operations for resources
+router.post("/", 
+  verifyClerkAuth, 
+  validate(resourceValidationSchema), 
+  createResource
+); // Create a new resource
+
+router.put("/:id", 
+  verifyClerkAuth, 
+  validate(resourceUpdateValidationSchema), 
+  updateResource
+); // Update a specific resource by ID
+
+router.delete("/:id", 
+  verifyClerkAuth, 
+  deleteResource
+); // Delete a specific resource by ID
 
 // 2. Like functionality
-router.post("/:id/like", verifyClerkAuth, toggleLike);
+router.post("/:id/like", 
+  verifyClerkAuth, 
+  toggleLike
+);
 
 // 3. CRUD operations for comments
-router
-  .route("/:resourceId/comments")
-  .post(verifyClerkAuth, validate(commentValidationSchema), createComment) // Create a new comment
-  .get(getComments); // Get all comments
+router.post("/:resourceId/comments", 
+  verifyClerkAuth, 
+  validate(commentValidationSchema), 
+  createComment
+); // Create a new comment
+  
+router.put("/:resourceId/comments/:commentId", 
+  verifyClerkAuth, 
+  validate(commentValidationSchema), 
+  updateComment
+); // Update a comment
 
-router
-  .route("/:resourceId/comments/:commentId")
-  .put(verifyClerkAuth, validate(commentValidationSchema), updateComment) // Update a comment
-  .delete(verifyClerkAuth, deleteComment); // Delete a comment
+router.delete("/:resourceId/comments/:commentId", 
+  verifyClerkAuth, 
+  deleteComment
+); // Delete a comment
 
 export default router;

@@ -8,7 +8,8 @@ const Layout = () => {
   return (
     <>
         <Outlet />
-    
+        <JoinComm />
+        <Footer/>   
 
       
     </>

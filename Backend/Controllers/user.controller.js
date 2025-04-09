@@ -1,3 +1,5 @@
+import ApiError from "../API/ApiError.js";
+import asyncHandler from "../API/asyncHandler.js";
 import User from "../Models/user.model.js";
 
 export const signUp = async (req, res) => {
@@ -16,9 +18,9 @@ export const signUp = async (req, res) => {
     const newUser = new User(user);
     await newUser.save();
 
-    res.status(201).json({ success: true, message: "User successfully registered!" });
-  } catch (error) {
-    console.error("Error in saving user data: ", error.message);
-    res.status(500).json({ success: false, message: "An error occurred" });
-  }
-};
+        res.status(201).json({success: true, message: "User successfully registered!"});
+    }catch(error){
+        console.error("Error in saving user data: ", error.message);
+        res.status(500).json({success: false, message: "An error occurred"});
+    }
+}

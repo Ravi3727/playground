@@ -118,7 +118,7 @@ const SignUpPage = () => {
 
         {/* Clerk Sign-Up Component */}
         <div className="bg-blue-100 flex justify-center rounded-xl shadow-lg p-8 w-full max-w-md">
-          <SignUp signInUrl="/api/v1/sign-up" />
+          <SignUp signInUrl="/signin" />
         </div>
       </main>
 

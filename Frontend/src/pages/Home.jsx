@@ -13,10 +13,7 @@ function Home() {
     if (!user) return;
 
     try {
-      const sessionId = user.sessionId; // Ensure sessionId is retrieved correctly
-      console.log("Session ID:", sessionId); // Log the session ID for debugging
-
-      const res = await fetch("http://localhost:5000/api/v1/user/sign-up", {
+      const res = await fetch("http://localhost:5000/api/v1/sign-up", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,7 +53,7 @@ function Home() {
       <WhatWeOffer />
       <BottomSection />
       <JoinComm />
-      <Footer />
+      <Footer></Footer>
     </>
   );
 }

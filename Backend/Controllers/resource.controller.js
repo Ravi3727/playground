@@ -6,23 +6,29 @@ import User from "../Models/user.model.js";
 
 export const createResource = async (req, res, next) => {
   try {
+    // Extract userId from request body
     const { userId } = req.body;
     if (!userId) {
+      // Validate presence of userId
       return next(new ApiError(400, "User ID is required in request body"));
     }
 
+    // Retrieve the user by ID
     const currentUser = await User.findById(userId);
     if (!currentUser) {
+      // User not found error
       return next(new ApiError(404, "User not found"));
     }
 
+    // Create a resource using validated data and associate it with the user
     const resource = new Resource({
       ...req.validatedData,
-      sharedBy: currentUser._id,
+      sharedBy: userId,
     });
 
     const savedResource = await resource.save();
 
+    // Update user's shared resources list
     currentUser.resources_Shared = currentUser.resources_Shared || [];
     currentUser.resources_Shared.push(savedResource._id);
     await currentUser.save();
@@ -50,7 +56,7 @@ export const getResources = async (req, res, next) => {
     return res
       .status(200)
       .json(
-        new ApiResponse(200, resources, `Found ${resources.length} resources`)
+        new ApiResponse(200, resources,`Found ${resources.length} resources`)
       );
   } catch (error) {
     return next(new ApiError(500, error.message));
@@ -75,11 +81,13 @@ export const getResource = async (req, res, next) => {
 
 export const updateResource = async (req, res, next) => {
   try {
+    // Extract userId from request body
     const { userId } = req.body;
     if (!userId) {
       return next(new ApiError(400, "User ID is required in request body"));
     }
 
+    // Find current user
     const currentUser = await User.findById(userId);
     if (!currentUser) {
       return next(new ApiError(404, "User not found"));
@@ -91,14 +99,19 @@ export const updateResource = async (req, res, next) => {
       return next(new ApiError(404, "Resource not found"));
     }
 
+    // Prepare update data from validated request data
     let updateData = req.validatedData;
 
+    // Determine if current user is the owner or an admin
     const isOwner = resource.sharedBy.toString() === currentUser._id.toString();
     const isAdmin = currentUser.role === "admin";
 
     if (isOwner) {
+      // Only admin can update isVerified field when owner is updating
       if ("isVerified" in updateData && !isAdmin) {
-        delete updateData.isVerified;
+        return next(
+          new ApiError(403, "You are not allowed to update the isVerified field.")
+        );
       }
     } else if (isAdmin) {
       if (!isOwner) {
@@ -135,11 +148,13 @@ export const updateResource = async (req, res, next) => {
 
 export const deleteResource = async (req, res, next) => {
   try {
+    // Extract userId from request body
     const { userId } = req.body;
     if (!userId) {
       return next(new ApiError(400, "User ID is required in request body"));
     }
 
+    // Retrieve current user using provided userId
     const currentUser = await User.findById(userId);
     if (!currentUser) {
       return next(new ApiError(404, "User not found"));
@@ -151,9 +166,9 @@ export const deleteResource = async (req, res, next) => {
       return next(new ApiError(404, "Resource not found"));
     }
 
+    // Verify if the user is the owner or an admin before deletion
     const isOwner = resource.sharedBy.toString() === currentUser._id.toString();
     const isAdmin = currentUser.role === "admin";
-
     if (!isOwner && !isAdmin) {
       return next(
         new ApiError(403, "You don't have permission to delete this resource.")
@@ -172,6 +187,7 @@ export const deleteResource = async (req, res, next) => {
 
 export const toggleLike = async (req, res, next) => {
   try {
+    // Extract userId from the request body
     const { userId } = req.body;
     if (!userId) {
       return next(new ApiError(400, "User ID is required in request body"));
@@ -208,9 +224,9 @@ export const toggleLike = async (req, res, next) => {
 
 export const createComment = async (req, res, next) => {
   try {
+    // Extract resourceId from params and userId from request body
     const { resourceId } = req.params;
     const { userId } = req.body;
-
     if (!userId) {
       return next(new ApiError(400, "User ID is required in request body"));
     }
@@ -247,13 +263,14 @@ export const getComments = async (req, res, next) => {
 
 export const updateComment = async (req, res, next) => {
   try {
+    // Extract commentId from params and userId from request body
     const { commentId } = req.params;
     const { userId } = req.body;
-
     if (!userId) {
       return next(new ApiError(400, "User ID is required in request body"));
     }
 
+    // Validate that user exists
     const currentUser = await User.findById(userId);
     if (!currentUser) {
       return next(new ApiError(404, "User not found"));
@@ -264,9 +281,9 @@ export const updateComment = async (req, res, next) => {
       return next(new ApiError(404, "Comment not found"));
     }
 
+    // Check if current user is owner or admin
     const isOwner = comment.userId === userId;
     const isAdmin = currentUser.role === "admin";
-
     if (!isOwner && !isAdmin) {
       return next(
         new ApiError(403, "You don't have permission to update this comment.")
@@ -291,13 +308,14 @@ export const updateComment = async (req, res, next) => {
 
 export const deleteComment = async (req, res, next) => {
   try {
+    // Extract commentId from params and userId from request body
     const { commentId } = req.params;
     const { userId } = req.body;
-
     if (!userId) {
       return next(new ApiError(400, "User ID is required in request body"));
     }
 
+    // Validate the existence of the user
     const currentUser = await User.findById(userId);
     if (!currentUser) {
       return next(new ApiError(404, "User not found"));
@@ -308,9 +326,9 @@ export const deleteComment = async (req, res, next) => {
       return next(new ApiError(404, "Comment not found"));
     }
 
+    // Check if the current user is allowed to delete (owner or admin)
     const isOwner = comment.userId === userId;
     const isAdmin = currentUser.role === "admin";
-
     if (!isOwner && !isAdmin) {
       return next(
         new ApiError(403, "You don't have permission to delete this comment.")
