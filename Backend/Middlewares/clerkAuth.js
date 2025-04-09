@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 const asyncHandler = require("express-async-handler");
 const { sessions, users } = require("@clerk/clerk-sdk-node");
 const { User } = require("../Models/user.model");
 const clerkClient = require("@clerk/clerk-sdk-node");
+=======
+import asyncHandler from "express-async-handler";
+import { clerkClient } from "@clerk/clerk-sdk-node";
+import User from "../Models/user.model.js";
+>>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
 
 // Middleware to verify Clerk authentication
 const verifyClerkAuth = asyncHandler(async (req, res, next) => {

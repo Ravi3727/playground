@@ -5,8 +5,14 @@ import cors from "cors";
 import { connectDB } from "./DBConfig/dbConnect.js";
 
 
+<<<<<<< HEAD
 import userRoutes from "./Routes/user.route.js";
 import resourceRoutes from "./Routes/resource.route.js";
+=======
+import mainRouter from "./Routes/index.js";
+import eventRoutes from "./Routes/events.route.js";
+
+>>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
 import ApiError from "./API/ApiError.js";
 
 dotenv.config();
@@ -22,8 +28,15 @@ app.get("/", (req, res) => {
 });
 
 
+<<<<<<< HEAD
 app.use("/api/v1", userRoutes);
 app.use("/api/v1/resources", resourceRoutes);
+=======
+
+app.use("/api/v1", mainRouter);
+app.use("/api/v1/events", eventRoutes);
+
+>>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
 
 // Global error-handling middleware
 app.use((err, req, res, next) => {

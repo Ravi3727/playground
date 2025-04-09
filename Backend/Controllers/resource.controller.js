@@ -84,18 +84,10 @@ export const getResource = async (req, res, next) => {
 // Update a resource
 export const updateResource = async (req, res, next) => {
   try {
-    // Extract userId from request body
-    const { userId } = req.body;
-    if (!userId) {
-      return next(new ApiError(400, "User ID is required in request body"));
-    }
+    // Get user ID from the authenticated user
+    const userId = req.user._id;
 
-    // Find current user
-    const currentUser = await User.findById(userId);
-    if (!currentUser) {
-      return next(new ApiError(404, "User not found"));
-    }
-
+    // Find resource to update by id
     const resourceId = req.params.id;
     const resource = await Resource.findById(resourceId);
     if (!resource) {
@@ -154,14 +146,20 @@ export const updateResource = async (req, res, next) => {
 };
 
 // Delete a resource
+<<<<<<< HEAD
 // Delete a resource
+=======
+>>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
 export const deleteResource = async (req, res, next) => {
   try {
     // Get user ID from the authenticated user
     const userId = req.user._id;
 
     // Find resource to delete by id
+<<<<<<< HEAD
     // Find resource to delete by id
+=======
+>>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
     const resourceId = req.params.id;
     const resource = await Resource.findById(resourceId);
     if (!resource) {
@@ -194,12 +192,10 @@ export const deleteResource = async (req, res, next) => {
 // Toggle the like status on a resource
 export const toggleLike = async (req, res, next) => {
   try {
-    // Extract userId from the request body
-    const { userId } = req.body;
-    if (!userId) {
-      return next(new ApiError(400, "User ID is required in request body"));
-    }
+    // Get user ID from the authenticated user
+    const userId = req.user._id;
 
+    // Find resource by id
     const resource = await Resource.findById(req.params.id);
     if (!resource) {
       return next(new ApiError(404, "Resource not found"));
@@ -290,17 +286,8 @@ export const updateComment = async (req, res, next) => {
 
     // Extract commentId from params
     const { commentId } = req.params;
-    const { userId } = req.body;
-    if (!userId) {
-      return next(new ApiError(400, "User ID is required in request body"));
-    }
 
-    // Validate that user exists
-    const currentUser = await User.findById(userId);
-    if (!currentUser) {
-      return next(new ApiError(404, "User not found"));
-    }
-
+    // Retrieve the comment to update
     const comment = await Comment.findById(commentId);
     if (!comment) {
       return next(new ApiError(404, "Comment not found"));
@@ -341,13 +328,17 @@ export const deleteComment = async (req, res, next) => {
 
     // Extract commentId from params
     const { commentId } = req.params;
+<<<<<<< HEAD
 
     // Validate the existence of the user
     const currentUser = await User.findById(userId);
     if (!currentUser) {
       return next(new ApiError(404, "User not found"));
     }
+=======
+>>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
 
+    // Find the comment to delete
     const comment = await Comment.findById(commentId);
     if (!comment) {
       return next(new ApiError(404, "Comment not found"));
