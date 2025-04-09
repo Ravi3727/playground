@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ClerkProvider, SignIn } from '@clerk/clerk-react';
+import { ClerkProvider } from '@clerk/clerk-react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './index.css';
 import Home from './pages/Home.jsx';
@@ -13,6 +13,10 @@ import App from './App.jsx';
 
 // Clerk API Key from environment variable
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!clerkPubKey) {
+  console.error("Clerk Publishable Key is missing in the environment variables.");
+}
 
 const router = createBrowserRouter([
   {
@@ -38,19 +42,17 @@ const router = createBrowserRouter([
       {
         path:'api/v1/sign-up',
         element:<SignInPage />
-
       }
-
     ],
   },
 ]);
 
 createRoot(document.getElementById('root')).render(
   <ClerkProvider publishableKey={clerkPubKey}>
-  <StrictMode>
+    <StrictMode>
       <RouterProvider router={router}>
-        <App/>
+        <App />
       </RouterProvider>
-  </StrictMode>
+    </StrictMode>
   </ClerkProvider>
 );
