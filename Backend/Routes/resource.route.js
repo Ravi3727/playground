@@ -1,5 +1,4 @@
-import express from "express";
-
+import { Router } from "express";
 import {
   getResources,
   createResource,
@@ -12,17 +11,15 @@ import {
   updateComment,
   deleteComment,
 } from "../Controllers/resource.controller.js";
-
 import {
   resourceValidationSchema,
   resourceUpdateValidationSchema,
   commentValidationSchema,
 } from "../Validations/resource.validation.js";
-
 import validate from "../Middlewares/validate.js";
-import { verifyClerkAuth } from "../Middlewares/clerkIdAuth.js";
+import { verifyClerkAuth } from "../Middlewares/clerkAuth.js";
 
-const router = express.Router();
+const router = Router();
 
 // 1. CRUD operations for resources
 router

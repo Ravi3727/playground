@@ -1,15 +1,15 @@
-import Project from '../Models/projectModel.js';
-import User from '../Models/userModel.js';
+import Project from "../Models/projectModel.js";
+import User from "../Models/userModel.js";
 
-const createProject = async (req, res) => {
+export const createProject = async (req, res) => {
   try {
     const { title, description, category, githubLink, mvpLink } = req.body;
 
     if (!title || !description || !category || !githubLink) {
-      return res.status(400).json({ error: 'Title, description, category, and GitHub link are required' });
+      return res.status(400).json({ error: "Title, description, category, and GitHub link are required" });
     }
 
-    const userId = req.user.clerkId;
+    const userId = req.user.clerk_id;
 
     const project = await Project.create({
       title,
@@ -25,14 +25,14 @@ const createProject = async (req, res) => {
       { $push: { projects: project._id } }
     );
 
-    res.status(201).json({ message: 'Project created successfully', project });
+    res.status(201).json({ message: "Project created successfully", project });
   } catch (error) {
-    console.error('Create Project Error:', error);
-    res.status(500).json({ error: 'Server error while creating project' });
+    console.error("Create Project Error:", error);
+    res.status(500).json({ error: "Server error while creating project" });
   }
 };
 
-const getAllProjects = async (req, res) => {
+export const getAllProjects = async (req, res) => {
   try {
     const projects = await Project.find().sort({ createdAt: -1 });
     res.status(200).json(projects);
@@ -41,7 +41,7 @@ const getAllProjects = async (req, res) => {
   }
 };
 
-const getProjectsByCategory = async (req, res) => {
+export const getProjectsByCategory = async (req, res) => {
   try {
     const category = req.params.category;
     const projects = await Project.find({ category });
@@ -51,7 +51,7 @@ const getProjectsByCategory = async (req, res) => {
   }
 };
 
-const getUserProjects = async (req, res) => {
+export const getUserProjects = async (req, res) => {
   try {
     const userId = req.user.clerkId;
     const projects = await Project.find({ createdBy: userId });
@@ -61,7 +61,7 @@ const getUserProjects = async (req, res) => {
   }
 };
 
-const updateProject = async (req, res) => {
+export const updateProject = async (req, res) => {
   try {
     const projectId = req.params.id;
     const userId = req.user.clerkId;
@@ -82,7 +82,7 @@ const updateProject = async (req, res) => {
   }
 };
 
-const deleteProject = async (req, res) => {
+export const deleteProject = async (req, res) => {
   try {
     const projectId = req.params.id;
     const userId = req.user.clerkId;
@@ -105,13 +105,4 @@ const deleteProject = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete project' });
   }
-};
-
-export default {
-  createProject,
-  getAllProjects,
-  getProjectsByCategory,
-  getUserProjects,
-  updateProject,
-  deleteProject,
 };

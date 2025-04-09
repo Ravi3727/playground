@@ -1,13 +1,13 @@
 {
   "license": "MIT",
   "main": "index.js",
+  "type": "module",
   "author": "Ravi",
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
     "build": "echo 'No build step necessary'"
   },
-  "type": "module",
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.1.6",
     "bcrypt": "^5.1.1",

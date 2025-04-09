@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from "express";
 import {
   createProject,
   getAllProjects,
@@ -6,16 +6,16 @@ import {
   getUserProjects,
   updateProject,
   deleteProject,
-} from '../Controllers/projectController.js';
-import { verifyClerkAuth } from '../Middlewares/clerkIdAuth.js';
+} from "../Controllers/projectController.js";
+import { verifyClerkAuth } from "../Middlewares/clerkAuth.js";
 
-const router = express.Router();
+const router = Router();
 
-router.post('/', verifyClerkAuth, createProject);
-router.get('/', verifyClerkAuth, getAllProjects);
-router.get('/category/:category', verifyClerkAuth, getProjectsByCategory);
-router.get('/user', verifyClerkAuth, getUserProjects);
-router.put('/:id', verifyClerkAuth, updateProject);
-router.delete('/:id', verifyClerkAuth, deleteProject);
+router.post("/", verifyClerkAuth, createProject);
+router.get("/", verifyClerkAuth, getAllProjects);
+router.get("/category/:category", verifyClerkAuth, getProjectsByCategory);
+router.get("/user", verifyClerkAuth, getUserProjects);
+router.put("/:id", verifyClerkAuth, updateProject);
+router.delete("/:id", verifyClerkAuth, deleteProject);
 
 export default router;
