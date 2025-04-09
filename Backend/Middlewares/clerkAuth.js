@@ -1,7 +1,8 @@
 import asyncHandler from "express-async-handler";
-import { sessions, users } from "@clerk/clerk-sdk-node";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 import User from "../Models/user.model.js";
 
+// Middleware to verify Clerk authentication
 const verifyClerkAuth = asyncHandler(async (req, res, next) => {
   try {
     const sessionToken =
@@ -37,6 +38,7 @@ const verifyClerkAuth = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Middleware to authorize roles
 const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user || !allowedRoles.includes(req.user.role)) {
@@ -49,6 +51,7 @@ const authorizeRoles = (...allowedRoles) => {
   };
 };
 
+// Middleware to submit a blog for approval or publish directly
 const submitBlogForApproval = asyncHandler(async (req, res, next) => {
   try {
     if (!req.user) {
@@ -77,6 +80,7 @@ const submitBlogForApproval = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Middleware to verify event access
 const verifyEventAccess = asyncHandler(async (req, res, next) => {
   try {
     if (req.method === "GET") {
@@ -103,7 +107,6 @@ const verifyEventAccess = asyncHandler(async (req, res, next) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
-
 
 export {
   verifyClerkAuth,

@@ -1,4 +1,5 @@
 import Event from "../Models/events.model.js"
+import User from "../Models/user.model.js"
 import asyncHandler from "../API/asyncHandler.js"
 import ApiError from "../API/ApiError.js"
 import ApiResponse from "../API/ApiResponse.js"
@@ -98,15 +99,21 @@ export const handleDeleteEvent = asyncHandler(async (req, res) => {
 export const handleUserRegistration = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    const { user_id } = req.body;
+    const user_id  = req.user._id;
 
     if (!user_id) {
       return res.status(400).json(new ApiError(400, "User ID is required"));
     }
-
+  
     const updatedEvent = await Event.findByIdAndUpdate(
       id,
       { $addToSet: { registered_user_id: user_id } },
+      { new: true }
+    );
+
+    const updatedUser = await User.findByIdAndUpdate(
+      user_id,
+      { $addToSet: { events_Participated : id } },
       { new: true }
     );
 
@@ -114,6 +121,10 @@ export const handleUserRegistration = asyncHandler(async (req, res) => {
       return res.status(404).json(new ApiError(404, "Event not found"));
     }
 
+    if (!updatedUser) {
+      return res.status(404).json(new ApiError(404, "User not found"));
+    }
+    
     res
       .status(200)
       .json(new ApiResponse(200, updatedEvent, "User registered successfully"));
