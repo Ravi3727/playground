@@ -20,7 +20,7 @@ import {
 } from "../Validations/resource.validation.js";
 
 import validate from "../Middlewares/validate.js";
-import { verifyClerkAuth } from "../Middlewares/clerkIdAuth.js";
+import { verifyClerkAuth } from "../Middlewares/clerkAuth.js";
 
 const router = express.Router();
 

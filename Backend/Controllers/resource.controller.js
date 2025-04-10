@@ -15,7 +15,7 @@ export const createResource = async (req, res, next) => {
     // Create a resource using validated data and associate it with the authenticated user
     const resource = new Resource({
       ...req.validatedData,
-      sharedBy: currentUser._id,
+      sharedBy: userId,
     });
 
     // Save the new resource
@@ -104,7 +104,9 @@ export const updateResource = async (req, res, next) => {
     if (isOwner) {
       // If a non-admin owner tries to update isVerified field, return an error
       if ("isVerified" in updateData && !isAdmin) {
-        delete updateData.isVerified;
+        return next(
+          new ApiError(403, "You are not allowed to update the isVerified field.")
+        );
       }
     } else if (isAdmin) {
       // Admin can only update isVerified for non-owners
@@ -146,20 +148,12 @@ export const updateResource = async (req, res, next) => {
 };
 
 // Delete a resource
-<<<<<<< HEAD
-// Delete a resource
-=======
->>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
 export const deleteResource = async (req, res, next) => {
   try {
     // Get user ID from the authenticated user
     const userId = req.user._id;
 
     // Find resource to delete by id
-<<<<<<< HEAD
-    // Find resource to delete by id
-=======
->>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
     const resourceId = req.params.id;
     const resource = await Resource.findById(resourceId);
     if (!resource) {
@@ -328,15 +322,6 @@ export const deleteComment = async (req, res, next) => {
 
     // Extract commentId from params
     const { commentId } = req.params;
-<<<<<<< HEAD
-
-    // Validate the existence of the user
-    const currentUser = await User.findById(userId);
-    if (!currentUser) {
-      return next(new ApiError(404, "User not found"));
-    }
-=======
->>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
 
     // Find the comment to delete
     const comment = await Comment.findById(commentId);
