@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 
 
-const SignUpPage = () => {
+const SignInPage = () => {
 
   const [authError, setAuthError] = useState(null);
   const formContainerRef = useRef(null);
@@ -104,7 +104,7 @@ const SignUpPage = () => {
 
         {/* Clerk Sign-Up Component */}
         <div className="bg-green-100 flex justify-center rounded-xl shadow-lg p-8 w-full max-w-md">
-          <SignIn signUpUrl="/api/v1/sign-up" />
+          <SignIn signUpUrl="/signup" />
         </div>
       </main>
 
@@ -116,4 +116,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default SignInPage;

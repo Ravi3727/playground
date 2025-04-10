@@ -1,6 +1,9 @@
-import clerk from "@clerk/clerk-sdk-node";
+
+// import clerk from "@clerk/clerk-sdk-node";
+const clerk = (await import("@clerk/clerk-sdk-node")).default;
 import asyncHandler from "express-async-handler";
-import User from "../Models/userModel.js";
+import User from "../Models/user.model.js";
+
 
 // Middleware to verify Clerk authentication using clerkId
 export const verifyClerkAuth = asyncHandler(async (req, res, next) => {
