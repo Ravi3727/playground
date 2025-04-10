@@ -2,7 +2,6 @@ import { z } from "zod";
 
 // Resource validation schema for creation
 export const resourceValidationSchema = z.object({
-  userId: z.string().min(1, "Resource must be shared by a user."),
   title: z.string().trim().min(1, "Title is required"),
   description: z.string().trim().min(1, "Description is required"),
   resourceUrl: z
