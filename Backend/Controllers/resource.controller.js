@@ -9,21 +9,10 @@ import User from "../Models/user.model.js";
 // Create a new resource
 export const createResource = async (req, res, next) => {
   try {
-    // Extract userId from request body
-    const { userId } = req.body;
-    if (!userId) {
-      // Validate presence of userId
-      return next(new ApiError(400, "User ID is required in request body"));
-    }
+    // Get user ID from the authenticated user
+    const userId = req.user._id;
 
-    // Retrieve the user by ID
-    const currentUser = await User.findById(userId);
-    if (!currentUser) {
-      // User not found error
-      return next(new ApiError(404, "User not found"));
-    }
-
-    // Create a resource using validated data and associate it with the user
+    // Create a resource using validated data and associate it with the authenticated user
     const resource = new Resource({
       ...req.validatedData,
       sharedBy: currentUser._id,
@@ -33,6 +22,7 @@ export const createResource = async (req, res, next) => {
     const savedResource = await resource.save();
 
     // Update user's shared resources list
+    const currentUser = await User.findById(userId);
     currentUser.resources_Shared = currentUser.resources_Shared || [];
     currentUser.resources_Shared.push(savedResource._id);
     await currentUser.save();
@@ -94,17 +84,8 @@ export const getResource = async (req, res, next) => {
 // Update a resource
 export const updateResource = async (req, res, next) => {
   try {
-    // Extract userId from request body
-    const { userId } = req.body;
-    if (!userId) {
-      return next(new ApiError(400, "User ID is required in request body"));
-    }
-
-    // Find current user
-    const currentUser = await User.findById(userId);
-    if (!currentUser) {
-      return next(new ApiError(404, "User not found"));
-    }
+    // Get user ID from the authenticated user
+    const userId = req.user._id;
 
     // Find resource to update by id
     const resourceId = req.params.id;
@@ -114,14 +95,14 @@ export const updateResource = async (req, res, next) => {
     }
 
     // Prepare update data from validated request data
-    let updateData = req.validatedData;
+    let updateData = req.validatedData || {};
 
     // Determine if current user is the owner or an admin
-    const isOwner = resource.sharedBy.toString() === currentUser._id.toString();
-    const isAdmin = currentUser.role === "admin";
+    const isOwner = resource.sharedBy.toString() === userId.toString();
+    const isAdmin = req.user.role === "admin";
 
     if (isOwner) {
-      // Only admin can update isVerified field when owner is updating
+      // If a non-admin owner tries to update isVerified field, return an error
       if ("isVerified" in updateData && !isAdmin) {
         delete updateData.isVerified;
       }
@@ -165,21 +146,20 @@ export const updateResource = async (req, res, next) => {
 };
 
 // Delete a resource
+<<<<<<< HEAD
+// Delete a resource
+=======
+>>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
 export const deleteResource = async (req, res, next) => {
   try {
-    // Extract userId from request body
-    const { userId } = req.body;
-    if (!userId) {
-      return next(new ApiError(400, "User ID is required in request body"));
-    }
-
-    // Retrieve current user using provided userId
-    const currentUser = await User.findById(userId);
-    if (!currentUser) {
-      return next(new ApiError(404, "User not found"));
-    }
+    // Get user ID from the authenticated user
+    const userId = req.user._id;
 
     // Find resource to delete by id
+<<<<<<< HEAD
+    // Find resource to delete by id
+=======
+>>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
     const resourceId = req.params.id;
     const resource = await Resource.findById(resourceId);
     if (!resource) {
@@ -187,8 +167,8 @@ export const deleteResource = async (req, res, next) => {
     }
 
     // Verify if the user is the owner or an admin before deletion
-    const isOwner = resource.sharedBy.toString() === currentUser._id.toString();
-    const isAdmin = currentUser.role === "admin";
+    const isOwner = resource.sharedBy.toString() === userId.toString();
+    const isAdmin = req.user.role === "admin";
     if (!isOwner && !isAdmin) {
       return next(
         new ApiError(403, "You don't have permission to delete this resource.")
@@ -212,11 +192,8 @@ export const deleteResource = async (req, res, next) => {
 // Toggle the like status on a resource
 export const toggleLike = async (req, res, next) => {
   try {
-    // Extract userId from the request body
-    const { userId } = req.body;
-    if (!userId) {
-      return next(new ApiError(400, "User ID is required in request body"));
-    }
+    // Get user ID from the authenticated user
+    const userId = req.user._id;
 
     // Find resource by id
     const resource = await Resource.findById(req.params.id);
@@ -258,12 +235,11 @@ export const toggleLike = async (req, res, next) => {
 // Create a new comment for a resource
 export const createComment = async (req, res, next) => {
   try {
-    // Extract resourceId from params and userId from request body
+    // Get user ID from the authenticated user
+    const userId = req.user._id;
+
+    // Extract resourceId from params
     const { resourceId } = req.params;
-    const { userId } = req.body;
-    if (!userId) {
-      return next(new ApiError(400, "User ID is required in request body"));
-    }
 
     // Create a new comment including the validated data
     const newComment = new Comment({
@@ -305,18 +281,11 @@ export const getComments = async (req, res, next) => {
 // Update a comment
 export const updateComment = async (req, res, next) => {
   try {
-    // Extract commentId from params and userId from request body
-    const { commentId } = req.params;
-    const { userId } = req.body;
-    if (!userId) {
-      return next(new ApiError(400, "User ID is required in request body"));
-    }
+    // Get user ID from the authenticated user
+    const userId = req.user._id;
 
-    // Validate that user exists
-    const currentUser = await User.findById(userId);
-    if (!currentUser) {
-      return next(new ApiError(404, "User not found"));
-    }
+    // Extract commentId from params
+    const { commentId } = req.params;
 
     // Retrieve the comment to update
     const comment = await Comment.findById(commentId);
@@ -325,8 +294,8 @@ export const updateComment = async (req, res, next) => {
     }
 
     // Check if current user is owner or admin
-    const isOwner = comment.userId === userId;
-    const isAdmin = currentUser.role === "admin";
+    const isOwner = comment.userId.toString() === userId.toString();
+    const isAdmin = req.user.role === "admin";
     if (!isOwner && !isAdmin) {
       return next(
         new ApiError(403, "You don't have permission to update this comment.")
@@ -354,18 +323,20 @@ export const updateComment = async (req, res, next) => {
 // Delete a comment
 export const deleteComment = async (req, res, next) => {
   try {
-    // Extract commentId from params and userId from request body
+    // Get user ID from the authenticated user
+    const userId = req.user._id;
+
+    // Extract commentId from params
     const { commentId } = req.params;
-    const { userId } = req.body;
-    if (!userId) {
-      return next(new ApiError(400, "User ID is required in request body"));
-    }
+<<<<<<< HEAD
 
     // Validate the existence of the user
     const currentUser = await User.findById(userId);
     if (!currentUser) {
       return next(new ApiError(404, "User not found"));
     }
+=======
+>>>>>>> parent of da71cb8 (Merge pull request #23 from AYUSH-0305/ayushman)
 
     // Find the comment to delete
     const comment = await Comment.findById(commentId);
@@ -374,8 +345,8 @@ export const deleteComment = async (req, res, next) => {
     }
 
     // Check if the current user is allowed to delete (owner or admin)
-    const isOwner = comment.userId === userId;
-    const isAdmin = currentUser.role === "admin";
+    const isOwner = comment.userId.toString() === userId.toString();
+    const isAdmin = req.user.role === "admin";
     if (!isOwner && !isAdmin) {
       return next(
         new ApiError(403, "You don't have permission to delete this comment.")
