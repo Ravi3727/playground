@@ -22,6 +22,7 @@ const verifyClerkAuth = asyncHandler(async (req, res, next) => {
         .json({ success: false, message: "Invalid or expired session token" });
     }
     const clerkUser = await clerkClient.users.getUser(session.userId);
+console.log(clerkUser)
     const user = await User.findOne({ clerk_id: clerkUser.id });
     if (!user) {
       return res
