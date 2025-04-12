@@ -15,7 +15,7 @@ export const createResource = async (req, res, next) => {
     // Create a resource using validated data and associate it with the authenticated user
     const resource = new Resource({
       ...req.validatedData,
-      sharedBy: currentUser._id,
+      sharedBy: userId,
     });
 
     // Save the new resource
@@ -104,7 +104,9 @@ export const updateResource = async (req, res, next) => {
     if (isOwner) {
       // If a non-admin owner tries to update isVerified field, return an error
       if ("isVerified" in updateData && !isAdmin) {
-        delete updateData.isVerified;
+        return next(
+          new ApiError(403, "You are not allowed to update the isVerified field.")
+        );
       }
     } else if (isAdmin) {
       // Admin can only update isVerified for non-owners

@@ -9,10 +9,10 @@ import ProjectPage from './pages/ProjectPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import Layout from './Layout.jsx';
-import App from './App.jsx';
-import ProtectedAdminRoute from './components/ProtectedAdminRoute.jsx'
-import AdminDashboard from './pages/AdminDashboard.jsx'
-
+import SignUpPage from './pages/SignUpPage.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
+import ProtectedAdminRoute from './components/ProtectedAdminRoute.jsx';
+import DoubtForum from './pages/DoubtForum.jsx';
 
 
 // Clerk API Key from environment variable
@@ -36,7 +36,11 @@ const router = createBrowserRouter([
         element: <Event />,
       },
       {
-        path: '/api/v1/signup',
+        path:'/forum',
+        element:<DoubtForum/>
+      },
+      {
+        path: '/signup',
         element: <SignUpPage />,
       },
       {
