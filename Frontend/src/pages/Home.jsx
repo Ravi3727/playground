@@ -5,16 +5,20 @@ import MiddleSection from '../components/homePageSections/MiddleSection'
 import WhatWeOffer from '../components/homePageSections/WhatWeOffer'
 import JoinComm from '../components/homePageSections/JoinComm'
 import Footer from '../components/homePageSections/Footer'
-import { useUser } from '@clerk/clerk-react'
+import { useUser, useSession } from '@clerk/clerk-react'
 import { useEffect } from 'react'
 
 function Home() {
 
+  const { session } = useSession();
+
   const handleSendData = async (user) => {
     if (!user) return;
-    
+  
     try {
-      const res = await fetch("http://localhost:5000/api/v1/sign-up", {
+      const sessionId = session.id; // Get the session ID
+      console.log("Session ID:", sessionId);
+      const res = await fetch("http://localhost:5000/api/v1/user/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -50,7 +54,8 @@ useEffect(()=>{
       <MiddleSection />
       <WhatWeOffer />
       <BottomSection />
-      
+      <JoinComm />
+      <Footer/>
     </>
   )
 }
