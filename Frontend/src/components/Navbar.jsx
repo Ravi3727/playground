@@ -90,6 +90,16 @@ function NavBar() {
             Alumni
           </NavLink>
         </li>
+        <li>
+          <NavLink
+            to="/forum"
+            className={({ isActive }) =>
+              isActive ? "text-gray-600 font-bold" : "hover:text-gray-600"
+            }
+          >
+            Forum
+          </NavLink>
+        </li>
         
         {/* Only show admin link if user is admin */}
         {isAdmin && (
