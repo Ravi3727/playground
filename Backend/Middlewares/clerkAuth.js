@@ -1,10 +1,6 @@
 import asyncHandler from "express-async-handler";
 import { clerkClient } from "@clerk/clerk-sdk-node";
 import User from "../Models/user.model.js";
-import { createClerkClient } from '@clerk/clerk-sdk-node';
-
-const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
-
 
 // Middleware to verify Clerk authentication
 const verifyClerkAuth = asyncHandler(async (req, res, next) => {
