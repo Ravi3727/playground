@@ -1,3 +1,5 @@
+import ApiError from "../API/ApiError.js";
+import asyncHandler from "../API/asyncHandler.js";
 import User from "../Models/user.model.js";
 
 export const signUp = async(req,res)=>{
@@ -22,3 +24,16 @@ export const signUp = async(req,res)=>{
         res.status(500).json({success: false, message: "An error occurred"});
     }
 }
+
+export const getUser = asyncHandler(async (req, res) => {
+    try {
+      const user = await User.find();
+      res
+        .status(200)
+        .json(new ApiResponse(200, user, "users fetched successfully"));
+    } catch (error) {
+        res
+        .status(500)
+        .json(new ApiError(500, "Error while fetching the users", error));
+    }
+  });
