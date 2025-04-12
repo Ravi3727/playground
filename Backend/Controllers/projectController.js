@@ -1,15 +1,16 @@
 import Project from '../Models/projectModel.js';
-import User from '../Models/userModel.js';
+import User from '../Models/user.model.js';
 
 const createProject = async (req, res) => {
   try {
+    console.log("User Info:", req.user); // Debugging log
     const { title, description, category, githubLink, mvpLink } = req.body;
 
     if (!title || !description || !category || !githubLink) {
       return res.status(400).json({ error: 'Title, description, category, and GitHub link are required' });
     }
 
-    const userId = req.user.clerkId;
+    const userId = req.user.clerk_id; // Use clerk_id instead of clerkId
 
     const project = await Project.create({
       title,
@@ -17,7 +18,7 @@ const createProject = async (req, res) => {
       category,
       githubLink,
       mvpLink,
-      createdBy: userId,
+      createdBy: userId, // Set createdBy to clerk_id
     });
 
     await User.findOneAndUpdate(

@@ -1,11 +1,12 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ClerkProvider } from '@clerk/clerk-react';
+import { ClerkProvider, SignIn } from '@clerk/clerk-react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './index.css';
 import Home from './pages/Home.jsx';
 import Event from './pages/Event.jsx';
 import ProjectPage from './pages/ProjectPage.jsx';
+import SignUpPage from './pages/SignUpPage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import Layout from './Layout.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
@@ -60,7 +61,6 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
