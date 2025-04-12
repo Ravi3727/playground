@@ -80,14 +80,15 @@ function NavBar() {
             Events
           </NavLink>
         </li>
+        
         <li>
           <NavLink
-            to="/alumni"
+            to="/forum"
             className={({ isActive }) =>
               isActive ? "text-gray-600 font-bold" : "hover:text-gray-600"
             }
           >
-            Alumni
+            Forum
           </NavLink>
         </li>
         
