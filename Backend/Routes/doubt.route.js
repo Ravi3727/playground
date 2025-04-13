@@ -1,5 +1,5 @@
 import express from "express"
-import { createDoubt, getAllDoubts, updateDoubt, deleteDoubt, createReply, getAllReplies, updateReply, deleteReply, doubtLikes } from "../Controllers/doubt.controller.js"
+import { createDoubt, getAllDoubts, updateDoubt, deleteDoubt, createReply, getAllReplies, updateReply, deleteReply, doubtLikes, replyLikes } from "../Controllers/doubt.controller.js"
 import { verifyClerkAuth } from "../Middlewares/clerkAuth.js"
 
 const router = express.Router()
@@ -15,5 +15,6 @@ router.put("/:id/replies/:rid/update", verifyClerkAuth, updateReply);
 router.delete("/:id/replies/:rid/delete", verifyClerkAuth, deleteReply);
 
 router.put("/:id/like", verifyClerkAuth, doubtLikes);
+router.put("/:id/replies/:rid/like", verifyClerkAuth, replyLikes);
 
 export default router;

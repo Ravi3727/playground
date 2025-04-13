@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 //CRUD operations on the Doubts in the Doubt Forum
 export const createDoubt = asyncHandler(async(req, res)=>{
     const doubt = req.body;
-    if(!doubt.user_id || !doubt.title || !doubt.doubt_description){
+    if(!doubt.user_id || !doubt.title || !doubt.doubt_description || !doubt.department){
         return res.status(400).json({success: false, message: "kindly fill all the required fields"});
     }
 
@@ -167,5 +167,29 @@ export const doubtLikes = asyncHandler(async(req, res)=>{
         res.status(200).json({ success: true, message: updatedDoubt});
     }catch(error){
         res.status(500).json({ success: false, message: "Server Error", error: error.message});
+    }
+})
+
+export const replyLikes = asyncHandler(async(req, res)=>{
+    const {id, rid} = req.params;
+    if(!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(rid)){
+        return res.status(400).json({ success: false, message: "Invalid doubt or reply ID"});
+    }
+
+    try{
+        const doubt = await Doubt.findById(id);
+        if (!doubt) {
+          return res.status(404).json({ success: false, message: "Doubt not found" });
+        }
+        const reply = doubt.replies.id(rid); 
+        if (!reply) {
+          return res.status(404).json({ success: false, message: "Reply not found" });
+        }
+        reply.likes = (reply.likes || 0) + 1; 
+        await doubt.save();
+
+        return res.status(200).json({ success: true, message: "Reply liked", data: reply});
+    }catch(error){
+        return res.status(500).json({ success: false, message: "Server Error", error: error.message});
     }
 })
