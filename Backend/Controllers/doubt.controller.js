@@ -147,3 +147,25 @@ export const deleteReply = asyncHandler(async(req, res)=>{
         res.status(500).json({ success: false, message: "Server Error", error: error.message});
     }
 })
+
+export const doubtLikes = asyncHandler(async(req, res)=>{
+    const {id} = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(400).json({ success: false, message: "Invalid doubt ID"});
+    }
+
+    try{
+        const updatedDoubt = await Doubt.findByIdAndUpdate(id,
+            { $inc: {likes: 1}},
+            {new: true}
+        );
+
+        if(!updatedDoubt){
+            return res.status(404).json({ success: false, message: "Doubt not found"});
+        }
+        res.status(200).json({ success: true, message: updatedDoubt});
+    }catch(error){
+        res.status(500).json({ success: false, message: "Server Error", error: error.message});
+    }
+})

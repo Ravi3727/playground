@@ -1,5 +1,5 @@
 import express from "express"
-import { createDoubt, getAllDoubts, updateDoubt, deleteDoubt, createReply, getAllReplies, updateReply, deleteReply } from "../Controllers/doubt.controller.js"
+import { createDoubt, getAllDoubts, updateDoubt, deleteDoubt, createReply, getAllReplies, updateReply, deleteReply, doubtLikes } from "../Controllers/doubt.controller.js"
 import { verifyClerkAuth } from "../Middlewares/clerkAuth.js"
 
 const router = express.Router()
@@ -13,5 +13,7 @@ router.post("/:id/reply", verifyClerkAuth, createReply);
 router.get("/:id/replies", verifyClerkAuth, getAllReplies);
 router.put("/:id/replies/:rid/update", verifyClerkAuth, updateReply);
 router.delete("/:id/replies/:rid/delete", verifyClerkAuth, deleteReply);
+
+router.put("/:id/like", verifyClerkAuth, doubtLikes);
 
 export default router;
