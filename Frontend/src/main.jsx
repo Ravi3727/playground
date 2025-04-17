@@ -9,7 +9,7 @@ import ProjectPage from './pages/ProjectPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import SignInPage from './pages/SignInPage.jsx';
 import Layout from './Layout.jsx';
-import SignUpPage from './pages/SignUpPage.jsx';
+// import SignUpPage from './pages/SignUpPage.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute.jsx';
 import DoubtForum from './pages/DoubtForum.jsx';
