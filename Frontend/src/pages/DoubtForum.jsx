@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import Input from '../components/ui/input';
 import NavBar from '../components/NavBar';
+import Replies from '../components/Replies';
 import AskDoubtModal from '../components/AskDoubtModal';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Search, MessageSquare, ThumbsUp, MessageCircle, Filter, Plus } from 'lucide-react';
+import { Search, MessageSquare, ThumbsUp, MessageCircle, Filter, Plus, CloudCog } from 'lucide-react';
+
+
 
 function DoubtForum() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +48,7 @@ function DoubtForum() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
               <h2 className="text-2xl font-bold">Discussion Forums</h2>
-              <Button onClick={openModal} className="px-4 cursor-pointer py-2 shadow-sm">
+              <Button onClick={openModal} className="px-4 flex justify-center items-center cursor-pointer py-2 shadow-sm">
                 <Plus className="mr-2 h-4 w-4" /> Ask a Question
               </Button>
             </div>
@@ -141,7 +144,7 @@ function DoubtForum() {
                                   <div className="text-xs text-gray-500">Posted 2 days ago</div>
                                 </div>
                               </div>
-                              <div className="flex items-center text-gray-500">
+                              <div  className="flex cursor-pointer active:scale-90 transform items-center bg-amber-50 p-2 rounded-xl text-gray-800 transition-all">
                                 <MessageCircle className="h-4 w-4 mr-1.5" />
                                 <span className="text-sm">8 replies</span>
                               </div>
