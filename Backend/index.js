@@ -1,3 +1,4 @@
+
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -6,6 +7,8 @@ import { connectDB } from "./DBConfig/dbConnect.js";
 
 import mainRouter from "./Routes/index.js";
 import ApiError from "./API/ApiError.js";
+import projectRoutes from "./Routes/projectRoutes.js";
+import userRoutes from "./Routes/index.js"
 
 dotenv.config();
 
@@ -20,6 +23,8 @@ app.get("/", (req, res) => {
 });
 
 
+app.use("/api/v1", userRoutes);
+// app.use("/api/v1/resources", resourceRoutes);
 
 app.use("/api/v1", mainRouter);
 
