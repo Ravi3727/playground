@@ -8,7 +8,7 @@ const HomeCards = ({ color, obj }) => {
                 <p className='text-[#696969] text-sm text-left'>{obj.description}
                 </p>
             </div>
-            <a className={` text-start hover:underline w-fit`} style={{ color: color }} href="">learn more</a>
+            <a className={` text-start hover:underline w-fit`} style={{ color: color }} href=""></a>
 
         </div>
     )
