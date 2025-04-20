@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Calendar, BookOpen, History, HelpCircle, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const WhatWeOffer = () => {
   const [featuresInView, setFeaturesInView] = useState(false);
@@ -63,7 +64,7 @@ const WhatWeOffer = () => {
           <OfferCard
             title="Activity History"
             description="A showcase of all the incredible projects, tasks, and contributions by YOU. Built something cool? This is where it gets the spotlight!"
-            href="/activities"
+            href="/projects"
             icon={<History className="h-7 w-7 text-red-600" />}
             bgColor="bg-red-100"
             borderColor="hover:border-red-200"
@@ -75,7 +76,7 @@ const WhatWeOffer = () => {
           <OfferCard
             title="Resources & Blogs"
             description="Access top resources, free & paid courses to speed up your learning, and publish your own blogs to share your knowledge."
-            href="/resources"
+            href="/"
             icon={<BookOpen className="h-7 w-7 text-yellow-600" />}
             bgColor="bg-yellow-100"
             borderColor="hover:border-yellow-200"
@@ -128,9 +129,9 @@ const OfferCard = ({ title, description, href, icon, bgColor, borderColor, textC
     </motion.div>
     <h3 className="text-xl font-bold mb-3">{title}</h3>
     <p className="text-gray-600 mb-5">{description}</p>
-    <a href={href} className={`${textColor} font-medium inline-flex items-center group`}>
+    <Link to={href} className={`${textColor} font-medium inline-flex items-center group`}>
       Learn More <ChevronRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" />
-    </a>
+    </Link>
   </motion.div>
 );
 

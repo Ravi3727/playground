@@ -13,6 +13,7 @@ import Layout from './Layout.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute.jsx';
 import DoubtForum from './pages/DoubtForum.jsx';
+import ResourcesPage from './pages/ResourcesPage.jsx';
 
 
 // Clerk API Key from environment variable
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: '/events',
         element: <Event />,
+      },
+      {
+        path: '/resources',
+        element: <ResourcesPage />,
       },
       {
         path:'/forum',
