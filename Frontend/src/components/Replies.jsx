@@ -10,7 +10,7 @@ function Replies({ doubtId }) {
   const { session } = useSession();
   const { user } = useUser();
   const sessionId = session.id;
-
+  
   useEffect(() => {
     const fetchReplies = async () => {
       try {
