@@ -13,6 +13,16 @@ import presidentImg from "../../assets/membersPic/president.jpg";
 import ayushmanImg from "../../assets/membersPic/ayushmannnn.jpg";
 import sahilImg from "../../assets/membersPic/sahil.jpg";
 import somyaImg from "../../assets/membersPic/somya.jpg";
+import raviImg from "../../assets/membersPic/ravi.jpg";
+
+
+
+const presidentData = {
+  name: "Shubham Goswami",
+  role: "President, GDG DTU", 
+  image: presidentImg,
+};
+
 
 const teamMembers = [
   {
@@ -21,9 +31,9 @@ const teamMembers = [
     image: lakshayImg,
   },
   {
-    name: "Shubham Goswami",
-    role: "President, GDG DTU", 
-    image: presidentImg,
+    name: "Ravi",
+    role: " GDSC-Web Dev Lead", 
+    image: raviImg,
   },
   {
     name: "Vishesh Sharma",
@@ -132,6 +142,25 @@ const BottomSection = () => {
           The passionate individuals behind GDSC DTU
         </p>
       </div>
+      {/* President Card (Static) */}
+      <div className="relative w-full flex justify-center mb-6">
+        <div className="transform scale-110"> {/* Slightly larger for emphasis */}
+          <ProfileCard
+            name={presidentData.name}
+            role={presidentData.role}
+            image={presidentData.image}
+          />
+        </div>
+      </div>
+
+      {/* Team Members Subtitle */}
+      <div className="relative w-full flex flex-col items-center">
+        <h2 className="text-[#191919] font-semibold mt-4 text-3xl">Our Core Team</h2>
+        <p className="text-[#696969] mt-2 text-[14px]">
+          Meet the dedicated team members working behind the scenes
+        </p>
+      </div>
+      
 
       {/* Infinite Scroll Slideshow */}
       <div 

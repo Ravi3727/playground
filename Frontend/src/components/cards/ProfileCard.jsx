@@ -8,8 +8,8 @@ const ProfileCard = ({ color, name, role,image }) => {
         <img className='absolute bottom-0 object-fill hover:shadow-3xl hover:scale-105 transition-all rounded-3xl border-4 border-black' src={image} alt="" />
       </div>
 
-      <h1 className='font-bold text-start px-2 '>{name}</h1>
-      <p className='text-start text-[#696969] px-2'>{role}</p>
+      <h1 className='font-bold mt-3 text-center px-2 '>{name}</h1>
+      <p className='text-center text-[#696969] px-2'>{role}</p>
     </div>
   )
 }
