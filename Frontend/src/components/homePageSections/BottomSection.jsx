@@ -12,6 +12,7 @@ import visheshImg from "../../assets/membersPic/sharmaji.jpg";
 import presidentImg from "../../assets/membersPic/president.jpg";
 import ayushmanImg from "../../assets/membersPic/ayushmannnn.jpg";
 import sahilImg from "../../assets/membersPic/sahil.jpg";
+import somyaImg from "../../assets/membersPic/somya.jpg";
 
 const teamMembers = [
   {
@@ -28,6 +29,11 @@ const teamMembers = [
     name: "Vishesh Sharma",
     role: "Web-Developer", 
     image: visheshImg,
+  },
+  {
+    name: "Somya Srivastav",
+    role: "UI-UX Department", 
+    image: somyaImg,
   },
   {
     name: "Arihant Srivastava", 

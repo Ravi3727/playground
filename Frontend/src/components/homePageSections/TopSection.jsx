@@ -22,7 +22,7 @@ export default function Home() {
       top: "23%",
       left: "5%",
       duration: 4,
-      responsive: ""
+      responsive: "",
     },
     {
       size: "w-12 h-12 sm:w-16 sm:h-16 md:w-28 md:h-28",
@@ -32,7 +32,7 @@ export default function Home() {
       top: "60%",
       left: "80%",
       duration: 8,
-      responsive: "hidden md:block"
+      responsive: "hidden md:block",
     },
     {
       size: "w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32",
@@ -42,7 +42,7 @@ export default function Home() {
       top: "40%",
       left: "75%",
       duration: 7,
-      responsive: ""
+      responsive: "",
     },
     {
       size: "w-10 h-10 sm:w-14 sm:h-14 md:w-24 md:h-24",
@@ -52,7 +52,7 @@ export default function Home() {
       top: "60%",
       left: "10%",
       duration: 5,
-      responsive: "hidden md:block" // Hide on small screens, show on md and up
+      responsive: "hidden md:block", // Hide on small screens, show on md and up
     },
     {
       size: "w-14 h-14 sm:w-20 sm:h-20 md:w-36 md:h-36",
@@ -62,8 +62,7 @@ export default function Home() {
       top: "20%",
       left: "20%",
       duration: 6,
-      responsive:""
-
+      responsive: "",
     },
   ];
 
@@ -161,10 +160,7 @@ export default function Home() {
       {/* Floating Circles - Restricted to Top Section Only */}
       <div className="absolute z-10 inset-0 top-0 h-full md:h-[500px] lg:h-[600px] xl:h-[700px] pointer-events-none overflow-hidden">
         {shapes.map((shape, index) => (
-          <FloatingShape 
-            key={index} 
-            {...shape} 
-          />
+          <FloatingShape key={index} {...shape} />
         ))}
       </div>
 
@@ -187,43 +183,46 @@ export default function Home() {
           >
             Google Developer Group at Delhi Technological University
           </motion.p>
-          
+
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}>
-            <Link to="/events"  >
-            <motion.a
-              className="px-6 sm:px-8 py-2 flex items-center justify-center bg-black text-white rounded-full hover:bg-slate-800"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}>
-              <span>Explore Events</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
+            transition={{ duration: 0.7, delay: 0.6 }}
+          >
+            <Link to="/events">
+              <motion.a
+                className="px-6 sm:px-8 py-2 flex items-center justify-center bg-black text-white rounded-full hover:bg-slate-800"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <path d="M5 12h14"></path>
-                <path d="m12 5 7 7-7 7"></path>
-              </svg>
-            </motion.a>
+                <span>Explore Events</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m12 5 7 7-7 7"></path>
+                </svg>
+              </motion.a>
             </Link>
-            <Link to="/signup" >
-            <motion.a
-              className="px-6 py-2 border border-gray-500 rounded-full hover:bg-gray-100"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Join Community
-            </motion.a>
+
+            <Link to="/signup">
+              <motion.a
+                className="px-6 sm:px-8 py-2 flex items-center justify-center border border-gray-500 rounded-full hover:bg-gray-100"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Join Community
+              </motion.a>
             </Link>
           </motion.div>
         </div>
