@@ -141,13 +141,13 @@ function Replies({ doubtId }) {
         {replies.length > 0 ? (
           replies.map(reply => (
             <div
-              key={reply._id}
+              key={reply?._id}
               className="flex items-start gap-3 group relative hover:bg-gray-50 p-2 rounded-md transition"
             >
               <div className="w-9 h-9 bg-gray-300 rounded-full flex-shrink-0" />
 
               <div className="flex flex-col w-full">
-                {editingReplyId === reply._id ? (
+                {editingReplyId === reply?._id ? (
                   <>
                     <input
                       type="text"
@@ -173,7 +173,7 @@ function Replies({ doubtId }) {
                 ) : (
                   <>
                     <p className="text-sm text-gray-800">
-                      <strong>{reply.author}</strong> {reply.message}
+                      <strong>{reply?.author}</strong> {reply?.message}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
   <button
@@ -182,7 +182,7 @@ function Replies({ doubtId }) {
   >
     👍 Like
   </button>
-  <span className="text-xs text-gray-400">{reply.likes || 0} likes</span>
+  <span className="text-xs text-gray-400">{reply?.likes || 0} likes</span>
 </div>
 
                     <span className="text-xs text-gray-400 mt-1">Just now</span>
@@ -192,7 +192,7 @@ function Replies({ doubtId }) {
 
               {/* Action Buttons */}
               
-              {user?.username === reply.author && editingReplyId !== reply._id && (
+              {user?.username === reply?.author && editingReplyId !== reply?._id && (
                 <div className="absolute right-2 top-2 hidden group-hover:flex gap-2">
                   <button
                     onClick={() => handleEdit(reply)}
