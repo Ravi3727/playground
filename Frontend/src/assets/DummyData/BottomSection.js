@@ -27,10 +27,7 @@ export const technologies = [
       name: "DSA/CP",
       description: "Enhance problem-solving skills with data structures and algorithms",
     },
-    {
-      name: "PR & Events",
-      description: "Manage public relations and organize tech events",
-    },
+    
     {
       name: "Social Media",
       description: "Leverage social media to build community engagement",
