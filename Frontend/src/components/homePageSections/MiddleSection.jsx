@@ -1,34 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
-
+import {cardsData} from "../../assets/DummyData/BottomSection"
 const MiddleSection = () => {
-  const cardsData = [
-    {
-      title: "Learn",
-      description:
-        "Learn about Google technologies through workshops, events, and project-based learning.",
-      icon: <svg width="50" height="50" viewBox="0 0 59 59" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="29.4946" cy="29.4946" r="29.4946" fill="#629AF6" fillOpacity="0.28"/>
-      <path d="M23.717 20.8247L14.7366 29.8051L23.0846 38.1532" stroke="#4988F0" strokeWidth="2.50428"/>
-      <path d="M34.8563 20.8247L43.8367 29.8051L35.4887 38.1532" stroke="#4988F0" strokeWidth="2.50428"/>
-      </svg>,
-      bgColor: "bg-blue-100",
-    },
-    {
-      title: "Grow",
-      description:
-        "Learn about Google technologies through workshops, events, and project-based learning.",
-      icon: <img className="w-[24px] h-[24px]" src="iconsBulb.png" alt="" />,
-      bgColor: "bg-red-100",
-    },
-    {
-      title: "Connect",
-      description:
-        "Learn about Google technologies through workshops, events, and project-based learning.",
-      icon: <img className="w-[30px] h-[30px]" src="iconsConnect.png" alt="" />,
-      bgColor: "bg-green-100",
-    },
-  ];
 
   return (
     <section className="relative py-16 mb-20 text-center">

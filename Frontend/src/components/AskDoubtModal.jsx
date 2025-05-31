@@ -33,7 +33,7 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
     department: "Web Dev",
   };
 
-    const res = await fetch("http://localhost:5000/api/v1/doubts/create", {
+    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/create`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${sessionId}`,

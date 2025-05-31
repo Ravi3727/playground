@@ -4,63 +4,8 @@ import yellowVector from "../../assets/HomePagePng/topRight.png"
 import redVector from "../../assets/HomePagePng/bottomLeft.png"
 import ProfileCard from "../cards/ProfileCard";
 import { technologies } from "../../assets/DummyData/BottomSection";
-import lakshayImg from "../../assets/membersPic/lakshay.jpg";
-import nikunjImg from "../../assets/membersPic/nikunj2.png";
-import yashImg from "../../assets/membersPic/yash.png";
-import arihantImg from "../../assets/membersPic/arihant.jpg";
-import visheshImg from "../../assets/membersPic/sharmaji.jpg";
-import presidentImg from "../../assets/membersPic/president.jpg";
-import ayushmanImg from "../../assets/membersPic/ayushmannnn.jpg";
-import sahilImg from "../../assets/membersPic/sahil.jpg";
-import somyaImg from "../../assets/membersPic/somya.jpg";
+import {presidentData,teamMembers} from "../../assets/DummyData/BottomSection"
 
-const teamMembers = [
-  {
-    name: "Lakshay",
-    role: "Web Developer", 
-    image: lakshayImg,
-  },
-  {
-    name: "Shubham Goswami",
-    role: "President, GDG DTU", 
-    image: presidentImg,
-  },
-  {
-    name: "Vishesh Sharma",
-    role: "Web-Developer", 
-    image: visheshImg,
-  },
-  {
-    name: "Somya Srivastav",
-    role: "UI-UX Department", 
-    image: somyaImg,
-  },
-  {
-    name: "Arihant Srivastava", 
-    role: "Web-Developer",
-    image: arihantImg,
-  },
-  {
-    name: "Ayushman Singh", 
-    role: "Web-Developer",
-    image: ayushmanImg,
-  },
-  {
-    name: "Yash Kumar",
-    role: "Web-Developer", 
-    image: yashImg,
-  },
-  {
-    name: "Sahil Chauhan",
-    role: "Web-Developer", 
-    image: sahilImg,
-  },
-  {
-    name: "Nikunj Sharma",
-    role: "Web-Developer", 
-    image: nikunjImg,
-  },
-];
 
 const BottomSection = () => {
   const colors = ["#4285F4", "#EA4335", "#FBBC04"];
@@ -132,6 +77,25 @@ const BottomSection = () => {
           The passionate individuals behind GDSC DTU
         </p>
       </div>
+      {/* President Card (Static) */}
+      <div className="relative w-full flex justify-center mb-6">
+        <div className="transform scale-110"> {/* Slightly larger for emphasis */}
+          <ProfileCard
+            name={presidentData.name}
+            role={presidentData.role}
+            image={presidentData.image}
+          />
+        </div>
+      </div>
+
+      {/* Team Members Subtitle */}
+      <div className="relative w-full flex flex-col items-center">
+        <h2 className="text-[#191919] font-semibold mt-4 text-3xl">Our Core Team</h2>
+        <p className="text-[#696969] mt-2 text-[14px]">
+          Meet the dedicated team members working behind the scenes
+        </p>
+      </div>
+      
 
       {/* Infinite Scroll Slideshow */}
       <div 

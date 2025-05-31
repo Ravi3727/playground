@@ -14,7 +14,7 @@ function Replies({ doubtId }) {
   useEffect(() => {
     const fetchReplies = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/v1/doubts/${doubtId}/replies`, {
+        const res = await fetch(`h${import.meta.env.VITE_BACKENDURL}/doubts/${doubtId}/replies`, {
           headers: {
             "Authorization": `Bearer ${sessionId}`,
             'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ function Replies({ doubtId }) {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:5000/api/v1/doubts/${doubtId}/reply`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/${doubtId}/reply`, {
         method: 'POST',
         headers: {
           "Authorization": `Bearer ${sessionId}`,
@@ -65,7 +65,7 @@ function Replies({ doubtId }) {
 
   const updateReply = async (replyId, newMessage) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/v1/doubts/${doubtId}/replies/${replyId}/update`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/${doubtId}/replies/${replyId}/update`, {
         method: 'PUT',
         headers: {
           "Authorization": `Bearer ${sessionId}`,
@@ -90,7 +90,7 @@ function Replies({ doubtId }) {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/v1/doubts/${doubtId}/replies/${replyId}/delete`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/${doubtId}/replies/${replyId}/delete`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${sessionId}`,
@@ -109,7 +109,7 @@ function Replies({ doubtId }) {
   const handleReplyLike = async (doubtId, replyId) => {
   try {
     const res = await fetch(
-      `http://localhost:5000/api/v1/doubts/${doubtId}/replies/${replyId}/like`,
+      `${import.meta.env.VITE_BACKENDURL}/doubts/${doubtId}/replies/${replyId}/like`,
       {
         method: "PUT",
         headers: {

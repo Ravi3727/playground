@@ -33,7 +33,7 @@ function UpdateDoubtModal({ isOpen, onClose, did, onDoubtUpdated }) {
     department: "Web Dev",
   };
 
-    const res = await fetch(`http://localhost:5000/api/v1/doubts/update/${did}`, {
+    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/update/${did}`, {
       method: "PUT",
       headers: {
         "Authorization": `Bearer ${sessionId}`,

@@ -10,13 +10,13 @@ import ApiError from "./API/ApiError.js";
 import projectRoutes from "./Routes/projectRoutes.js";
 import userRoutes from "./Routes/index.js"
 
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 5000;
-
+dotenv.config();
 app.use(express.json());
 app.use(cors());
+
+const PORT = process.env.PORT || 5000;
+
 
 app.get("/", (req, res) => {
   res.send("Welcome to GDSC Web Server!");
