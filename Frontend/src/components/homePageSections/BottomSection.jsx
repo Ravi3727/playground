@@ -4,73 +4,8 @@ import yellowVector from "../../assets/HomePagePng/topRight.png"
 import redVector from "../../assets/HomePagePng/bottomLeft.png"
 import ProfileCard from "../cards/ProfileCard";
 import { technologies } from "../../assets/DummyData/BottomSection";
-import lakshayImg from "../../assets/membersPic/lakshay.jpg";
-import nikunjImg from "../../assets/membersPic/nikunj2.png";
-import yashImg from "../../assets/membersPic/yash.png";
-import arihantImg from "../../assets/membersPic/arihant.jpg";
-import visheshImg from "../../assets/membersPic/sharmaji.jpg";
-import presidentImg from "../../assets/membersPic/president.jpg";
-import ayushmanImg from "../../assets/membersPic/ayushmannnn.jpg";
-import sahilImg from "../../assets/membersPic/sahil.jpg";
-import somyaImg from "../../assets/membersPic/somya.jpg";
-import raviImg from "../../assets/membersPic/ravi.jpg";
+import {presidentData,teamMembers} from "../../assets/DummyData/BottomSection"
 
-
-
-const presidentData = {
-  name: "Shubham Goswami",
-  role: "President, GDG DTU", 
-  image: presidentImg,
-};
-
-
-const teamMembers = [
-  {
-    name: "Lakshay",
-    role: "Web Developer", 
-    image: lakshayImg,
-  },
-  {
-    name: "Ravi",
-    role: " GDSC-Web Dev Lead", 
-    image: raviImg,
-  },
-  {
-    name: "Vishesh Sharma",
-    role: "Web-Developer", 
-    image: visheshImg,
-  },
-  {
-    name: "Somya Srivastav",
-    role: "UI-UX Department", 
-    image: somyaImg,
-  },
-  {
-    name: "Arihant Srivastava", 
-    role: "Web-Developer",
-    image: arihantImg,
-  },
-  {
-    name: "Ayushman Singh", 
-    role: "Web-Developer",
-    image: ayushmanImg,
-  },
-  {
-    name: "Yash Kumar",
-    role: "Web-Developer", 
-    image: yashImg,
-  },
-  {
-    name: "Sahil Chauhan",
-    role: "Web-Developer", 
-    image: sahilImg,
-  },
-  {
-    name: "Nikunj Sharma",
-    role: "Web-Developer", 
-    image: nikunjImg,
-  },
-];
 
 const BottomSection = () => {
   const colors = ["#4285F4", "#EA4335", "#FBBC04"];

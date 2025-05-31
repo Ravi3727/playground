@@ -35,7 +35,7 @@ if (!userLoaded || !sessionLoaded) {
 
 
   const getAllDoubts = async () => {
-    const res = await fetch("http://localhost:5000/api/v1/doubts/get", {
+    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/get`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${sessionId}`,
@@ -48,7 +48,7 @@ if (!userLoaded || !sessionLoaded) {
   }
 
   const deleteDoubt = async (did) => {
-    const res = await fetch(`http://localhost:5000/api/v1/doubts/delete/${did}`, {
+    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/delete/${did}`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${sessionId}`,
@@ -60,7 +60,7 @@ if (!userLoaded || !sessionLoaded) {
   }
 
   const handleDoubtLikes = async(doubtId) => {
-    const res = await fetch(`http://localhost:5000/api/v1/doubts/${doubtId}/like`, {
+    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/${doubtId}/like`, {
       method: 'PUT',
       headers: {
         "Authorization": `Bearer ${sessionId}`,
@@ -101,7 +101,7 @@ if (!userLoaded || !sessionLoaded) {
 
     await Promise.all(uniqueUserIds.map(async (userId) => {
       try {
-        const res = await fetch("http://localhost:5000/api/v1/doubts/get-user-info", {
+        const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/get-user-info`, {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${sessionId}`,
@@ -320,7 +320,7 @@ if (!userLoaded || !sessionLoaded) {
 
                     <div className="mt-10 flex justify-center">
                       <Button variant="outline" className="px-6 cursor-pointer py-2.5 shadow-sm">
-                        Load More Questions
+                        {doubts.length > 0 ?"Load More Questions":"No Doubts Found"}
                       </Button>
                     </div>
                   </div>

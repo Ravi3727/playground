@@ -2,7 +2,7 @@ import React from "react";
 import { format } from "date-fns";
 import { CalendarCheck, MapPin, Users, Clock } from "lucide-react";
 import { useSession } from "@clerk/clerk-react";
-const apiUrl = import.meta.env.VITE_API_URL;
+
 
 const EventCard = ({ event, id }) => {
   const { session } = useSession();
@@ -10,7 +10,7 @@ const EventCard = ({ event, id }) => {
   async function register(id) {
     try {
       const sessionId = session.id;
-      const response = await fetch(`${apiUrl}/events/register/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/events/register/${id}`, {
         method: "PATCH",
         headers: { 
           "Authorization": `Bearer ${sessionId}`,

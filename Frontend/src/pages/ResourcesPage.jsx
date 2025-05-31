@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import NavBar from "../components/NavBar";
 import { Search, Filter, BookOpen, Video, Code } from "lucide-react";
-
+import { blog } from "../assets/DummyData/BottomSection";
 const ResourcesPage = () => {
   const [activeTab, setActiveTab] = useState("resources");
   const [searchQuery, setSearchQuery] = useState("");
@@ -89,99 +89,11 @@ const ResourcesPage = () => {
   };
 
   // Mock resource data
-  const resources = [
-    {
-      id: 1,
-      type: "course",
-      icon: <BookOpen className="h-5 w-5 mr-2 text-blue-600" />,
-      category: "Android",
-      title: "Android Development for Beginners",
-      description:
-        "Learn the basics of Android app development with Kotlin. This comprehensive course covers everything from setup to publishing.",
-      price: "Free",
-    },
-    {
-      id: 2,
-      type: "tutorial",
-      icon: <Video className="h-5 w-5 mr-2 text-red-600" />,
-      category: "Web",
-      title: "Building with Next.js and Firebase",
-      description:
-        "A step-by-step tutorial on how to build a full-stack application using Next.js and Firebase. Includes authentication and database.",
-      price: "Free",
-    },
-    {
-      id: 3,
-      type: "tool",
-      icon: <Code className="h-5 w-5 mr-2 text-green-600" />,
-      category: "Cloud",
-      title: "Google Cloud Platform Essentials",
-      description:
-        "A collection of tools and resources to help you get started with Google Cloud Platform. Includes $300 free credit.",
-      price: "Free Trial",
-    },
-    {
-      id: 4,
-      type: "course",
-      icon: <BookOpen className="h-5 w-5 mr-2 text-purple-600" />,
-      category: "ML",
-      title: "Machine Learning with TensorFlow",
-      description:
-        "Learn machine learning concepts and how to implement them using TensorFlow. Includes hands-on projects.",
-      price: "Premium",
-    },
-  ];
 
   // Mock blog data
-  const blogs = [
-    {
-      id: 1,
-      category: "Technology",
-      categoryColor: "blue",
-      date: "April 10, 2023",
-      title: "My Journey Learning Flutter: Tips and Tricks",
-      description:
-        "In this blog post, I share my experience learning Flutter and some useful tips and tricks I discovered along the way.",
-      author: {
-        name: "Rahul Sharma",
-        role: "3rd Year, Computer Science",
-        image: "https://randomuser.me/api/portraits/men/32.jpg",
-      },
-      image:
-        "https://miro.medium.com/v2/resize:fit:1400/1*TFZQzyVAHLVXI_wNreokGA.png",
-    },
-    {
-      id: 2,
-      category: "Event Recap",
-      categoryColor: "green",
-      date: "March 25, 2023",
-      title: "Highlights from Google I/O Extended DTU",
-      description:
-        "A recap of the Google I/O Extended event held at DTU. Learn about the latest announcements and how they impact developers.",
-      author: {
-        name: "Priya Patel",
-        role: "GDG Lead, DTU",
-        image: "https://randomuser.me/api/portraits/women/44.jpg",
-      },
-      image:
-        "https://miro.medium.com/v2/resize:fit:1400/1*-R8GwOL9Jn-YBiMJ_2K-Bw.jpeg",
-    },
-    {
-      id: 3,
-      category: "Tutorial",
-      categoryColor: "red",
-      date: "March 15, 2023",
-      title: "Building a Serverless API with Firebase Functions",
-      description:
-        "A step-by-step tutorial on how to build a serverless API using Firebase Cloud Functions. Perfect for beginners.",
-      author: {
-        name: "Amit Kumar",
-        role: "4th Year, IT",
-        image: "https://randomuser.me/api/portraits/men/68.jpg",
-      },
-      image: "https://firebase.google.com/images/social.png",
-    },
-  ];
+
+  const resources = [];
+  const blogs = [];
 
   return (
     <div className="min-h-screen bg-yellow-50 flex flex-col">
@@ -223,21 +135,19 @@ const ResourcesPage = () => {
           {/* Tabs */}
           <div className="flex mb-6 border-b">
             <button
-              className={`py-2 px-6 text-center ${
-                activeTab === "resources"
-                  ? "border-b-2 border-blue-500 font-medium"
-                  : "text-gray-500"
-              }`}
+              className={`py-2 px-6 text-center ${activeTab === "resources"
+                ? "border-b-2 border-blue-500 font-medium"
+                : "text-gray-500"
+                }`}
               onClick={() => setActiveTab("resources")}
             >
               Resources
             </button>
             <button
-              className={`py-2 px-6 text-center ${
-                activeTab === "blogs"
-                  ? "border-b-2 border-blue-500 font-medium"
-                  : "text-gray-500"
-              }`}
+              className={`py-2 px-6 text-center ${activeTab === "blogs"
+                ? "border-b-2 border-blue-500 font-medium"
+                : "text-gray-500"
+                }`}
               onClick={() => setActiveTab("blogs")}
             >
               Blogs
@@ -369,8 +279,16 @@ const ResourcesPage = () => {
 
               {/* Resources Grid */}
               <div className="flex-1">
-                <div className="grid md:grid-cols-2 gap-6">
-                  {resources.map((resource) => (
+                {
+                  resources.length === 0 &&
+                  <div className="mt-8 flex justify-center">
+                    <h1 className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                      No Resource Found
+                    </h1>
+                  </div>
+                }
+                <div className="grid md:grid-cols-2 gap-6 bg-red-400">
+                  {(resources.length > 0) ? (resources.map((resource) => (
                     <div
                       key={resource.id}
                       className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
@@ -401,14 +319,18 @@ const ResourcesPage = () => {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))) :""}
                 </div>
 
-                <div className="mt-8 flex justify-center">
-                  <button className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
-                    Load More Resources
-                  </button>
-                </div>
+                {
+                  resources.length > 0 &&
+
+                  <div className="mt-8 flex justify-center">
+                    <button className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                      Load More Resources
+                    </button>
+                  </div>
+                }
               </div>
             </div>
           )}
@@ -511,7 +433,7 @@ const ResourcesPage = () => {
               {/* Blog Posts */}
               <div className="flex-1">
                 <div className="space-y-6">
-                  {blogs.map((blog) => (
+                  {(blogs.length > 0) ? (blogs.map((blog) => (
                     <div
                       key={blog.id}
                       className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
@@ -562,14 +484,25 @@ const ResourcesPage = () => {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))) :
+                    (
+                      <div className="mt-8 flex justify-center">
+                        <h1 className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                          No Blogs Found
+                        </h1>
+                      </div>
+                    )
+                  }
                 </div>
 
-                <div className="mt-8 flex justify-center">
-                  <button className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
-                    Load More Blogs
-                  </button>
-                </div>
+                {
+                  blogs.length > 0 &&
+                  <div className="mt-8 flex justify-center">
+                    <button className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                      Load More Blogs
+                    </button>
+                  </div>
+                }
               </div>
             </div>
           )}
