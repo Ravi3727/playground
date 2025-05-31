@@ -13,6 +13,7 @@ import presidentImg from "../../assets/membersPic/president.jpg";
 import ayushmanImg from "../../assets/membersPic/ayushmannnn.jpg";
 import sahilImg from "../../assets/membersPic/sahil.jpg";
 import somyaImg from "../../assets/membersPic/somya.jpg";
+import sonalImg from "../../assets/membersPic/sonal_new.jpg";
 import raviImg from "../../assets/membersPic/ravi.jpg";
 
 
@@ -26,9 +27,9 @@ const presidentData = {
 
 const teamMembers = [
   {
-    name: "Lakshay",
+    name: "Vishesh",
     role: "Web Developer", 
-    image: lakshayImg,
+    image: visheshImg,
   },
   {
     name: "Ravi",
@@ -36,14 +37,19 @@ const teamMembers = [
     image: raviImg,
   },
   {
-    name: "Vishesh Sharma",
-    role: "Web-Developer", 
-    image: visheshImg,
-  },
-  {
     name: "Somya Srivastav",
     role: "UI-UX Department", 
     image: somyaImg,
+  },
+  {
+    name: "Nikunj Sharma",
+    role: "Web-Developer", 
+    image: nikunjImg,
+  },
+  {
+    name: "Lakshay",
+    role: "Web-Developer", 
+    image: lakshayImg,
   },
   {
     name: "Arihant Srivastava", 
@@ -66,9 +72,9 @@ const teamMembers = [
     image: sahilImg,
   },
   {
-    name: "Nikunj Sharma",
+    name: "Sonal Verma",
     role: "Web-Developer", 
-    image: nikunjImg,
+    image: sonalImg,
   },
 ];
 
