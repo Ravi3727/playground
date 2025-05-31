@@ -13,12 +13,18 @@ import presidentImg from "../../assets/membersPic/president.jpg";
 import ayushmanImg from "../../assets/membersPic/ayushmannnn.jpg";
 import sahilImg from "../../assets/membersPic/sahil.jpg";
 import somyaImg from "../../assets/membersPic/somya.jpg";
+import raviImg from "../../assets/membersPic/ravi.jpg";
 
 const teamMembers = [
   {
     name: "Lakshay",
     role: "Web Developer", 
     image: lakshayImg,
+  },
+  {
+    name: "Ravi",
+    role: " GDSC-Web Dev Lead", 
+    image: raviImg,
   },
   {
     name: "Shubham Goswami",
