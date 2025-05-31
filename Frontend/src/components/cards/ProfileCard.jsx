@@ -5,7 +5,7 @@ const ProfileCard = ({ color, name, role,image }) => {
   return (
     <div >
       <div className='w-[300px] h-[350px] rounded-2xl relative z-30 '  style={{ backgroundColor: color }}>
-        <img className='absolute bottom-0 object-fill ' src={image} alt="" />
+        <img className='absolute bottom-0 object-fill hover:shadow-xl hover:scale-105 transition-all rounded-3xl border-4 border-black' src={image} alt="" />
       </div>
 
       <h1 className='font-bold text-start px-2 '>{name}</h1>

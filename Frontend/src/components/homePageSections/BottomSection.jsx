@@ -57,7 +57,7 @@ const teamMembers = [
 ];
 
 const BottomSection = () => {
-  const colors = [];
+  const colors = ["#4285F4", "#EA4335", "#FBBC04"];
   const profileColors = [];
   const scrollRef = useRef(null);
 
