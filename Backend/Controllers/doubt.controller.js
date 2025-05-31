@@ -3,6 +3,8 @@ import ApiResponse from "../API/ApiResponse.js";
 import asyncHandler from "../API/asyncHandler.js";
 import Doubt from "../Models/doubt.model.js";
 import mongoose from "mongoose";
+import * as clerk from "@clerk/clerk-sdk-node";
+
 
 //CRUD operations on the Doubts in the Doubt Forum
 export const createDoubt = asyncHandler(async(req, res)=>{
@@ -30,6 +32,24 @@ export const getAllDoubts = asyncHandler(async(req, res)=>{
         console.error('Doubt Error : ', error.message);
         return res.status(500).json({ success: false, message: "Some error occured"});
     }
+})
+
+export const getUserInfo = asyncHandler(async(req, res)=>{
+    if (req.method !== "POST") {
+    return res.status(405).end();
+  }
+
+  const { userId } = req.body;
+  console.log(userId);
+
+  try {
+    const user = await clerk.clerkClient.users.getUser(userId.trim());
+    res.status(200).json({
+      username: user.username || user.firstName || user.emailAddresses[0]?.emailAddress,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "User not found" });
+  }
 })
 
 export const updateDoubt = asyncHandler(async(req, res)=>{
