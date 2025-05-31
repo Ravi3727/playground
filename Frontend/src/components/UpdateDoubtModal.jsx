@@ -5,7 +5,7 @@ import { MdCloudUpload } from 'react-icons/md';
 
 Modal.setAppElement('#root');
 
-function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
+function UpdateDoubtModal({ isOpen, onClose, did, onDoubtUpdated }) {
   const [doubt, setDoubt] = useState('');
   const [file, setFile] = useState(null);
   const inputFile = useRef(null);
@@ -17,23 +17,23 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
   const { session } = useSession();
   const { user } = useUser();
 
-  const handleSubmit = async(e) => {
+  //For updating the doubt
+  const handleSubmit = async(e, did) => {  //did => doubt id
     e.preventDefault();
-    console.log('Posted Doubt:', doubt);
-    console.log('Uploaded File:', file);
+    // console.log('Posted Doubt:', doubt);
+    // console.log('Uploaded File:', file);
     const sessionId = session.id;
-    const { id: userId } = user;
+    // const { id: userId } = user;
     // console.log(userId);
 
     const doubtData = {
     title: "My React error",
     doubt_description: doubt,
-    user_id: userId,
     department: "Web Dev",
   };
 
-    const res = await fetch("http://localhost:5000/api/v1/doubts/create", {
-      method: "POST",
+    const res = await fetch(`http://localhost:5000/api/v1/doubts/update/${did}`, {
+      method: "PUT",
       headers: {
         "Authorization": `Bearer ${sessionId}`,
         "Content-Type": "application/json"
@@ -44,7 +44,7 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
     console.log(data);
     setDoubt('');
     setFile(null);
-    onDoubtAdded();
+    onDoubtUpdated();
     onClose();
   };
 
@@ -75,7 +75,7 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
       }}
     >
       <h2 className="text-lg font-bold mb-4">Post Your Doubt</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmit(e, did)}>
         {/* Textarea for doubt */}
         <textarea
           value={doubt}
@@ -125,4 +125,4 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
   );
 }
 
-export default AskDoubtModal;
+export default UpdateDoubtModal;
