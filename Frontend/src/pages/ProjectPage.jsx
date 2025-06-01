@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Search, Github, ExternalLink, Code, Filter, ChevronDown, X } from "lucide-react";
-// import {sampleProjects} from "../assets/DummyData/BottomSection";
+import { sampleProjects } from "../assets/DummyData/BottomSection";
 
 
 // Sample project data
@@ -34,11 +34,31 @@ const ProjectsPage = () => {
       setLoading(true);
       try {
         // Use sample data during development
-        setTimeout(() => {
+
+        const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/projects`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${sessionId}`,
+            "Content-Type": "application/json"
+          },
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch events");
+        }
+
+        const res = await response.json();
+
+        if (res.statusCode === 200) {
+          setProjects(res.data || []);
+          setFilteredProjects(res.data || []);
+        } else {
+          console.error("Error fetching events:", res.message);
           setProjects(sampleProjects);
           setFilteredProjects(sampleProjects);
-          setLoading(false);
-        }, 500); // Simulate network delay
+        }
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching projects:", error);
         setLoading(false);
@@ -109,7 +129,7 @@ const ProjectsPage = () => {
 
   return (
 
-    
+
     <div className="min-h-screen bg-green-50 flex flex-col">
       {/* Fixed Navbar */}
       <NavBar />
@@ -253,7 +273,7 @@ const ProjectsPage = () => {
                   </div>
                 )}
               </div>
-              {loading && (filteredProjects.length>0) ? (
+              {loading && (filteredProjects.length > 0) ? (
                 <div className="flex justify-center py-20">
                   <div className="spinner"></div>
                 </div>

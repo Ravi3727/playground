@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Calendar as CalendarIcon, MapPin, Clock, List, Grid, Filter, Users } from "lucide-react";
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_BACKENDURL;
 
 // Sample events data (will be replaced with API data when available)
 const sampleEvents = [
@@ -98,7 +98,7 @@ const Event = () => {
       setLoading(true);
       try {
         // Comment out API fetch for now and use sample data
-        /* 
+        
         const response = await fetch(`${apiUrl}/events/get`);
         
         if (!response.ok) {
@@ -111,15 +111,14 @@ const Event = () => {
           setEvents(res.data || []);
         } else {
           console.error("Error fetching events:", res.message);
-          setEvents(sampleEvents); // Fallback to sample data
-        }
-        */
-        
-        // Use sample data during development
-        setTimeout(() => {
           setEvents(sampleEvents);
-          setLoading(false);
-        }, 500); // Simulate network delay
+        }
+        setLoading(false);
+        // Use sample data during development
+        // setTimeout(() => {
+        //   setEvents(sampleEvents);
+        //   setLoading(false);
+        // }, 500); // Simulate network delay
       } catch (error) {
         console.error("Error:", error);
         setEvents(sampleEvents); // Fallback to sample data
