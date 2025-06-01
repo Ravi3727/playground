@@ -7,7 +7,7 @@ import NavBar from '../components/NavBar';
 import Replies from '../components/Replies';
 import AskDoubtModal from '../components/AskDoubtModal';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Search, ThumbsUp, MessageCircle, Filter, Plus } from 'lucide-react';
+import { Search, MessageSquare, ThumbsUp, MessageCircle, Filter, Plus, CloudCog } from 'lucide-react';
 import { useSession, useUser } from '@clerk/clerk-react';
 import UpdateDoubtModal from '../components/UpdateDoubtModal';
 
@@ -19,116 +19,57 @@ function DoubtForum() {
   const [expandedDoubtId, setExpandedDoubtId] = useState(null);
   const [did, setDid] = useState("");
   const openModal = () => setIsModalOpen(true);
-  const [refreshKey, setRefreshKey] = useState(0);
-  const { user, isLoaded: userLoaded } = useUser();
-  const { session, isLoaded: sessionLoaded } = useSession();
-  const sessionId = session?.id;
-
-
-  const getAllDoubts = async () => {
-  try {
-    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/get`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${sessionId}`,
-        "Content-Type": "application/json"
-      },
-      credentials: "include",
-    });
-    const data = await res.json();
-    console.log("Fetched doubts:", data);
-
-    if (Array.isArray(data.message)) {
-      setDoubts(data.message);
-    } else {
-      console.error("Unexpected response format:", data);
-      setDoubts([]); 
-    }
-  } catch (error) {
-    console.error("Failed to fetch doubts:", error);
-    setDoubts([]);
-  }
-};
-
-
-  const deleteDoubt = async (did) => {
-    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/delete/${did}`, {
-      method: "DELETE",
-      headers: {
-        "Authorization": `Bearer ${sessionId}`,
-        "Content-Type": "application/json"
-      },
-      credentials: "include",
-    })
-    const data = await res.json();
-    console.log(data);
-  }
-
-  const handleDoubtLikes = async (doubtId) => {
-    const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/${doubtId}/like`, {
-      method: 'PUT',
-      headers: {
-        "Authorization": `Bearer ${sessionId}`,
-        "Content-Type": "application/json"
-      },
-      credentials: "include",
-    })
-  }
-
-  useEffect(() => {
-    getAllDoubts();
-  }, [refreshKey]);
-
-
-  useEffect(() => {
-    if (!sessionLoaded || !session?.id) return;
-
-    const fetchUsernames = async () => {
-      if (!sessionId) return;
-
-      const uniqueUserIds = [...new Set(doubts.map(d => d.user_id))];
-
-      const fetchedUsernames = {};
-
-      await Promise.all(uniqueUserIds.map(async (userId) => {
-        try {
-          const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/get-user-info`, {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${sessionId}`,
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({ userId }),
-          });
-          const data = await res.json();
-          fetchedUsernames[userId] = data.username || "Unknown User";
-        } catch (err) {
-          fetchedUsernames[userId] = "Unknown User";
-        }
-      }));
-
-      setUsernames(fetchedUsernames);
-    };
-
-    fetchUsernames();
-  }, [doubts, sessionId]);
-
   const closeModal = () => setIsModalOpen(false);
   const openUpdateModal = (did) => {
     setIsUpdateModalOpen(true);
     setDid(did);
   }
   const closeUpdateModal = () => setIsUpdateModalOpen(false);
-
+  const { user, isLoaded: userLoaded } = useUser();
+  const { session, isLoaded: sessionLoaded } = useSession();
+  const sessionId = session?.id; // <-- Move this outside of condition
 
   if (!userLoaded || !sessionLoaded) {
     return <div className="text-center py-10">Loading...</div>;
   }
 
 
+  const getAllDoubts = async () => {
+    const res = await fetch("http://localhost:5000/api/v1/doubts/get", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${sessionId}`,
+        "Content-Type": "application/json"
+      }
+    })
+    const data = await res.json();
+    console.log(data);
+    setDoubts(data.message);
+  }
 
+  const deleteDoubt = async (did) => {
+    const res = await fetch(`http://localhost:5000/api/v1/doubts/delete/${did}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${sessionId}`,
+        "Content-Type": "application/json"
+      },
+    })
+    const data = await res.json();
+    console.log(data);
+  }
 
+  const handleDoubtLikes = async (doubtId) => {
+    const res = await fetch(`http://localhost:5000/api/v1/doubts/${doubtId}/like`, {
+      method: 'PUT',
+      headers: {
+        "Authorization": `Bearer ${sessionId}`,
+        "Content-Type": "application/json"
+      },
+    })
+  }
+
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleDeleteDoubt = async (did) => {
     await deleteDoubt(did);
@@ -144,10 +85,61 @@ function DoubtForum() {
   };
 
 
+  useEffect(() => {
+    getAllDoubts();
+  }, [refreshKey]);
+
+
+  useEffect(() => {
+    if (!sessionLoaded || !session?.id) return; // Wait for session to be ready
+
+    const fetchUsernames = async () => {
+      if (!sessionId) return; // guard clause
+
+      const uniqueUserIds = [...new Set(doubts.map(d => d.user_id))];
+      const fetchedUsernames = {};
+
+      await Promise.all(uniqueUserIds.map(async (userId) => {
+        try {
+          const res = await fetch("http://localhost:5000/api/v1/doubts/get-user-info", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${sessionId}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId }),
+          });
+
+          const data = await res.json();
+          fetchedUsernames[userId] = data.username || "Unknown User";
+        } catch (err) {
+          fetchedUsernames[userId] = "Unknown User";
+        }
+      }));
+
+      setUsernames(fetchedUsernames);
+    };
+
+    fetchUsernames();
+  }, [doubts, sessionId]);
+
+  const tagStyleMap = {
+    react: 'bg-blue-100 text-blue-600',
+    javascript: 'bg-yellow-100 text-yellow-600',
+    css: 'bg-teal-100 text-teal-600',
+    html: 'bg-red-100 text-red-600',
+    ml: 'bg-purple-100 text-purple-600',
+    dl: 'bg-indigo-100 text-indigo-600',
+    python: 'bg-green-100 text-green-600',
+    java: 'bg-orange-100 text-orange-600',
+    kotlin: 'bg-pink-100 text-pink-600',
+    flutter: 'bg-cyan-100 text-cyan-600',
+  };
+
 
   return (
     <div className="min-h-screen flex bg-green-50 flex-col">
-      <NavBar />
+      <NavBar /> {/* Navigation Bar */}
 
       {/* Page Content */}
       <main className="flex-1 ">
@@ -282,7 +274,7 @@ function DoubtForum() {
                         </div>
                       </div> */}
 
-                      { doubts.map((doubt) => (
+                      {doubts.map((doubt) => (
                         <div key={doubt._id} className="border rounded-xl p-5 hover:shadow-md transition-shadow bg-white">
                           <div className="flex items-start gap-4">
                             <div className="flex flex-col items-center">
@@ -293,8 +285,23 @@ function DoubtForum() {
                             </div>
                             <div className="flex-1">
                               <div className="flex flex-wrap items-center gap-2 mb-2">
-                                <span className="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full">Solved</span>
-                                <span className="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-full">React</span>
+                                <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  {doubt.isSolved && (
+                                    <span className="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full">
+                                      Solved
+                                    </span>
+                                  )}
+                                  {doubt.tags?.map((tag) => (
+                                    <span
+                                      key={tag}
+                                      className={`text-xs px-3 py-1 rounded-full ${tagStyleMap[tag.toLowerCase()] || 'bg-gray-100 text-gray-600'}`}
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+
+
                               </div>
                               <Link to="#" className="font-bold text-lg hover:text-blue-600 transition-colors block mb-2">
                                 {doubt.title}
@@ -341,7 +348,7 @@ function DoubtForum() {
 
                     <div className="mt-10 flex justify-center">
                       <Button variant="outline" className="px-6 cursor-pointer py-2.5 shadow-sm">
-                        {doubts.length > 0 ? "Load More Questions" : "No Doubts Found"}
+                        Load More Questions
                       </Button>
                     </div>
                   </div>
