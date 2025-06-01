@@ -12,7 +12,6 @@ router.use("/team", verifyClerkAuth, teamRouter);
 // router.use("/signup", signupRouter);
 
 import blogRouter from "./blog.route.js"
-
 import resourceRouter from "./resource.route.js";
 import userRouter from "./user.route.js";
 import eventRoutes from "./events.route.js";

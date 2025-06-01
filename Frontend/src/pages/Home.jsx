@@ -1,5 +1,5 @@
 import React from 'react'
-import BottomSection from '../components/homePageSections/bottomSection'
+import BottomSection from '../components/homePageSections/BottomSection'
 import TopSection from '../components/homePageSections/TopSection'
 import MiddleSection from '../components/homePageSections/MiddleSection'
 import WhatWeOffer from '../components/homePageSections/WhatWeOffer'

@@ -7,7 +7,7 @@ import NavBar from '../components/NavBar';
 import Replies from '../components/Replies';
 import AskDoubtModal from '../components/AskDoubtModal';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Search, MessageSquare, ThumbsUp, MessageCircle, Filter, Plus, CloudCog } from 'lucide-react';
+import { Search, ThumbsUp, MessageCircle, Filter, Plus } from 'lucide-react';
 import { useSession, useUser } from '@clerk/clerk-react';
 import UpdateDoubtModal from '../components/UpdateDoubtModal';
 
@@ -19,33 +19,36 @@ function DoubtForum() {
   const [expandedDoubtId, setExpandedDoubtId] = useState(null);
   const [did, setDid] = useState("");
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-  const openUpdateModal = (did) => {
-    setIsUpdateModalOpen(true);
-    setDid(did);
-  }
-  const closeUpdateModal = () => setIsUpdateModalOpen(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const { user, isLoaded: userLoaded } = useUser();
-const { session, isLoaded: sessionLoaded } = useSession();
-const sessionId = session?.id; // <-- Move this outside of condition
-
-if (!userLoaded || !sessionLoaded) {
-  return <div className="text-center py-10">Loading...</div>;
-}
+  const { session, isLoaded: sessionLoaded } = useSession();
+  const sessionId = session?.id;
 
 
   const getAllDoubts = async () => {
+  try {
     const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/get`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${sessionId}`,
         "Content-Type": "application/json"
       }
-    })
+    });
     const data = await res.json();
-    console.log(data);
-    setDoubts(data.message);
+    console.log("Fetched doubts:", data);
+
+    if (Array.isArray(data.message)) {
+      setDoubts(data.message);
+    } else {
+      console.error("Unexpected response format:", data);
+      setDoubts([]); 
+    }
+  } catch (error) {
+    console.error("Failed to fetch doubts:", error);
+    setDoubts([]);
   }
+};
+
 
   const deleteDoubt = async (did) => {
     const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/delete/${did}`, {
@@ -59,7 +62,7 @@ if (!userLoaded || !sessionLoaded) {
     console.log(data);
   }
 
-  const handleDoubtLikes = async(doubtId) => {
+  const handleDoubtLikes = async (doubtId) => {
     const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/${doubtId}/like`, {
       method: 'PUT',
       headers: {
@@ -69,7 +72,59 @@ if (!userLoaded || !sessionLoaded) {
     })
   }
 
-  const [refreshKey, setRefreshKey] = useState(0);
+  useEffect(() => {
+    getAllDoubts();
+  }, [refreshKey]);
+
+
+  useEffect(() => {
+    if (!sessionLoaded || !session?.id) return;
+
+    const fetchUsernames = async () => {
+      if (!sessionId) return;
+
+      const uniqueUserIds = [...new Set(doubts.map(d => d.user_id))];
+
+      const fetchedUsernames = {};
+
+      await Promise.all(uniqueUserIds.map(async (userId) => {
+        try {
+          const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/get-user-info`, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${sessionId}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId }),
+          });
+          const data = await res.json();
+          fetchedUsernames[userId] = data.username || "Unknown User";
+        } catch (err) {
+          fetchedUsernames[userId] = "Unknown User";
+        }
+      }));
+
+      setUsernames(fetchedUsernames);
+    };
+
+    fetchUsernames();
+  }, [doubts, sessionId]);
+
+  const closeModal = () => setIsModalOpen(false);
+  const openUpdateModal = (did) => {
+    setIsUpdateModalOpen(true);
+    setDid(did);
+  }
+  const closeUpdateModal = () => setIsUpdateModalOpen(false);
+
+
+  if (!userLoaded || !sessionLoaded) {
+    return <div className="text-center py-10">Loading...</div>;
+  }
+
+
+
+
 
   const handleDeleteDoubt = async (did) => {
     await deleteDoubt(did);
@@ -81,52 +136,14 @@ if (!userLoaded || !sessionLoaded) {
   };
 
   const toggleReplies = (doubtId) => {
-  setExpandedDoubtId(prevId => (prevId === doubtId ? null : doubtId));
-};
-
-
-  useEffect(() => {
-    getAllDoubts();
-  }, [refreshKey]);
-
-
-  useEffect(() => {
-  if (!sessionLoaded || !session?.id) return; // Wait for session to be ready
-
-  const fetchUsernames = async () => {
-    if (!sessionId) return; // guard clause
-
-    const uniqueUserIds = [...new Set(doubts.map(d => d.user_id))];
-    const fetchedUsernames = {};
-
-    await Promise.all(uniqueUserIds.map(async (userId) => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/doubts/get-user-info`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${sessionId}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId }),
-        });
-
-        const data = await res.json();
-        fetchedUsernames[userId] = data.username || "Unknown User";
-      } catch (err) {
-        fetchedUsernames[userId] = "Unknown User";
-      }
-    }));
-
-    setUsernames(fetchedUsernames);
+    setExpandedDoubtId(prevId => (prevId === doubtId ? null : doubtId));
   };
 
-  fetchUsernames();
-}, [doubts, sessionId]);
 
 
   return (
     <div className="min-h-screen flex bg-green-50 flex-col">
-      <NavBar /> {/* Navigation Bar */}
+      <NavBar />
 
       {/* Page Content */}
       <main className="flex-1 ">
@@ -261,11 +278,11 @@ if (!userLoaded || !sessionLoaded) {
                         </div>
                       </div> */}
 
-                      {doubts.map((doubt) => (
+                      { doubts.map((doubt) => (
                         <div key={doubt._id} className="border rounded-xl p-5 hover:shadow-md transition-shadow bg-white">
                           <div className="flex items-start gap-4">
                             <div className="flex flex-col items-center">
-                              <Button onClick={()=>{handleDoubtLikes(doubt._id)}} variant="ghost" size="sm" className="h-10 w-10 rounded-full p-0 hover:bg-gray-100">
+                              <Button onClick={() => { handleDoubtLikes(doubt._id) }} variant="ghost" size="sm" className="h-10 w-10 rounded-full p-0 hover:bg-gray-100">
                                 <ThumbsUp className="h-5 w-5 text-gray-600" />
                               </Button>
                               <span className="text-sm font-medium mt-1">{doubt.likes}</span>
@@ -311,7 +328,7 @@ if (!userLoaded || !sessionLoaded) {
                           </div>
                         </div>
                       ))}
-            
+
 
                       {/* Additional questions... */}
                       {/* You can duplicate the question card for more content */}
@@ -320,7 +337,7 @@ if (!userLoaded || !sessionLoaded) {
 
                     <div className="mt-10 flex justify-center">
                       <Button variant="outline" className="px-6 cursor-pointer py-2.5 shadow-sm">
-                        {doubts.length > 0 ?"Load More Questions":"No Doubts Found"}
+                        {doubts.length > 0 ? "Load More Questions" : "No Doubts Found"}
                       </Button>
                     </div>
                   </div>
