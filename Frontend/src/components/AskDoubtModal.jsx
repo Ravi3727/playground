@@ -7,6 +7,7 @@ Modal.setAppElement('#root');
 
 function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
   const [doubt, setDoubt] = useState('');
+  const [title, setTitle] = useState('');
   const [file, setFile] = useState(null);
   const inputFile = useRef(null);
 
@@ -26,7 +27,7 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
     // console.log(userId);
 
     const doubtData = {
-    title: "My React error",
+    title: title,
     doubt_description: doubt,
     user_id: userId,
     department: "Web Dev",
@@ -75,12 +76,19 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
       }}
     >
       <h2 className="text-lg font-bold mb-4">Post Your Doubt</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Textarea for doubt */}
+      <form onSubmit={handleSubmit}> 
+        {/* Input field for doubt title */}
+        <input 
+        type="text" 
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder='Type your doubt title here...'
+        className="w-full p-2 border rounded mb-4"
+        />
+        {/* Textarea for doubt description */}
         <textarea
           value={doubt}
           onChange={(e) => setDoubt(e.target.value)}
-          placeholder="Type your doubt here..."
+          placeholder="Type your doubt description here..."
           className="w-full p-2 border rounded mb-4"
           rows="5"
         ></textarea>
