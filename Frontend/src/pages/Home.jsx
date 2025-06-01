@@ -18,7 +18,7 @@ function Home() {
     try {
       const sessionId = session.id; // Get the session ID
       console.log("Session ID:", sessionId);
-      const res = await fetch("http://localhost:5000/api/v1/user/sign-up", {
+      const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/user/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
