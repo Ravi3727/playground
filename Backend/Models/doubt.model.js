@@ -16,7 +16,7 @@ const replySchema = new mongoose.Schema({
     likes: {
         type: Number,
         default: 0
-    }
+    },
 })
 
 const doubtSchema = new mongoose.Schema({
@@ -40,7 +40,8 @@ const doubtSchema = new mongoose.Schema({
     likes: {
         type: Number,
         default: 0
-    }
+    },
+    tags: [String],
 }, {
     timestamps: true  //createdAt, updatedAt
 })

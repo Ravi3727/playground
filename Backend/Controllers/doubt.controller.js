@@ -5,151 +5,199 @@ import Doubt from "../Models/doubt.model.js";
 import mongoose from "mongoose";
 import * as clerk from "@clerk/clerk-sdk-node";
 
+const TAG_KEYWORDS = {
+    react: ["react", "jsx", "hooks", "useState", "useEffect"],
+    javascript: ["javascript", "js", "ecmascript", "console.log"],
+    css: ["css", "margin", "padding", "flexbox", "grid"],
+    html: ["html", "doctype", "div", "span", "form"],
+    python: ["python", "py", "pandas", "numpy", "flask", "django"],
+    java: ["java", "jvm", "spring", "jdk", "jre"],
+    kotlin: ["kotlin", "android", "jetpack", "compose"],
+    flutter: ["flutter", "dart", "widget", "hot reload"],
+    ml: ["machine learning", "sklearn", "scikit", "regression", "model"],
+    dl: ["deep learning", "neural network", "cnn", "rnn", "tensor"],
+};
+
+function generateTagsFromText(text) {
+    const foundTags = new Set();
+    const lowerText = text.toLowerCase();
+
+    for (const [tag, keywords] of Object.entries(TAG_KEYWORDS)) {
+        for (const word of keywords) {
+            if (lowerText.includes(word)) {
+                foundTags.add(tag);
+                break; // Only need one keyword match to include the tag
+            }
+        }
+    }
+
+    return Array.from(foundTags);
+}
+
 
 //CRUD operations on the Doubts in the Doubt Forum
-export const createDoubt = asyncHandler(async(req, res)=>{
+export const createDoubt = asyncHandler(async (req, res) => {
     const doubt = req.body;
-    if(!doubt.user_id || !doubt.title || !doubt.doubt_description || !doubt.department){
-        return res.status(400).json({success: false, message: "kindly fill all the required fields"});
+    if (!doubt.user_id || !doubt.title || !doubt.doubt_description || !doubt.department) {
+        return res.status(400).json({ success: false, message: "kindly fill all the required fields" });
     }
 
-    try{
-        const newDoubt = new Doubt(doubt);
+    const combinedText = `${doubt.title} ${doubt.doubt_description}`;
+    const tags = generateTagsFromText(combinedText);
+
+    try {
+        const newDoubt = new Doubt({
+            user_id: doubt.user_id,
+            title: doubt.title,
+            doubt_description: doubt.doubt_description,
+            tags: tags,
+            department: doubt.department,
+        });
         await newDoubt.save();
-        return res.status(201).json({ success: true, message: "Doubt saved!"});
+        return res.status(201).json({ success: true, message: "Doubt saved!" });
         //here not giving doubt already asked thing because maybe different people ask the same doubt
-    }catch(error){
+    } catch (error) {
         console.error('Doubt creation error: ', error.message);
-        return res.status(500).json({ success: false, message: "Some error occured"});
+        return res.status(500).json({ success: false, message: "Some error occured" });
     }
 })
 
-export const getAllDoubts = asyncHandler(async(req, res)=>{
-    try{
+export const getAllDoubts = asyncHandler(async (req, res) => {
+    try {
         const doubts = await Doubt.find({});
-        return res.status(200).json({success: true, message: doubts});
-    }catch(error){
+        return res.status(200).json({ success: true, message: doubts });
+    } catch (error) {
         console.error('Doubt Error : ', error.message);
-        return res.status(500).json({ success: false, message: "Some error occured"});
+        return res.status(500).json({ success: false, message: "Some error occured" });
     }
 })
 
-export const getUserInfo = asyncHandler(async(req, res)=>{
+export const getUserInfo = asyncHandler(async (req, res) => {
     if (req.method !== "POST") {
-    return res.status(405).end();
-  }
+        return res.status(405).end();
+    }
 
-  const { userId } = req.body;
-  console.log(userId);
+    const { userId } = req.body;
+    console.log(userId);
 
-  try {
-    const user = await clerk.clerkClient.users.getUser(userId.trim());
-    res.status(200).json({
-      username: user.username || user.firstName || user.emailAddresses[0]?.emailAddress,
-    });
-  } catch (error) {
-    res.status(500).json({ error: "User not found" });
-  }
+    try {
+        const user = await clerk.clerkClient.users.getUser(userId.trim());
+        res.status(200).json({
+            username: user.username || user.firstName || user.emailAddresses[0]?.emailAddress,
+        });
+    } catch (error) {
+        res.status(500).json({ error: "User not found" });
+    }
 })
 
-export const updateDoubt = asyncHandler(async(req, res)=>{
+export const updateDoubt = asyncHandler(async (req, res) => {
     const updatedValues = req.body;
-    const {id} = req.params;
+    const { id } = req.params;
 
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({ success: false, message: "Invalid doubt id"});
+    const combinedText = `${updatedValues.title} ${updatedValues.doubt_description}`;
+    const tags = generateTagsFromText(combinedText);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ success: false, message: "Invalid doubt id" });
     }
 
-    try{
-        const updatedDoubt  = await Doubt.findByIdAndUpdate(id, updatedValues, {new: true});
-        res.status(200).json({ success: true, message: updatedDoubt});
-    }catch(error){
-        res.status(500).json({success: false, message: "Server error"});
+    const updatePayload = {
+        title: updatedValues.title,
+        doubt_description: updatedValues.doubt_description,
+        department: updatedValues.department,
+        tags: tags,
+    };
+
+    try {
+        const updatedDoubt = await Doubt.findByIdAndUpdate(id, updatePayload, { new: true });
+        res.status(200).json({ success: true, message: updatedDoubt });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server error" });
     }
 })
 
-export const deleteDoubt = asyncHandler(async(req, res)=>{
-    const {id} = req.params;
+export const deleteDoubt = asyncHandler(async (req, res) => {
+    const { id } = req.params;
 
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({ success: false, message: "Invalid doubt id"});
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ success: false, message: "Invalid doubt id" });
     }
 
-    try{
+    try {
         await Doubt.findByIdAndDelete(id);
-        res.status(200).json({ success: true, message: "Doubt deleted"});
-    }catch(error){
-        res.status(500).json({ success: false, message: "Server Error"});
+        res.status(200).json({ success: true, message: "Doubt deleted" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 })
 
 //Now CRUD operations on the replies send on any of the doubts
 
-export const createReply = asyncHandler(async(req, res)=>{
-    const {id} = req.params;
-    const {author, message} = req.body;
+export const createReply = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { author, message } = req.body;
     //i also need to think , how will i provide author and message in request body, message from form at frontend, and author , by getting sessionId for current user and then use it to get clerk id and from there get the fullName
 
-    if(!author || !message){
-        return res.status(401).json({ success: false, message: "Missing author or message"});
+    if (!author || !message) {
+        return res.status(401).json({ success: false, message: "Missing author or message" });
     }
 
-    try{
+    try {
         const doubt = await Doubt.findById(id);
-        if(!doubt){
-            return res.status(404).json({ message: 'Doubt not found'});
+        if (!doubt) {
+            return res.status(404).json({ message: 'Doubt not found' });
         }
 
         doubt.replies.push({ author, message })
         await doubt.save();
-        res.status(200).json({success: true, message: "reply send"});
-    }catch(error){
-        res.status(500).json({ success: false, message: "Server Error"});
+        res.status(200).json({ success: true, message: "reply send" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 })
 
-export const getAllReplies = asyncHandler(async(req, res)=>{
-    const {id} = req.params;
+export const getAllReplies = asyncHandler(async (req, res) => {
+    const { id } = req.params;
 
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({ success: false, message: "Invalid doubt id"});
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ success: false, message: "Invalid doubt id" });
     }
 
-    try{
+    try {
         const doubt = await Doubt.findById(id);
         const replies = doubt.replies;
-        res.status(200).json({ success: true, message: "All replies availables", data: replies});
-    }catch(error){
-        res.status(500).json({ success: false, message: "Server Error"});
+        res.status(200).json({ success: true, message: "All replies availables", data: replies });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server Error" });
     }
 })
 
-export const updateReply = asyncHandler(async(req, res)=>{
-    const {id, rid} = req.params;
+export const updateReply = asyncHandler(async (req, res) => {
+    const { id, rid } = req.params;
     const { message } = req.body;
-    if(!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(rid)){
-        return res.status(400).json({ success: false, message: "Invalid doubt or reply id"})
+    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(rid)) {
+        return res.status(400).json({ success: false, message: "Invalid doubt or reply id" })
     }
 
-    try{
+    try {
         const doubt = await Doubt.findById(id);
         const reply = doubt.replies.id(rid);
         reply.message = message || reply.message;  //update only if the new message is provided
         await doubt.save();
 
-        res.status(200).json({ success: true, message: "Reply updated"});
-    }catch(error){
-        res.status(500).json({ success: false, message: "Server error", error: error.message});
+        res.status(200).json({ success: true, message: "Reply updated" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server error", error: error.message });
     }
 })
 
-export const deleteReply = asyncHandler(async(req, res)=>{
-    const {id, rid} = req.params;
-    if(!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(rid)){
-        return res.status(400).json({ success: false, message: "Invalid doubt or reply id"});
+export const deleteReply = asyncHandler(async (req, res) => {
+    const { id, rid } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(rid)) {
+        return res.status(400).json({ success: false, message: "Invalid doubt or reply id" });
     }
 
-    try{
+    try {
         const doubt = await Doubt.findById(id);
         const reply = doubt.replies.id(rid);
         const originalLength = doubt.replies.length;
@@ -162,54 +210,54 @@ export const deleteReply = asyncHandler(async(req, res)=>{
         }
         await doubt.save();
 
-        res.status(200).json({ success: true, message: "Reply deleted"});
-    }catch(error){
-        res.status(500).json({ success: false, message: "Server Error", error: error.message});
+        res.status(200).json({ success: true, message: "Reply deleted" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server Error", error: error.message });
     }
 })
 
-export const doubtLikes = asyncHandler(async(req, res)=>{
-    const {id} = req.params;
+export const doubtLikes = asyncHandler(async (req, res) => {
+    const { id } = req.params;
 
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(400).json({ success: false, message: "Invalid doubt ID"});
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ success: false, message: "Invalid doubt ID" });
     }
 
-    try{
+    try {
         const updatedDoubt = await Doubt.findByIdAndUpdate(id,
-            { $inc: {likes: 1}},
-            {new: true}
+            { $inc: { likes: 1 } },
+            { new: true }
         );
 
-        if(!updatedDoubt){
-            return res.status(404).json({ success: false, message: "Doubt not found"});
+        if (!updatedDoubt) {
+            return res.status(404).json({ success: false, message: "Doubt not found" });
         }
-        res.status(200).json({ success: true, message: updatedDoubt});
-    }catch(error){
-        res.status(500).json({ success: false, message: "Server Error", error: error.message});
+        res.status(200).json({ success: true, message: updatedDoubt });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server Error", error: error.message });
     }
 })
 
-export const replyLikes = asyncHandler(async(req, res)=>{
-    const {id, rid} = req.params;
-    if(!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(rid)){
-        return res.status(400).json({ success: false, message: "Invalid doubt or reply ID"});
+export const replyLikes = asyncHandler(async (req, res) => {
+    const { id, rid } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(rid)) {
+        return res.status(400).json({ success: false, message: "Invalid doubt or reply ID" });
     }
 
-    try{
+    try {
         const doubt = await Doubt.findById(id);
         if (!doubt) {
-          return res.status(404).json({ success: false, message: "Doubt not found" });
+            return res.status(404).json({ success: false, message: "Doubt not found" });
         }
-        const reply = doubt.replies.id(rid); 
+        const reply = doubt.replies.id(rid);
         if (!reply) {
-          return res.status(404).json({ success: false, message: "Reply not found" });
+            return res.status(404).json({ success: false, message: "Reply not found" });
         }
-        reply.likes = (reply.likes || 0) + 1; 
+        reply.likes = (reply.likes || 0) + 1;
         await doubt.save();
 
-        return res.status(200).json({ success: true, message: "Reply liked", data: reply});
-    }catch(error){
-        return res.status(500).json({ success: false, message: "Server Error", error: error.message});
+        return res.status(200).json({ success: true, message: "Reply liked", data: reply });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server Error", error: error.message });
     }
 })
