@@ -32,7 +32,8 @@ function DoubtForum() {
       headers: {
         "Authorization": `Bearer ${sessionId}`,
         "Content-Type": "application/json"
-      }
+      },
+      credentials: "include",
     });
     const data = await res.json();
     console.log("Fetched doubts:", data);
@@ -57,6 +58,7 @@ function DoubtForum() {
         "Authorization": `Bearer ${sessionId}`,
         "Content-Type": "application/json"
       },
+      credentials: "include",
     })
     const data = await res.json();
     console.log(data);
@@ -69,6 +71,7 @@ function DoubtForum() {
         "Authorization": `Bearer ${sessionId}`,
         "Content-Type": "application/json"
       },
+      credentials: "include",
     })
   }
 
@@ -95,6 +98,7 @@ function DoubtForum() {
               "Authorization": `Bearer ${sessionId}`,
               "Content-Type": "application/json",
             },
+            credentials: "include",
             body: JSON.stringify({ userId }),
           });
           const data = await res.json();

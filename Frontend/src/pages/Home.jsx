@@ -27,6 +27,7 @@ function Home() {
           fullName: user.fullName,
           role: "member",
         }),
+        credentials: "include",
       });
         
       if (!res.ok) {
