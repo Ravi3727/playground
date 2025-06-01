@@ -3,7 +3,7 @@ version: "3.9"
 services:
   backend:
     build:
-      context: ./Backend 
+      context: ./backend 
       dockerfile: Dockerfile
     container_name: gdsc_backend
     ports:
@@ -16,7 +16,7 @@ services:
 
   frontend:
     build:
-      context: ./Frontend 
+      context: ./frontend 
       dockerfile: Dockerfile
       args:
         VITE_CLERK_PUBLISHABLE_KEY: pk_test_bWVycnktZWFnbGUtNzQuY2xlcmsuYWNjb3VudHMuZGV2JA
