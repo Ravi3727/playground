@@ -16,6 +16,7 @@ const TAG_KEYWORDS = {
     flutter: ["flutter", "dart", "widget", "hot reload"],
     ml: ["machine learning", "sklearn", "scikit", "regression", "model"],
     dl: ["deep learning", "neural network", "cnn", "rnn", "tensor"],
+    cloud: ["cloud", "aws", "azure", "gcp", "docker", "kubernetes", "devops"]
 };
 
 function generateTagsFromText(text) {
@@ -69,6 +70,50 @@ export const getAllDoubts = asyncHandler(async (req, res) => {
     } catch (error) {
         console.error('Doubt Error : ', error.message);
         return res.status(500).json({ success: false, message: "Some error occured" });
+    }
+})
+
+export const getAllDoubtsByCategory = asyncHandler(async(req, res) => {
+    try {
+        const doubts = await Doubt.find({});
+
+        const webTags = ["react", "javascript", "css", "html"];
+        const androidTags = ["java", "kotlin", "flutter"];
+        const cloudTags = ["cloud"];
+        const mlTags = ["ml", "dl"];
+
+        const webDoubts = [];
+        const androidDoubts = [];
+        const cloudDoubts = [];
+        const mlDoubts = [];
+
+        doubts.forEach(doubt => {
+            if (doubt.tags.some(tag => webTags.includes(tag))) {
+                webDoubts.push(doubt);
+            }
+            if (doubt.tags.some(tag => androidTags.includes(tag))) {
+                androidDoubts.push(doubt);
+            }
+            if(doubt.tags.some(tag => cloudTags.includes(tag))){
+                cloudDoubts.push(doubt);
+            }
+            if (doubt.tags.some(tag => mlTags.includes(tag))) {
+                mlDoubts.push(doubt);
+            }
+        });
+
+        return res.status(200).json({
+            success: true,
+            categories: {
+                web: webDoubts,
+                android: androidDoubts,
+                cloud: cloudDoubts,
+                ml: mlDoubts,
+            }
+        });
+    } catch (error) {
+        console.error('Category Doubt Error:', error.message);
+        return res.status(500).json({ success: false, message: "Some error occurred" });
     }
 })
 

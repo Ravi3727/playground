@@ -30,7 +30,7 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
     title: title,
     doubt_description: doubt,
     user_id: userId,
-    department: "Web Dev",
+    department: "Mixed",
   };
 
     const res = await fetch(`http://localhost:5000/api/v1/doubts/create`, {
