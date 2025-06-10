@@ -1,11 +1,13 @@
 import express from "express"
-import { createDoubt, getAllDoubts, updateDoubt, deleteDoubt, createReply, getAllReplies, updateReply, deleteReply, doubtLikes, replyLikes } from "../Controllers/doubt.controller.js"
+import { createDoubt, getAllDoubts, getAllDoubtsByCategory, getUserInfo, updateDoubt, deleteDoubt, createReply, getAllReplies, updateReply, deleteReply, doubtLikes, replyLikes } from "../Controllers/doubt.controller.js"
 import { verifyClerkAuth } from "../Middlewares/clerkAuth.js"
 
 const router = express.Router()
 
 router.post("/create", verifyClerkAuth, createDoubt);
 router.get("/get", verifyClerkAuth, getAllDoubts);
+router.get("/getByCategory", verifyClerkAuth, getAllDoubtsByCategory);
+router.post("/get-user-info", verifyClerkAuth, getUserInfo)
 router.put("/update/:id", verifyClerkAuth, updateDoubt);
 router.delete("/delete/:id", verifyClerkAuth, deleteDoubt);
 

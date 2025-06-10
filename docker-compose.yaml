@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend 
+      dockerfile: Dockerfile
+    container_name: gdsc_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend 
+      dockerfile: Dockerfile
+      args:
+        VITE_CLERK_PUBLISHABLE_KEY: pk_test_bWVycnktZWFnbGUtNzQuY2xlcmsuYWNjb3VudHMuZGV2JA
+        VITE_BACKENDURL: http://localhost:3000/api/v1
+    container_name: gdsc_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

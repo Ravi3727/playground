@@ -3,20 +3,23 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./DBConfig/dbConnect.js";
-
-
+import cookieParser from "cookie-parser"
 import mainRouter from "./Routes/index.js";
 import ApiError from "./API/ApiError.js";
-import projectRoutes from "./Routes/projectRoutes.js";
 import userRoutes from "./Routes/index.js"
 
-dotenv.config();
-
 const app = express();
+dotenv.config();
+app.use(express.json());
+app.use(
+  cors({
+    origin: ["http://localhost:5173","http://localhost","https://gdgdtu.vercel.app"],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 const PORT = process.env.PORT || 5000;
 
-app.use(express.json());
-app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Welcome to GDSC Web Server!");

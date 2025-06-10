@@ -5,7 +5,7 @@ import { MdCloudUpload } from 'react-icons/md';
 
 Modal.setAppElement('#root');
 
-function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
+function UpdateDoubtModal({ isOpen, onClose, did, onDoubtUpdated }) {
   const [doubt, setDoubt] = useState('');
   const [title, setTitle] = useState('');
   const [file, setFile] = useState(null);
@@ -18,23 +18,23 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
   const { session } = useSession();
   const { user } = useUser();
 
-  const handleSubmit = async(e) => {
+  //For updating the doubt
+  const handleSubmit = async(e, did) => {  //did => doubt id
     e.preventDefault();
-    console.log('Posted Doubt:', doubt);
-    console.log('Uploaded File:', file);
+    // console.log('Posted Doubt:', doubt);
+    // console.log('Uploaded File:', file);
     const sessionId = session.id;
-    const { id: userId } = user;
+    // const { id: userId } = user;
     // console.log(userId);
 
     const doubtData = {
     title: title,
     doubt_description: doubt,
-    user_id: userId,
-    department: "Mixed",
+    department: "Web Dev",
   };
 
-    const res = await fetch(`http://localhost:5000/api/v1/doubts/create`, {
-      method: "POST",
+    const res = await fetch(`http://localhost:5000/api/v1/doubts/update/${did}`, {
+      method: "PUT",
       headers: {
         "Authorization": `Bearer ${sessionId}`,
         "Content-Type": "application/json"
@@ -45,7 +45,7 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
     console.log(data);
     setDoubt('');
     setFile(null);
-    onDoubtAdded();
+    onDoubtUpdated();
     onClose();
   };
 
@@ -76,7 +76,7 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
       }}
     >
       <h2 className="text-lg font-bold mb-4">Post Your Doubt</h2>
-      <form onSubmit={handleSubmit}> 
+      <form onSubmit={(e) => handleSubmit(e, did)}>
         {/* Input field for doubt title */}
         <input 
         type="text" 
@@ -84,11 +84,11 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
         placeholder='Type your doubt title here...'
         className="w-full p-2 border rounded mb-4"
         />
-        {/* Textarea for doubt description */}
+        {/* Textarea for doubt */}
         <textarea
           value={doubt}
           onChange={(e) => setDoubt(e.target.value)}
-          placeholder="Type your doubt description here..."
+          placeholder="Type your doubt here..."
           className="w-full p-2 border rounded mb-4"
           rows="5"
         ></textarea>
@@ -133,4 +133,4 @@ function AskDoubtModal({ isOpen, onClose, onDoubtAdded }) {
   );
 }
 
-export default AskDoubtModal;
+export default UpdateDoubtModal;

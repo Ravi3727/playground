@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
@@ -8,14 +8,156 @@ import Replies from '../components/Replies';
 import AskDoubtModal from '../components/AskDoubtModal';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Search, MessageSquare, ThumbsUp, MessageCircle, Filter, Plus, CloudCog } from 'lucide-react';
-
-
+import { useSession, useUser } from '@clerk/clerk-react';
+import UpdateDoubtModal from '../components/UpdateDoubtModal';
 
 function DoubtForum() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [doubts, setDoubts] = useState([]);
+  const [webdoubts, setWebdoubts] = useState([]);
+  const [androiddoubts, setAndroidDoubts] = useState([]);
+  const [clouddoubts, setCloudDoubts] = useState([]);
+  const [mldoubts, setMldoubts] = useState([]);
+  const [usernames, setUsernames] = useState({});
+  const [expandedDoubtId, setExpandedDoubtId] = useState(null);
+  const [did, setDid] = useState("");
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const openUpdateModal = (did) => {
+    setIsUpdateModalOpen(true);
+    setDid(did);
+  }
+  const closeUpdateModal = () => setIsUpdateModalOpen(false);
+  const { user, isLoaded: userLoaded } = useUser();
+  const { session, isLoaded: sessionLoaded } = useSession();
+  const sessionId = session?.id; // <-- Move this outside of condition
+
+  if (!userLoaded || !sessionLoaded) {
+    return <div className="text-center py-10">Loading...</div>;
+  }
+
+
+  const getAllDoubts = async () => {
+    const res = await fetch("http://localhost:5000/api/v1/doubts/get", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${sessionId}`,
+        "Content-Type": "application/json"
+      }
+    })
+    const data = await res.json();
+    console.log(data);
+    setDoubts(data.message);
+  }
+
+  const getAllDoubtsByCategory = async() => {
+    const res = await fetch("http://localhost:5000/api/v1/doubts/getByCategory", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${sessionId}`,
+        "Content-Type": "application/json",
+      }
+    })
+    const data = await res.json();
+    console.log(data);
+    setWebdoubts(data.categories.web);
+    setAndroidDoubts(data.categories.android);
+    setCloudDoubts(data.categories.cloud);
+    setMldoubts(data.categories.ml);
+  }
+
+  const deleteDoubt = async (did) => {
+    const res = await fetch(`http://localhost:5000/api/v1/doubts/delete/${did}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${sessionId}`,
+        "Content-Type": "application/json"
+      },
+    })
+    const data = await res.json();
+    console.log(data);
+  }
+
+  const handleDoubtLikes = async (doubtId) => {
+    const res = await fetch(`http://localhost:5000/api/v1/doubts/${doubtId}/like`, {
+      method: 'PUT',
+      headers: {
+        "Authorization": `Bearer ${sessionId}`,
+        "Content-Type": "application/json"
+      },
+    })
+  }
+
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleDeleteDoubt = async (did) => {
+    await deleteDoubt(did);
+    setRefreshKey(prev => prev + 1);
+  };
+
+  const handleUpdateDoubt = () => {
+    setRefreshKey(prev => prev + 1);
+  };
+
+  const toggleReplies = (doubtId) => {
+    setExpandedDoubtId(prevId => (prevId === doubtId ? null : doubtId));
+  };
+
+
+  useEffect(() => {
+    getAllDoubts();
+    getAllDoubtsByCategory();
+  }, [refreshKey]);
+
+
+  useEffect(() => {
+    if (!sessionLoaded || !session?.id) return; // Wait for session to be ready
+
+    const fetchUsernames = async () => {
+      if (!sessionId) return; // guard clause
+
+      const uniqueUserIds = [...new Set(doubts.map(d => d.user_id))];
+      const fetchedUsernames = {};
+
+      await Promise.all(uniqueUserIds.map(async (userId) => {
+        try {
+          const res = await fetch("http://localhost:5000/api/v1/doubts/get-user-info", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${sessionId}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId }),
+          });
+
+          const data = await res.json();
+          fetchedUsernames[userId] = data.username || "Unknown User";
+        } catch (err) {
+          fetchedUsernames[userId] = "Unknown User";
+        }
+      }));
+
+      setUsernames(fetchedUsernames);
+    };
+
+    fetchUsernames();
+  }, [doubts, sessionId]);
+
+  const tagStyleMap = {
+    react: 'bg-blue-100 text-blue-600',
+    javascript: 'bg-yellow-100 text-yellow-600',
+    css: 'bg-teal-100 text-teal-600',
+    html: 'bg-red-100 text-red-600',
+    ml: 'bg-purple-100 text-purple-600',
+    dl: 'bg-indigo-100 text-indigo-600',
+    python: 'bg-green-100 text-green-600',
+    java: 'bg-orange-100 text-orange-600',
+    kotlin: 'bg-pink-100 text-pink-600',
+    flutter: 'bg-cyan-100 text-cyan-600',
+  };
+
+
   return (
     <div className="min-h-screen flex bg-green-50 flex-col">
       <NavBar /> {/* Navigation Bar */}
@@ -99,7 +241,7 @@ function DoubtForum() {
                       </div>
                     </div>
 
-                   
+
 
                     <Button variant="outline" className="w-full cursor-pointer py-2.5 flex items-center justify-center shadow-sm">
                       <Filter className="mr-2 h-4 w-4" /> Apply Filters
@@ -110,7 +252,7 @@ function DoubtForum() {
                   <div className="flex-1">
                     <div className="space-y-6">
                       {/* Question 1 */}
-                      <div className="border rounded-xl p-5 hover:shadow-md transition-shadow bg-white">
+                      {/* <div className="border rounded-xl p-5 hover:shadow-md transition-shadow bg-white">
                         <div className="flex items-start gap-4">
                           <div className="flex flex-col items-center">
                             <Button variant="ghost" size="sm" className="h-10 w-10 rounded-full p-0 hover:bg-gray-100">
@@ -151,7 +293,74 @@ function DoubtForum() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
+
+                      {doubts.map((doubt) => (
+                        <div key={doubt._id} className="border rounded-xl p-5 hover:shadow-md transition-shadow bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="flex flex-col items-center">
+                              <Button onClick={() => { handleDoubtLikes(doubt._id) }} variant="ghost" size="sm" className="h-10 w-10 rounded-full p-0 hover:bg-gray-100">
+                                <ThumbsUp className="h-5 w-5 text-gray-600" />
+                              </Button>
+                              <span className="text-sm font-medium mt-1">{doubt.likes}</span>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  {doubt.isSolved && (
+                                    <span className="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full">
+                                      Solved
+                                    </span>
+                                  )}
+                                  {doubt.tags?.map((tag) => (
+                                    <span
+                                      key={tag}
+                                      className={`text-xs px-3 py-1 rounded-full ${tagStyleMap[tag.toLowerCase()] || 'bg-gray-100 text-gray-600'}`}
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+
+
+                              </div>
+                              <Link to="#" className="font-bold text-lg hover:text-blue-600 transition-colors block mb-2">
+                                {doubt.title}
+                              </Link>
+                              <p className="text-gray-600 text-sm mb-4">
+                                {doubt.doubt_description}
+                              </p>
+                              <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t">
+                                <div className="flex items-center">
+                                  <img src="/placeholder.svg?height=32&width=32" alt="User" width={36} height={36} className="rounded-full mr-3" />
+                                  <div>
+                                    <div className="text-sm font-medium">{usernames[doubt.user_id] || "Loading..."}</div>
+                                    <div className="text-xs text-gray-500">{doubt.createdAt}</div>
+                                  </div>
+                                </div>
+                                <div
+                                  onClick={() => toggleReplies(doubt._id)}
+                                  className="flex cursor-pointer active:scale-90 transform items-center bg-amber-50 p-2 rounded-xl text-gray-800 transition-all"
+                                >
+                                  <MessageCircle className="h-4 w-4 mr-1.5" />
+                                  <span className="text-sm">{doubt.replies?.length || 0} replies</span>
+                                </div>
+                                <button className="cursor-pointer" onClick={() => {
+                                  openUpdateModal(doubt._id);
+                                  handleUpdateDoubt();
+                                }}>Update Doubt</button>
+                                <button className="cursor-pointer" onClick={() => handleDeleteDoubt(doubt._id)}>Delete Doubt</button>
+                              </div>
+                              {expandedDoubtId === doubt._id && (
+                                <div className="mt-4 ml-12">
+                                  <Replies doubtId={doubt._id} />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
 
                       {/* Additional questions... */}
                       {/* You can duplicate the question card for more content */}
@@ -166,10 +375,508 @@ function DoubtForum() {
                   </div>
                 </div>
               </TabsContent>
+              
+              <TabsContent value="web" className="mt-8">
+                <div className="flex flex-col lg:flex-row gap-8">
+                  {/* Sidebar */}
+                  <div className="w-full lg:w-80 space-y-6">
+                    <div className="border rounded-xl p-5 shadow-sm">
+                      <h3 className="font-medium text-lg mb-4">Filter By</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="recent" className="mr-3 h-4 w-4" defaultChecked />
+                          <label htmlFor="recent" className="text-sm">
+                            Most Recent
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="popular" className="mr-3 h-4 w-4" />
+                          <label htmlFor="popular" className="text-sm">
+                            Most Popular
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="unanswered" className="mr-3 h-4 w-4" />
+                          <label htmlFor="unanswered" className="text-sm">
+                            Unanswered
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="solved" className="mr-3 h-4 w-4" />
+                          <label htmlFor="solved" className="text-sm">
+                            Solved
+                          </label>
+                        </div>
+                      </div>
+                    </div>
 
+
+
+                    <Button variant="outline" className="w-full cursor-pointer py-2.5 flex items-center justify-center shadow-sm">
+                      <Filter className="mr-2 h-4 w-4" /> Apply Filters
+                    </Button>
+                  </div>
+
+                  {/* Main Content */}
+                  <div className="flex-1">
+                    <div className="space-y-6">
+                      {webdoubts.map((doubt) => (
+                        <div key={doubt._id} className="border rounded-xl p-5 hover:shadow-md transition-shadow bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="flex flex-col items-center">
+                              <Button onClick={() => { handleDoubtLikes(doubt._id) }} variant="ghost" size="sm" className="h-10 w-10 rounded-full p-0 hover:bg-gray-100">
+                                <ThumbsUp className="h-5 w-5 text-gray-600" />
+                              </Button>
+                              <span className="text-sm font-medium mt-1">{doubt.likes}</span>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  {doubt.isSolved && (
+                                    <span className="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full">
+                                      Solved
+                                    </span>
+                                  )}
+                                  {doubt.tags?.map((tag) => (
+                                    <span
+                                      key={tag}
+                                      className={`text-xs px-3 py-1 rounded-full ${tagStyleMap[tag.toLowerCase()] || 'bg-gray-100 text-gray-600'}`}
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+
+
+                              </div>
+                              <Link to="#" className="font-bold text-lg hover:text-blue-600 transition-colors block mb-2">
+                                {doubt.title}
+                              </Link>
+                              <p className="text-gray-600 text-sm mb-4">
+                                {doubt.doubt_description}
+                              </p>
+                              <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t">
+                                <div className="flex items-center">
+                                  <img src="/placeholder.svg?height=32&width=32" alt="User" width={36} height={36} className="rounded-full mr-3" />
+                                  <div>
+                                    <div className="text-sm font-medium">{usernames[doubt.user_id] || "Loading..."}</div>
+                                    <div className="text-xs text-gray-500">{doubt.createdAt}</div>
+                                  </div>
+                                </div>
+                                <div
+                                  onClick={() => toggleReplies(doubt._id)}
+                                  className="flex cursor-pointer active:scale-90 transform items-center bg-amber-50 p-2 rounded-xl text-gray-800 transition-all"
+                                >
+                                  <MessageCircle className="h-4 w-4 mr-1.5" />
+                                  <span className="text-sm">{doubt.replies?.length || 0} replies</span>
+                                </div>
+                                <button className="cursor-pointer" onClick={() => {
+                                  openUpdateModal(doubt._id);
+                                  handleUpdateDoubt();
+                                }}>Update Doubt</button>
+                                <button className="cursor-pointer" onClick={() => handleDeleteDoubt(doubt._id)}>Delete Doubt</button>
+                              </div>
+                              {expandedDoubtId === doubt._id && (
+                                <div className="mt-4 ml-12">
+                                  <Replies doubtId={doubt._id} />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+
+                      {/* Additional questions... */}
+                      {/* You can duplicate the question card for more content */}
+
+                    </div>
+
+                    <div className="mt-10 flex justify-center">
+                      <Button variant="outline" className="px-6 cursor-pointer py-2.5 shadow-sm">
+                        Load More Questions
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+              <TabsContent value="android" className="mt-8">
+                <div className="flex flex-col lg:flex-row gap-8">
+                  {/* Sidebar */}
+                  <div className="w-full lg:w-80 space-y-6">
+                    <div className="border rounded-xl p-5 shadow-sm">
+                      <h3 className="font-medium text-lg mb-4">Filter By</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="recent" className="mr-3 h-4 w-4" defaultChecked />
+                          <label htmlFor="recent" className="text-sm">
+                            Most Recent
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="popular" className="mr-3 h-4 w-4" />
+                          <label htmlFor="popular" className="text-sm">
+                            Most Popular
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="unanswered" className="mr-3 h-4 w-4" />
+                          <label htmlFor="unanswered" className="text-sm">
+                            Unanswered
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="solved" className="mr-3 h-4 w-4" />
+                          <label htmlFor="solved" className="text-sm">
+                            Solved
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                    <Button variant="outline" className="w-full cursor-pointer py-2.5 flex items-center justify-center shadow-sm">
+                      <Filter className="mr-2 h-4 w-4" /> Apply Filters
+                    </Button>
+                  </div>
+
+                  {/* Main Content */}
+                  <div className="flex-1">
+                    <div className="space-y-6">
+                      {androiddoubts.map((doubt) => (
+                        <div key={doubt._id} className="border rounded-xl p-5 hover:shadow-md transition-shadow bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="flex flex-col items-center">
+                              <Button onClick={() => { handleDoubtLikes(doubt._id) }} variant="ghost" size="sm" className="h-10 w-10 rounded-full p-0 hover:bg-gray-100">
+                                <ThumbsUp className="h-5 w-5 text-gray-600" />
+                              </Button>
+                              <span className="text-sm font-medium mt-1">{doubt.likes}</span>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  {doubt.isSolved && (
+                                    <span className="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full">
+                                      Solved
+                                    </span>
+                                  )}
+                                  {doubt.tags?.map((tag) => (
+                                    <span
+                                      key={tag}
+                                      className={`text-xs px-3 py-1 rounded-full ${tagStyleMap[tag.toLowerCase()] || 'bg-gray-100 text-gray-600'}`}
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+
+
+                              </div>
+                              <Link to="#" className="font-bold text-lg hover:text-blue-600 transition-colors block mb-2">
+                                {doubt.title}
+                              </Link>
+                              <p className="text-gray-600 text-sm mb-4">
+                                {doubt.doubt_description}
+                              </p>
+                              <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t">
+                                <div className="flex items-center">
+                                  <img src="/placeholder.svg?height=32&width=32" alt="User" width={36} height={36} className="rounded-full mr-3" />
+                                  <div>
+                                    <div className="text-sm font-medium">{usernames[doubt.user_id] || "Loading..."}</div>
+                                    <div className="text-xs text-gray-500">{doubt.createdAt}</div>
+                                  </div>
+                                </div>
+                                <div
+                                  onClick={() => toggleReplies(doubt._id)}
+                                  className="flex cursor-pointer active:scale-90 transform items-center bg-amber-50 p-2 rounded-xl text-gray-800 transition-all"
+                                >
+                                  <MessageCircle className="h-4 w-4 mr-1.5" />
+                                  <span className="text-sm">{doubt.replies?.length || 0} replies</span>
+                                </div>
+                                <button className="cursor-pointer" onClick={() => {
+                                  openUpdateModal(doubt._id);
+                                  handleUpdateDoubt();
+                                }}>Update Doubt</button>
+                                <button className="cursor-pointer" onClick={() => handleDeleteDoubt(doubt._id)}>Delete Doubt</button>
+                              </div>
+                              {expandedDoubtId === doubt._id && (
+                                <div className="mt-4 ml-12">
+                                  <Replies doubtId={doubt._id} />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+
+                      {/* Additional questions... */}
+                      {/* You can duplicate the question card for more content */}
+
+                    </div>
+
+                    <div className="mt-10 flex justify-center">
+                      <Button variant="outline" className="px-6 cursor-pointer py-2.5 shadow-sm">
+                        Load More Questions
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+              <TabsContent value="cloud" className="mt-8">
+                <div className="flex flex-col lg:flex-row gap-8">
+                  {/* Sidebar */}
+                  <div className="w-full lg:w-80 space-y-6">
+                    <div className="border rounded-xl p-5 shadow-sm">
+                      <h3 className="font-medium text-lg mb-4">Filter By</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="recent" className="mr-3 h-4 w-4" defaultChecked />
+                          <label htmlFor="recent" className="text-sm">
+                            Most Recent
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="popular" className="mr-3 h-4 w-4" />
+                          <label htmlFor="popular" className="text-sm">
+                            Most Popular
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="unanswered" className="mr-3 h-4 w-4" />
+                          <label htmlFor="unanswered" className="text-sm">
+                            Unanswered
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="solved" className="mr-3 h-4 w-4" />
+                          <label htmlFor="solved" className="text-sm">
+                            Solved
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                    <Button variant="outline" className="w-full cursor-pointer py-2.5 flex items-center justify-center shadow-sm">
+                      <Filter className="mr-2 h-4 w-4" /> Apply Filters
+                    </Button>
+                  </div>
+
+                  {/* Main Content */}
+                  <div className="flex-1">
+                    <div className="space-y-6">
+                      {clouddoubts.map((doubt) => (
+                        <div key={doubt._id} className="border rounded-xl p-5 hover:shadow-md transition-shadow bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="flex flex-col items-center">
+                              <Button onClick={() => { handleDoubtLikes(doubt._id) }} variant="ghost" size="sm" className="h-10 w-10 rounded-full p-0 hover:bg-gray-100">
+                                <ThumbsUp className="h-5 w-5 text-gray-600" />
+                              </Button>
+                              <span className="text-sm font-medium mt-1">{doubt.likes}</span>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  {doubt.isSolved && (
+                                    <span className="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full">
+                                      Solved
+                                    </span>
+                                  )}
+                                  {doubt.tags?.map((tag) => (
+                                    <span
+                                      key={tag}
+                                      className={`text-xs px-3 py-1 rounded-full ${tagStyleMap[tag.toLowerCase()] || 'bg-gray-100 text-gray-600'}`}
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+
+
+                              </div>
+                              <Link to="#" className="font-bold text-lg hover:text-blue-600 transition-colors block mb-2">
+                                {doubt.title}
+                              </Link>
+                              <p className="text-gray-600 text-sm mb-4">
+                                {doubt.doubt_description}
+                              </p>
+                              <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t">
+                                <div className="flex items-center">
+                                  <img src="/placeholder.svg?height=32&width=32" alt="User" width={36} height={36} className="rounded-full mr-3" />
+                                  <div>
+                                    <div className="text-sm font-medium">{usernames[doubt.user_id] || "Loading..."}</div>
+                                    <div className="text-xs text-gray-500">{doubt.createdAt}</div>
+                                  </div>
+                                </div>
+                                <div
+                                  onClick={() => toggleReplies(doubt._id)}
+                                  className="flex cursor-pointer active:scale-90 transform items-center bg-amber-50 p-2 rounded-xl text-gray-800 transition-all"
+                                >
+                                  <MessageCircle className="h-4 w-4 mr-1.5" />
+                                  <span className="text-sm">{doubt.replies?.length || 0} replies</span>
+                                </div>
+                                <button className="cursor-pointer" onClick={() => {
+                                  openUpdateModal(doubt._id);
+                                  handleUpdateDoubt();
+                                }}>Update Doubt</button>
+                                <button className="cursor-pointer" onClick={() => handleDeleteDoubt(doubt._id)}>Delete Doubt</button>
+                              </div>
+                              {expandedDoubtId === doubt._id && (
+                                <div className="mt-4 ml-12">
+                                  <Replies doubtId={doubt._id} />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+
+                      {/* Additional questions... */}
+                      {/* You can duplicate the question card for more content */}
+
+                    </div>
+
+                    <div className="mt-10 flex justify-center">
+                      <Button variant="outline" className="px-6 cursor-pointer py-2.5 shadow-sm">
+                        Load More Questions
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+              <TabsContent value="ml" className="mt-8">
+                <div className="flex flex-col lg:flex-row gap-8">
+                  {/* Sidebar */}
+                  <div className="w-full lg:w-80 space-y-6">
+                    <div className="border rounded-xl p-5 shadow-sm">
+                      <h3 className="font-medium text-lg mb-4">Filter By</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="recent" className="mr-3 h-4 w-4" defaultChecked />
+                          <label htmlFor="recent" className="text-sm">
+                            Most Recent
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="popular" className="mr-3 h-4 w-4" />
+                          <label htmlFor="popular" className="text-sm">
+                            Most Popular
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="unanswered" className="mr-3 h-4 w-4" />
+                          <label htmlFor="unanswered" className="text-sm">
+                            Unanswered
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" name="filter" id="solved" className="mr-3 h-4 w-4" />
+                          <label htmlFor="solved" className="text-sm">
+                            Solved
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                    <Button variant="outline" className="w-full cursor-pointer py-2.5 flex items-center justify-center shadow-sm">
+                      <Filter className="mr-2 h-4 w-4" /> Apply Filters
+                    </Button>
+                  </div>
+
+                  {/* Main Content */}
+                  <div className="flex-1">
+                    <div className="space-y-6">
+                      {mldoubts.map((doubt) => (
+                        <div key={doubt._id} className="border rounded-xl p-5 hover:shadow-md transition-shadow bg-white">
+                          <div className="flex items-start gap-4">
+                            <div className="flex flex-col items-center">
+                              <Button onClick={() => { handleDoubtLikes(doubt._id) }} variant="ghost" size="sm" className="h-10 w-10 rounded-full p-0 hover:bg-gray-100">
+                                <ThumbsUp className="h-5 w-5 text-gray-600" />
+                              </Button>
+                              <span className="text-sm font-medium mt-1">{doubt.likes}</span>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  {doubt.isSolved && (
+                                    <span className="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full">
+                                      Solved
+                                    </span>
+                                  )}
+                                  {doubt.tags?.map((tag) => (
+                                    <span
+                                      key={tag}
+                                      className={`text-xs px-3 py-1 rounded-full ${tagStyleMap[tag.toLowerCase()] || 'bg-gray-100 text-gray-600'}`}
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+
+
+                              </div>
+                              <Link to="#" className="font-bold text-lg hover:text-blue-600 transition-colors block mb-2">
+                                {doubt.title}
+                              </Link>
+                              <p className="text-gray-600 text-sm mb-4">
+                                {doubt.doubt_description}
+                              </p>
+                              <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t">
+                                <div className="flex items-center">
+                                  <img src="/placeholder.svg?height=32&width=32" alt="User" width={36} height={36} className="rounded-full mr-3" />
+                                  <div>
+                                    <div className="text-sm font-medium">{usernames[doubt.user_id] || "Loading..."}</div>
+                                    <div className="text-xs text-gray-500">{doubt.createdAt}</div>
+                                  </div>
+                                </div>
+                                <div
+                                  onClick={() => toggleReplies(doubt._id)}
+                                  className="flex cursor-pointer active:scale-90 transform items-center bg-amber-50 p-2 rounded-xl text-gray-800 transition-all"
+                                >
+                                  <MessageCircle className="h-4 w-4 mr-1.5" />
+                                  <span className="text-sm">{doubt.replies?.length || 0} replies</span>
+                                </div>
+                                <button className="cursor-pointer" onClick={() => {
+                                  openUpdateModal(doubt._id);
+                                  handleUpdateDoubt();
+                                }}>Update Doubt</button>
+                                <button className="cursor-pointer" onClick={() => handleDeleteDoubt(doubt._id)}>Delete Doubt</button>
+                              </div>
+                              {expandedDoubtId === doubt._id && (
+                                <div className="mt-4 ml-12">
+                                  <Replies doubtId={doubt._id} />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+
+                      {/* Additional questions... */}
+                      {/* You can duplicate the question card for more content */}
+
+                    </div>
+
+                    <div className="mt-10 flex justify-center">
+                      <Button variant="outline" className="px-6 cursor-pointer py-2.5 shadow-sm">
+                        Load More Questions
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
               {/* Other tab contents similar to above */}
             </Tabs>
-            <AskDoubtModal isOpen={isModalOpen} onClose={closeModal} />
+            <AskDoubtModal isOpen={isModalOpen} onClose={closeModal} onDoubtAdded={() => setRefreshKey(prev => prev + 1)} />
+            <UpdateDoubtModal isOpen={isUpdateModalOpen} onClose={closeUpdateModal} did={did} onDoubtUpdated={() => setRefreshKey(prev => prev + 1)} />
+
           </div>
         </section>
       </main>

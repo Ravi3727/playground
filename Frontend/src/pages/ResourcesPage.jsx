@@ -246,21 +246,19 @@ const ResourcesPage = () => {
           {/* Tabs */}
           <div className="flex mb-6 border-b">
             <button
-              className={`py-2 px-6 text-center ${
-                activeTab === "resources"
-                  ? "border-b-2 border-blue-500 font-medium"
-                  : "text-gray-500"
-              }`}
+              className={`py-2 px-6 text-center ${activeTab === "resources"
+                ? "border-b-2 border-blue-500 font-medium"
+                : "text-gray-500"
+                }`}
               onClick={() => setActiveTab("resources")}
             >
               Resources
             </button>
             <button
-              className={`py-2 px-6 text-center ${
-                activeTab === "blogs"
-                  ? "border-b-2 border-blue-500 font-medium"
-                  : "text-gray-500"
-              }`}
+              className={`py-2 px-6 text-center ${activeTab === "blogs"
+                ? "border-b-2 border-blue-500 font-medium"
+                : "text-gray-500"
+                }`}
               onClick={() => setActiveTab("blogs")}
             >
               Blogs
@@ -392,8 +390,16 @@ const ResourcesPage = () => {
 
               {/* Resources Grid */}
               <div className="flex-1">
-                <div className="grid md:grid-cols-2 gap-6">
-                  {resources.map((resource) => (
+                {
+                  resources.length === 0 &&
+                  <div className="mt-8 flex justify-center">
+                    <h1 className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                      No Resource Found
+                    </h1>
+                  </div>
+                }
+                <div className="grid md:grid-cols-2 gap-6 bg-red-400">
+                  {(resources.length > 0) ? (resources.map((resource) => (
                     <div
                       key={resource.id}
                       className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
@@ -424,14 +430,18 @@ const ResourcesPage = () => {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))) :""}
                 </div>
 
-                <div className="mt-8 flex justify-center">
-                  <button className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
-                    Load More Resources
-                  </button>
-                </div>
+                {
+                  resources.length > 0 &&
+
+                  <div className="mt-8 flex justify-center">
+                    <button className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                      Load More Resources
+                    </button>
+                  </div>
+                }
               </div>
             </div>
           )}
@@ -534,7 +544,7 @@ const ResourcesPage = () => {
               {/* Blog Posts */}
               <div className="flex-1">
                 <div className="space-y-6">
-                  {blogs.map((blog) => (
+                  {(blogs.length > 0) ? (blogs.map((blog) => (
                     <div
                       key={blog.id}
                       className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
@@ -585,14 +595,25 @@ const ResourcesPage = () => {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))) :
+                    (
+                      <div className="mt-8 flex justify-center">
+                        <h1 className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                          No Blogs Found
+                        </h1>
+                      </div>
+                    )
+                  }
                 </div>
 
-                <div className="mt-8 flex justify-center">
-                  <button className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
-                    Load More Blogs
-                  </button>
-                </div>
+                {
+                  blogs.length > 0 &&
+                  <div className="mt-8 flex justify-center">
+                    <button className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                      Load More Blogs
+                    </button>
+                  </div>
+                }
               </div>
             </div>
           )}

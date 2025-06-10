@@ -1,5 +1,5 @@
 import React from 'react'
-import BottomSection from '../components/homePageSections/bottomSection'
+import BottomSection from '../components/homePageSections/BottomSection'
 import TopSection from '../components/homePageSections/TopSection'
 import MiddleSection from '../components/homePageSections/MiddleSection'
 import WhatWeOffer from '../components/homePageSections/WhatWeOffer'
@@ -18,7 +18,7 @@ function Home() {
     try {
       const sessionId = session.id; // Get the session ID
       console.log("Session ID:", sessionId);
-      const res = await fetch("http://localhost:5000/api/v1/user/sign-up", {
+      const res = await fetch(`${import.meta.env.VITE_BACKENDURL}/user/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -27,6 +27,7 @@ function Home() {
           fullName: user.fullName,
           role: "member",
         }),
+        credentials: "include",
       });
         
       if (!res.ok) {

@@ -51,14 +51,14 @@ const ProjectsPage = () => {
     if (projects.length === 0) return;
 
     const isAnyFilterActive = Object.values(filters).some(value => value);
-    
+
     const filtered = projects.filter(project => {
       // Filter by category if any filter is active
       let matchesCategory = true;
       if (isAnyFilterActive) {
         matchesCategory = false;
         const category = project.category;
-        
+
         if (filters.webDev && category === "Web Dev") matchesCategory = true;
         if (filters.appDev && category === "App Dev") matchesCategory = true;
         if (filters.uiUx && category === "UI/UX") matchesCategory = true;
@@ -66,20 +66,20 @@ const ProjectsPage = () => {
         if (filters.openSource && category === "Open Source") matchesCategory = true;
         if (filters.cyberSecurity && category === "Cyber Security") matchesCategory = true;
       }
-      
+
       // Filter by search query
       let matchesSearch = true;
       if (searchQuery.trim() !== '') {
         const query = searchQuery.toLowerCase().trim();
-        matchesSearch = 
-          project.title.toLowerCase().includes(query) || 
+        matchesSearch =
+          project.title.toLowerCase().includes(query) ||
           project.description.toLowerCase().includes(query) ||
           project.tags.some(tag => tag.toLowerCase().includes(query));
       }
-      
+
       return matchesCategory && matchesSearch;
     });
-    
+
     setFilteredProjects(filtered);
   }, [filters, searchQuery, projects]);
 
@@ -104,16 +104,19 @@ const ProjectsPage = () => {
     setSearchQuery("");
   };
 
+
   return (
+
+
     <div className="min-h-screen bg-green-50 flex flex-col">
       {/* Fixed Navbar */}
       <NavBar />
-      
+
       {/* Hero Section */}
       <section className="bg-green-50 py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl">
-            <motion.h1 
+            <motion.h1
               className="text-4xl font-bold text-gray-900 mb-4"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -121,7 +124,7 @@ const ProjectsPage = () => {
             >
               Activity History
             </motion.h1>
-            <motion.p 
+            <motion.p
               className="text-lg text-gray-600 mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -129,9 +132,9 @@ const ProjectsPage = () => {
             >
               A showcase of all the incredible projects, tasks, and contributions by YOU. Built something cool? This is where it gets the spotlight!
             </motion.p>
-            
+
             {/* Search Bar */}
-            <motion.div 
+            <motion.div
               className="relative"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -146,7 +149,7 @@ const ProjectsPage = () => {
               />
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               {searchQuery && (
-                <button 
+                <button
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   onClick={() => setSearchQuery("")}
                 >
@@ -168,8 +171,8 @@ const ProjectsPage = () => {
                 <h3 className="font-medium text-gray-800 mb-3">Filter Projects</h3>
                 <div className="space-y-2">
                   <label className="flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={filters.webDev}
                       onChange={() => toggleFilter('webDev')}
                       className="h-4 w-4 text-blue-600 rounded mr-2"
@@ -177,8 +180,8 @@ const ProjectsPage = () => {
                     <span className="text-sm text-gray-700">Web Development</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={filters.appDev}
                       onChange={() => toggleFilter('appDev')}
                       className="h-4 w-4 text-blue-600 rounded mr-2"
@@ -186,8 +189,8 @@ const ProjectsPage = () => {
                     <span className="text-sm text-gray-700">App Development</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={filters.uiUx}
                       onChange={() => toggleFilter('uiUx')}
                       className="h-4 w-4 text-blue-600 rounded mr-2"
@@ -195,8 +198,8 @@ const ProjectsPage = () => {
                     <span className="text-sm text-gray-700">UI/UX Design</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={filters.mlAi}
                       onChange={() => toggleFilter('mlAi')}
                       className="h-4 w-4 text-blue-600 rounded mr-2"
@@ -204,8 +207,8 @@ const ProjectsPage = () => {
                     <span className="text-sm text-gray-700">ML & AI</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={filters.openSource}
                       onChange={() => toggleFilter('openSource')}
                       className="h-4 w-4 text-blue-600 rounded mr-2"
@@ -213,8 +216,8 @@ const ProjectsPage = () => {
                     <span className="text-sm text-gray-700">Open Source</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={filters.cyberSecurity}
                       onChange={() => toggleFilter('cyberSecurity')}
                       className="h-4 w-4 text-blue-600 rounded mr-2"
@@ -223,9 +226,9 @@ const ProjectsPage = () => {
                   </label>
                 </div>
               </div>
-              
+
               {(Object.values(filters).some(value => value) || searchQuery) && (
-                <button 
+                <button
                   onClick={resetFilters}
                   className="w-full border border-gray-300 rounded-lg py-2.5 flex items-center justify-center bg-white shadow-sm hover:bg-gray-50"
                 >
@@ -233,7 +236,7 @@ const ProjectsPage = () => {
                 </button>
               )}
             </div>
-            
+
             {/* Projects Grid */}
             <div className="flex-1">
               {/* Results info */}
@@ -241,22 +244,21 @@ const ProjectsPage = () => {
                 <h2 className="text-lg font-medium text-gray-800">
                   Projects <span className="text-gray-500">({filteredProjects.length})</span>
                 </h2>
-                
+
                 {searchQuery && (
                   <div className="text-sm text-gray-600">
                     Search results for: <span className="font-medium">{searchQuery}</span>
                   </div>
                 )}
               </div>
-
-              {loading ? (
+              {loading && (filteredProjects.length > 0) ? (
                 <div className="flex justify-center py-20">
                   <div className="spinner"></div>
                 </div>
               ) : filteredProjects.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredProjects.map((project) => (
-                    <motion.div 
+                    <motion.div
                       key={project.id}
                       className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow border border-gray-100"
                       variants={itemVariants}
@@ -264,7 +266,7 @@ const ProjectsPage = () => {
                       animate="visible"
                     >
                       <div className="h-48 relative group">
-                        <img 
+                        <img
                           src={project.image}
                           alt={project.title}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -276,9 +278,9 @@ const ProjectsPage = () => {
                             </span>
                             <div className="flex gap-2">
                               {project.github && (
-                                <a 
-                                  href={project.github} 
-                                  target="_blank" 
+                                <a
+                                  href={project.github}
+                                  target="_blank"
                                   rel="noopener noreferrer"
                                   className="bg-white/90 p-2 rounded-full hover:bg-white transition-colors"
                                 >
@@ -286,9 +288,9 @@ const ProjectsPage = () => {
                                 </a>
                               )}
                               {project.demo && (
-                                <a 
-                                  href={project.demo} 
-                                  target="_blank" 
+                                <a
+                                  href={project.demo}
+                                  target="_blank"
                                   rel="noopener noreferrer"
                                   className="bg-white/90 p-2 rounded-full hover:bg-white transition-colors"
                                 >
@@ -299,15 +301,15 @@ const ProjectsPage = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="p-6">
                         <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-1">{project.title}</h3>
                         <p className="text-gray-600 mb-4 text-sm line-clamp-2">{project.description}</p>
-                        
+
                         {/* Tech tags */}
                         <div className="flex flex-wrap gap-2 mb-4">
                           {project.tags.map((tag, index) => (
-                            <span 
+                            <span
                               key={index}
                               className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-md"
                             >
@@ -315,10 +317,10 @@ const ProjectsPage = () => {
                             </span>
                           ))}
                         </div>
-                        
+
                         <div className="flex justify-between items-center">
                           <span className="text-xs text-gray-500">{project.date}</span>
-                          <Link 
+                          <Link
                             to={`/project/${project.id}`}
                             className="text-blue-600 text-sm font-medium hover:underline flex items-center"
                           >
@@ -338,7 +340,7 @@ const ProjectsPage = () => {
                   <p className="text-gray-500 mb-6">
                     We couldn't find any projects matching your current filters. Try adjusting your search criteria.
                   </p>
-                  <button 
+                  <button
                     onClick={resetFilters}
                     className="px-6 py-2 bg-blue-500 text-white rounded-full font-medium"
                   >
@@ -350,7 +352,7 @@ const ProjectsPage = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Styles for spinner */}
       <style jsx>{`
         .spinner {

@@ -41,20 +41,24 @@ const router = createBrowserRouter([
         element: <ResourcesPage />,
       },
       {
-        path:'/forum',
-        element:<DoubtForum/>
+        path: '/forum',
+        element: <DoubtForum />
       },
       {
         path: '/signup',
         element: <SignUpPage />,
       },
       {
-        path:'/signin',
-        element:<SignInPage/>
+        path: '/signin',
+        element: <SignInPage />
 
       },
-       // Admin routes - protected by role check
-       {
+      {
+        path: '/project/:id',
+        element: <ProjectPage />
+      },
+      // Admin routes - protected by role check
+      {
         element: <ProtectedAdminRoute />,
         children: [
           {
