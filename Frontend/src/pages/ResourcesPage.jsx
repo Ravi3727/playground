@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import { Search, Filter, BookOpen, Video, Code } from "lucide-react";
-import { blog } from "../assets/DummyData/BottomSection";
+
+const apiUrl = import.meta.env.VITE_BACKENDURL;
+
 const ResourcesPage = () => {
   const [activeTab, setActiveTab] = useState("resources");
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,6 +30,122 @@ const ResourcesPage = () => {
     students: false,
     faculty: false,
     industryExperts: false,
+  });
+
+  // Real data states
+  const [resources, setResources] = useState([]);
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch resources and blogs from backend
+  useEffect(() => {
+    const fetchResources = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${apiUrl}/resources/`);
+        const res = await response.json();
+        if (res.statusCode === 200) {
+          const all = res.data || [];
+          setResources(
+            all.filter(
+              (item) =>
+                item.tag === "resource" || item.type === "resource" || !item.tag
+            )
+          );
+          setBlogs(
+            all.filter((item) => item.tag === "blog" || item.type === "blog")
+          );
+        } else {
+          setResources([]);
+          setBlogs([]);
+        }
+      } catch (error) {
+        setResources([]);
+        setBlogs([]);
+      }
+      setLoading(false);
+    };
+    fetchResources();
+  }, []);
+
+  // Filter logic (example: filter by search, category, type)
+  const filteredResources = resources.filter((resource) => {
+    let matches = true;
+    // Search filter
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase();
+      matches =
+        resource.title?.toLowerCase().includes(q) ||
+        resource.description?.toLowerCase().includes(q) ||
+        resource.category?.toLowerCase().includes(q);
+    }
+    // Category filters
+    if (matches && Object.values(categoryFilters).some(Boolean)) {
+      matches = false;
+      if (categoryFilters.androidDevelopment && resource.category === "Android")
+        matches = true;
+      if (categoryFilters.webDevelopment && resource.category === "Web")
+        matches = true;
+      if (categoryFilters.cloudComputing && resource.category === "Cloud")
+        matches = true;
+      if (categoryFilters.machineLearning && resource.category === "ML")
+        matches = true;
+      if (categoryFilters.flutter && resource.category === "Flutter")
+        matches = true;
+    }
+    // Type filters
+    if (matches && Object.values(typeFilters).some(Boolean)) {
+      matches = false;
+      if (typeFilters.courses && resource.type === "course") matches = true;
+      if (typeFilters.tutorials && resource.type === "tutorial") matches = true;
+      if (typeFilters.documentation && resource.type === "documentation")
+        matches = true;
+      if (typeFilters.tools && resource.type === "tool") matches = true;
+    }
+    return matches;
+  });
+
+  const filteredBlogs = blogs.filter((blog) => {
+    let matches = true;
+    // Search filter
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase();
+      matches =
+        blog.title?.toLowerCase().includes(q) ||
+        blog.description?.toLowerCase().includes(q) ||
+        blog.category?.toLowerCase().includes(q);
+    }
+    // Blog category filters
+    if (matches && Object.values(blogFilters).some(Boolean)) {
+      matches = false;
+      if (blogFilters.technology && blog.category === "Technology")
+        matches = true;
+      if (blogFilters.tutorials && blog.category === "Tutorial") matches = true;
+      if (blogFilters.eventRecaps && blog.category === "Event Recap")
+        matches = true;
+      if (blogFilters.experiences && blog.category === "Experiences")
+        matches = true;
+    }
+    // Author filters (if author info available)
+    if (matches && Object.values(authorFilters).some(Boolean) && blog.author) {
+      matches = false;
+      if (
+        authorFilters.students &&
+        blog.author.role?.toLowerCase().includes("student")
+      )
+        matches = true;
+      if (
+        authorFilters.faculty &&
+        blog.author.role?.toLowerCase().includes("faculty")
+      )
+        matches = true;
+      if (
+        authorFilters.industryExperts &&
+        blog.author.role?.toLowerCase().includes("industry")
+      )
+        matches = true;
+    }
+    return matches;
   });
 
   // Toggle filter checkboxes
@@ -87,13 +205,6 @@ const ResourcesPage = () => {
     });
     setSearchQuery("");
   };
-
-  // Mock resource data
-
-  // Mock blog data
-
-  const resources = [];
-  const blogs = [];
 
   return (
     <div className="min-h-screen bg-yellow-50 flex flex-col">

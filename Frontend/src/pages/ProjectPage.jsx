@@ -3,11 +3,8 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Search, Github, ExternalLink, Code, Filter, ChevronDown, X } from "lucide-react";
-import { sampleProjects } from "../assets/DummyData/BottomSection";
 
-
-// Sample project data
-
+const apiUrl = import.meta.env.VITE_BACKENDURL;
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState([]);
@@ -33,40 +30,21 @@ const ProjectsPage = () => {
     const fetchProjects = async () => {
       setLoading(true);
       try {
-        // Use sample data during development
-
-        const response = await fetch(`${import.meta.env.VITE_BACKENDURL}/projects`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${sessionId}`,
-            "Content-Type": "application/json"
-          },
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch events");
-        }
-
-        const res = await response.json();
-
-        if (res.statusCode === 200) {
-          setProjects(res.data || []);
-          setFilteredProjects(res.data || []);
-        } else {
-          console.error("Error fetching events:", res.message);
-          setProjects(sampleProjects);
-          setFilteredProjects(sampleProjects);
-        }
-        setLoading(false);
+        const response = await fetch(`${apiUrl}/projects/`);
+        if (!response.ok) throw new Error("Failed to fetch projects");
+        const projects = await response.json();
+        setProjects(projects);
+        setFilteredProjects(projects);
       } catch (error) {
-        console.error("Error fetching projects:", error);
-        setLoading(false);
+        setProjects([]);
+        setFilteredProjects([]);
       }
+      setLoading(false);
     };
-
     fetchProjects();
   }, []);
+  
+  
 
   // Filter projects whenever the filter state or search query changes
   useEffect(() => {

@@ -4,8 +4,85 @@ import yellowVector from "../../assets/HomePagePng/topRight.png"
 import redVector from "../../assets/HomePagePng/bottomLeft.png"
 import ProfileCard from "../cards/ProfileCard";
 import { technologies } from "../../assets/DummyData/BottomSection";
-import {presidentData,teamMembers} from "../../assets/DummyData/BottomSection";
+import lakshayImg from "../../assets/membersPic/lakshay.jpg";
+import nikunjImg from "../../assets/membersPic/nikunj2.png";
+import yashImg from "../../assets/membersPic/yash.png";
+import arihantImg from "../../assets/membersPic/arihant.jpg";
+import visheshImg from "../../assets/membersPic/sharmaji.jpg";
+import presidentImg from "../../assets/membersPic/president.jpg";
+import ayushmanImg from "../../assets/membersPic/ayushmannnn.jpg";
+import sahilImg from "../../assets/membersPic/sahil.jpg";
+import somyaImg from "../../assets/membersPic/somya.jpg";
+import sonalImg from "../../assets/membersPic/sonal_new.jpg";
+import raviImg from "../../assets/membersPic/ravi.jpg";
+import omImg from "../../assets/membersPic/om.jpg";
 
+
+
+const presidentData = {
+  name: "Shubham Goswami",
+  role: "President, GDG DTU", 
+  image: presidentImg,
+};
+
+
+const teamMembers = [
+  {
+    name: "Vishesh",
+    role: "Web Developer", 
+    image: visheshImg,
+  },
+  {
+    name: "Ravi",
+    role: " GDSC-Web Dev Lead", 
+    image: raviImg,
+  },
+  {
+    name: "Somya Srivastav",
+    role: "UI-UX Department", 
+    image: somyaImg,
+  },
+  {
+    name: "Nikunj Sharma",
+    role: "Web-Developer", 
+    image: nikunjImg,
+  },
+  {
+    name: "Lakshay",
+    role: "Web-Developer", 
+    image: lakshayImg,
+  },
+  {
+    name: "Arihant Srivastava", 
+    role: "Web-Developer",
+    image: arihantImg,
+  },
+  {
+    name: "Ayushman Singh", 
+    role: "Web-Developer",
+    image: ayushmanImg,
+  },
+  {
+    name: "Yash Kumar",
+    role: "Web-Developer", 
+    image: yashImg,
+  },
+  {
+    name: "Om Kushwah",
+    role: "UI-UX Department", 
+    image: omImg,
+  },
+  {
+    name: "Sahil Chauhan",
+    role: "Web-Developer", 
+    image: sahilImg,
+  },
+  {
+    name: "Sonal Verma",
+    role: "Web-Developer", 
+    image: sonalImg,
+  },
+];
 
 const BottomSection = () => {
   const colors = ["#4285F4", "#EA4335", "#FBBC04"];
