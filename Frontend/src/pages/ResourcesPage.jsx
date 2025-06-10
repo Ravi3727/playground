@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import { Search, Filter, BookOpen, Video, Code } from "lucide-react";
+
+const apiUrl = import.meta.env.VITE_BACKENDURL;
 
 const ResourcesPage = () => {
   const [activeTab, setActiveTab] = useState("resources");
@@ -28,6 +30,122 @@ const ResourcesPage = () => {
     students: false,
     faculty: false,
     industryExperts: false,
+  });
+
+  // Real data states
+  const [resources, setResources] = useState([]);
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch resources and blogs from backend
+  useEffect(() => {
+    const fetchResources = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${apiUrl}/resources/`);
+        const res = await response.json();
+        if (res.statusCode === 200) {
+          const all = res.data || [];
+          setResources(
+            all.filter(
+              (item) =>
+                item.tag === "resource" || item.type === "resource" || !item.tag
+            )
+          );
+          setBlogs(
+            all.filter((item) => item.tag === "blog" || item.type === "blog")
+          );
+        } else {
+          setResources([]);
+          setBlogs([]);
+        }
+      } catch (error) {
+        setResources([]);
+        setBlogs([]);
+      }
+      setLoading(false);
+    };
+    fetchResources();
+  }, []);
+
+  // Filter logic (example: filter by search, category, type)
+  const filteredResources = resources.filter((resource) => {
+    let matches = true;
+    // Search filter
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase();
+      matches =
+        resource.title?.toLowerCase().includes(q) ||
+        resource.description?.toLowerCase().includes(q) ||
+        resource.category?.toLowerCase().includes(q);
+    }
+    // Category filters
+    if (matches && Object.values(categoryFilters).some(Boolean)) {
+      matches = false;
+      if (categoryFilters.androidDevelopment && resource.category === "Android")
+        matches = true;
+      if (categoryFilters.webDevelopment && resource.category === "Web")
+        matches = true;
+      if (categoryFilters.cloudComputing && resource.category === "Cloud")
+        matches = true;
+      if (categoryFilters.machineLearning && resource.category === "ML")
+        matches = true;
+      if (categoryFilters.flutter && resource.category === "Flutter")
+        matches = true;
+    }
+    // Type filters
+    if (matches && Object.values(typeFilters).some(Boolean)) {
+      matches = false;
+      if (typeFilters.courses && resource.type === "course") matches = true;
+      if (typeFilters.tutorials && resource.type === "tutorial") matches = true;
+      if (typeFilters.documentation && resource.type === "documentation")
+        matches = true;
+      if (typeFilters.tools && resource.type === "tool") matches = true;
+    }
+    return matches;
+  });
+
+  const filteredBlogs = blogs.filter((blog) => {
+    let matches = true;
+    // Search filter
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase();
+      matches =
+        blog.title?.toLowerCase().includes(q) ||
+        blog.description?.toLowerCase().includes(q) ||
+        blog.category?.toLowerCase().includes(q);
+    }
+    // Blog category filters
+    if (matches && Object.values(blogFilters).some(Boolean)) {
+      matches = false;
+      if (blogFilters.technology && blog.category === "Technology")
+        matches = true;
+      if (blogFilters.tutorials && blog.category === "Tutorial") matches = true;
+      if (blogFilters.eventRecaps && blog.category === "Event Recap")
+        matches = true;
+      if (blogFilters.experiences && blog.category === "Experiences")
+        matches = true;
+    }
+    // Author filters (if author info available)
+    if (matches && Object.values(authorFilters).some(Boolean) && blog.author) {
+      matches = false;
+      if (
+        authorFilters.students &&
+        blog.author.role?.toLowerCase().includes("student")
+      )
+        matches = true;
+      if (
+        authorFilters.faculty &&
+        blog.author.role?.toLowerCase().includes("faculty")
+      )
+        matches = true;
+      if (
+        authorFilters.industryExperts &&
+        blog.author.role?.toLowerCase().includes("industry")
+      )
+        matches = true;
+    }
+    return matches;
   });
 
   // Toggle filter checkboxes
@@ -87,101 +205,6 @@ const ResourcesPage = () => {
     });
     setSearchQuery("");
   };
-
-  // Mock resource data
-  const resources = [
-    {
-      id: 1,
-      type: "course",
-      icon: <BookOpen className="h-5 w-5 mr-2 text-blue-600" />,
-      category: "Android",
-      title: "Android Development for Beginners",
-      description:
-        "Learn the basics of Android app development with Kotlin. This comprehensive course covers everything from setup to publishing.",
-      price: "Free",
-    },
-    {
-      id: 2,
-      type: "tutorial",
-      icon: <Video className="h-5 w-5 mr-2 text-red-600" />,
-      category: "Web",
-      title: "Building with Next.js and Firebase",
-      description:
-        "A step-by-step tutorial on how to build a full-stack application using Next.js and Firebase. Includes authentication and database.",
-      price: "Free",
-    },
-    {
-      id: 3,
-      type: "tool",
-      icon: <Code className="h-5 w-5 mr-2 text-green-600" />,
-      category: "Cloud",
-      title: "Google Cloud Platform Essentials",
-      description:
-        "A collection of tools and resources to help you get started with Google Cloud Platform. Includes $300 free credit.",
-      price: "Free Trial",
-    },
-    {
-      id: 4,
-      type: "course",
-      icon: <BookOpen className="h-5 w-5 mr-2 text-purple-600" />,
-      category: "ML",
-      title: "Machine Learning with TensorFlow",
-      description:
-        "Learn machine learning concepts and how to implement them using TensorFlow. Includes hands-on projects.",
-      price: "Premium",
-    },
-  ];
-
-  // Mock blog data
-  const blogs = [
-    {
-      id: 1,
-      category: "Technology",
-      categoryColor: "blue",
-      date: "April 10, 2023",
-      title: "My Journey Learning Flutter: Tips and Tricks",
-      description:
-        "In this blog post, I share my experience learning Flutter and some useful tips and tricks I discovered along the way.",
-      author: {
-        name: "Rahul Sharma",
-        role: "3rd Year, Computer Science",
-        image: "https://randomuser.me/api/portraits/men/32.jpg",
-      },
-      image:
-        "https://miro.medium.com/v2/resize:fit:1400/1*TFZQzyVAHLVXI_wNreokGA.png",
-    },
-    {
-      id: 2,
-      category: "Event Recap",
-      categoryColor: "green",
-      date: "March 25, 2023",
-      title: "Highlights from Google I/O Extended DTU",
-      description:
-        "A recap of the Google I/O Extended event held at DTU. Learn about the latest announcements and how they impact developers.",
-      author: {
-        name: "Priya Patel",
-        role: "GDG Lead, DTU",
-        image: "https://randomuser.me/api/portraits/women/44.jpg",
-      },
-      image:
-        "https://miro.medium.com/v2/resize:fit:1400/1*-R8GwOL9Jn-YBiMJ_2K-Bw.jpeg",
-    },
-    {
-      id: 3,
-      category: "Tutorial",
-      categoryColor: "red",
-      date: "March 15, 2023",
-      title: "Building a Serverless API with Firebase Functions",
-      description:
-        "A step-by-step tutorial on how to build a serverless API using Firebase Cloud Functions. Perfect for beginners.",
-      author: {
-        name: "Amit Kumar",
-        role: "4th Year, IT",
-        image: "https://randomuser.me/api/portraits/men/68.jpg",
-      },
-      image: "https://firebase.google.com/images/social.png",
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-yellow-50 flex flex-col">

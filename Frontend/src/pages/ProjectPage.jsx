@@ -4,77 +4,7 @@ import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Search, Github, ExternalLink, Code, Filter, ChevronDown, X } from "lucide-react";
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
-// Sample project data
-const sampleProjects = [
-  { 
-    id: 1, 
-    title: "GDG Community Platform", 
-    description: "A comprehensive platform for managing GDG community events, projects, and resources with real-time updates and interactive dashboards.", 
-    date: "April 2023", 
-    category: "Web Dev",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    github: "https://github.com/gdg-community/platform",
-    demo: "https://gdg-platform.dev",
-    tags: ["React", "Firebase", "Material UI"]
-  },
-  { 
-    id: 2, 
-    title: "DTU Connect Mobile App", 
-    description: "A mobile application to connect DTU students and facilitate campus-wide communication with features like event notifications and group chats.", 
-    date: "June 2023", 
-    category: "App Dev",
-    image: "https://images.unsplash.com/photo-1526498460520-4c246339dccb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    github: "https://github.com/dtu-connect/mobile-app",
-    demo: "https://dtu-connect.dev",
-    tags: ["Flutter", "Firebase", "Dart"]
-  },
-  { 
-    id: 3, 
-    title: "AI Study Companion", 
-    description: "An AI-powered study assistant that helps students optimize their learning experience using personalized study schedules and smart recommendations.", 
-    date: "August 2023", 
-    category: "ML/AI",
-    image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-    github: "https://github.com/gdg-ai/study-companion",
-    demo: "https://ai-study-companion.dev",
-    tags: ["Python", "TensorFlow", "React"]
-  },
-  { 
-    id: 4, 
-    title: "Secure Campus", 
-    description: "A comprehensive security solution for educational institutions with advanced threat detection and real-time monitoring capabilities.", 
-    date: "September 2023", 
-    category: "Cyber Security",
-    image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2532&q=80",
-    github: "https://github.com/secure-campus/dashboard",
-    demo: "https://secure-campus.dev",
-    tags: ["Node.js", "Express", "MongoDB"]
-  },
-  { 
-    id: 5, 
-    title: "Learning Management Redesign", 
-    description: "A UX redesign project for the university's learning management system with improved accessibility and modern interface.", 
-    date: "October 2023", 
-    category: "UI/UX",
-    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
-    github: "https://github.com/gdg-design/lms-redesign",
-    demo: "https://lms-redesign.figma.dev",
-    tags: ["Figma", "Adobe XD", "UI Design"]
-  },
-  { 
-    id: 6, 
-    title: "Open Source Contribution Hub", 
-    description: "A platform to track and encourage open source contributions from university students with gamification elements and badges.", 
-    date: "November 2023", 
-    category: "Open Source",
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
-    github: "https://github.com/gdg-opensource/contrib-hub",
-    demo: "https://contrib-hub.dev",
-    tags: ["Vue.js", "GraphQL", "PostgreSQL"]
-  }
-];
+const apiUrl = import.meta.env.VITE_BACKENDURL;
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState([]);
@@ -100,20 +30,21 @@ const ProjectsPage = () => {
     const fetchProjects = async () => {
       setLoading(true);
       try {
-        // Use sample data during development
-        setTimeout(() => {
-          setProjects(sampleProjects);
-          setFilteredProjects(sampleProjects);
-          setLoading(false);
-        }, 500); // Simulate network delay
+        const response = await fetch(`${apiUrl}/projects/`);
+        if (!response.ok) throw new Error("Failed to fetch projects");
+        const projects = await response.json();
+        setProjects(projects);
+        setFilteredProjects(projects);
       } catch (error) {
-        console.error("Error fetching projects:", error);
-        setLoading(false);
+        setProjects([]);
+        setFilteredProjects([]);
       }
+      setLoading(false);
     };
-
     fetchProjects();
   }, []);
+  
+  
 
   // Filter projects whenever the filter state or search query changes
   useEffect(() => {

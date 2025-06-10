@@ -4,76 +4,7 @@ import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Calendar as CalendarIcon, MapPin, Clock, List, Grid, Filter, Users } from "lucide-react";
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
-// Sample events data (will be replaced with API data when available)
-const sampleEvents = [
-  {
-    _id: "1",
-    title: "Flutter Workshop",
-    description: "Learn how to build beautiful cross-platform apps with Flutter. This hands-on workshop will cover the basics of Flutter and help you build your first app.",
-    on_date: "2024-04-15T18:00:00", // April 15, 6:00 PM
-    department: ["Mobile Development", "Flutter"],
-    type_of_event: "Workshop",
-    venue: {
-      place: "Online",
-      mode: "Zoom"
-    },
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-  },
-  {
-    _id: "2",
-    title: "Cloud Study Jam",
-    description: "Hands-on experience with Google Cloud Platform. Learn about cloud computing, virtual machines, and how to deploy applications to the cloud.",
-    on_date: "2024-04-22T14:00:00", // April 22, 2:00 PM
-    department: ["Cloud", "Backend"],
-    type_of_event: "Workshop",
-    venue: {
-      place: "DTU Campus",
-      mode: "Lab 3"
-    },
-    image: "https://images.unsplash.com/photo-1560732488-7b5f5db671c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-  },
-  {
-    _id: "3",
-    title: "Hackathon 2023",
-    description: "48-hour coding competition with amazing prizes. Form a team and build innovative solutions to real-world problems.",
-    on_date: "2024-05-05T09:00:00", // May 5, 9:00 AM
-    department: ["Competition", "Coding"],
-    type_of_event: "Hackathon",
-    venue: {
-      place: "DTU Campus",
-      mode: "Main Auditorium"
-    },
-    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-  },
-  {
-    _id: "4",
-    title: "Web Development with React",
-    description: "A comprehensive introduction to React.js for building modern web applications. Learn component-based architecture, state management, and more.",
-    on_date: "2024-05-12T17:00:00", // May 12, 5:00 PM
-    department: ["Web Development", "Frontend"],
-    type_of_event: "Webinar",
-    venue: {
-      place: "Online",
-      mode: "YouTube Live"
-    },
-    image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-  },
-  {
-    _id: "5",
-    title: "Tech Meetup: AI/ML Discussion",
-    description: "Join fellow developers and AI enthusiasts to discuss the latest trends in artificial intelligence and machine learning.",
-    on_date: "2024-05-20T18:30:00", // May 20, 6:30 PM
-    department: ["AI/ML", "Research"],
-    type_of_event: "Meetup",
-    venue: {
-      place: "Innovation Hub",
-      mode: "Room 204"
-    },
-    image: "https://images.unsplash.com/photo-1591453089816-0fbb971b454c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-  }
-];
+const apiUrl = import.meta.env.VITE_BACKENDURL;
 
 const Event = () => {
   const [events, setEvents] = useState([]);
@@ -97,38 +28,22 @@ const Event = () => {
     const fetchEvents = async () => {
       setLoading(true);
       try {
-        // Comment out API fetch for now and use sample data
-        /* 
         const response = await fetch(`${apiUrl}/events/get`);
-        
-        if (!response.ok) {
-          throw new Error("Failed to fetch events");
-        }
-
+        if (!response.ok) throw new Error("Failed to fetch events");
         const res = await response.json();
-
         if (res.statusCode === 200) {
           setEvents(res.data || []);
         } else {
-          console.error("Error fetching events:", res.message);
-          setEvents(sampleEvents); // Fallback to sample data
+          setEvents([]);
         }
-        */
-        
-        // Use sample data during development
-        setTimeout(() => {
-          setEvents(sampleEvents);
-          setLoading(false);
-        }, 500); // Simulate network delay
       } catch (error) {
-        console.error("Error:", error);
-        setEvents(sampleEvents); // Fallback to sample data
-        setLoading(false);
+        setEvents([]);
       }
+      setLoading(false);
     };
-
     fetchEvents();
   }, []);
+  
 
   // Get filtered events based on selected filters
   const filteredEvents = events.filter(event => {
