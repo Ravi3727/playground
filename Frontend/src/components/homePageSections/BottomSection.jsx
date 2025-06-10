@@ -15,6 +15,7 @@ import sahilImg from "../../assets/membersPic/sahil.jpg";
 import somyaImg from "../../assets/membersPic/somya.jpg";
 import sonalImg from "../../assets/membersPic/sonal_new.jpg";
 import raviImg from "../../assets/membersPic/ravi.jpg";
+import omImg from "../../assets/membersPic/om.jpg";
 
 
 
@@ -65,6 +66,11 @@ const teamMembers = [
     name: "Yash Kumar",
     role: "Web-Developer", 
     image: yashImg,
+  },
+  {
+    name: "Om Kushwah",
+    role: "UI-UX Department", 
+    image: omImg,
   },
   {
     name: "Sahil Chauhan",
